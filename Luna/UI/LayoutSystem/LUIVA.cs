@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using SharpDX.DXGI;
 
 namespace Luna.UI.LayoutSystem
 {
@@ -55,7 +56,7 @@ namespace Luna.UI.LayoutSystem
                     LVector2 parentPadding = GetElementPaddingByAxis(parent, axis);
                     int parentSpacing = parent.GetLayout().Spacing;
                     int currentPosition = -1;
-                    int totalElementsSize = GetTotalAxisSize(elements, parentSpacing, axis);
+                    //int totalElementsSize = GetTotalAxisSize(elements, parentSpacing, axis);
 
                     for (int i = 0; i < elements.Count(); i++)
                     {
@@ -74,16 +75,18 @@ namespace Luna.UI.LayoutSystem
                                 }
                                 case Alignment.Middle:
                                 {
-                                    currentPosition = (int)(((float)parentSize / 2) - ((float) totalElementsSize / 2));
+                                    currentPosition = (int)(((float)parentSize / 2) - ((float) elementSize / 2));
                                     break;
                                 }
                                 case Alignment.End:
                                 {
-                                    currentPosition = parentSize - (int)parentPadding.Y - totalElementsSize;
+                                    currentPosition = parentSize - (int)parentPadding.Y - elementSize;
                                     break;
                                 }
                             }
                         }
+                        
+                        if (!element.GetLayout().Inline) continue;
 
                         element.GetTransform().Position.SetComponentValue(currentPosition, axis);
                         currentPosition += elementSize + parentSpacing;
@@ -99,30 +102,33 @@ namespace Luna.UI.LayoutSystem
                     for (int i = 0; i < elements.Count(); i++)
                     {
                         ILayoutable element = elements.ElementAt(i);
+
+                        if (!element.GetLayout().Inline) continue;
+
                         Alignment alignment = parent.GetLayout().GetAlignmentFromAxis(axis);
+                        int elementSize = (int)element.GetTransform().Size.GetComponent(axis);
+                        float position = 0;
 
                         switch (alignment)
                         {
                             case Alignment.Begin:
                             {
-                                element.GetTransform().Position.SetComponentValue(parentPadding.X, axis);
+                                position = parentPadding.X;
                                 break;
                             }
                             case Alignment.Middle:
                             {
-                                int elementSize = (int)element.GetTransform().Size.GetComponent(axis);
-                                int position = (int)(((float)parentSize / 2) - ((float)elementSize / 2));
-                                element.GetTransform().Position.SetComponentValue(position, axis);
+                                position = (int)(((float)parentSize / 2) - ((float)elementSize / 2));
                                 break;
                             }
                             case Alignment.End:
                             {
-                                int elementSize = (int)element.GetTransform().Size.GetComponent(axis);
-                                int position = (parentSize - elementSize) - (int)parentPadding.Y;
-                                element.GetTransform().Position.SetComponentValue(position, axis);
+                                position = (parentSize - elementSize) - (int)parentPadding.Y;
                                 break;
                             }
                         }
+
+                        element.GetTransform().Position.SetComponentValue(position, axis);
                     }
                 }
 
@@ -206,25 +212,29 @@ namespace Luna.UI.LayoutSystem
                 {
                     case Sizing.Mode.Fixed:
                     {
-                        parent.GetTransform().Size.SetComponentValue(parentSizing.FixedSize, axis);
+                        containerSize = parentSizing.FixedSize;
+                        childGrowScaling = CalculateAxisGrowScaling(fixedSize, stretchSize, containerSize, (int)parentAxisPadding.X, (int)parentAxisPadding.Y, parentSpacing, parent.GetChildCount());
+                        parent.GetTransform().Size.SetComponentValue(containerSize, axis);
 
                         foreach (ILayoutable e in elements)
                         {
-                            CalculateLayoutScale(e, e.GetChildren(), childGrowScaling, axis, e.GetLayout().LayoutAxis == axis);
+                            CalculateLayoutScale(e, e.GetChildren(), e.GetLayout().Inline ? childGrowScaling : containerSize, axis, e.GetLayout().LayoutAxis == axis);
                         }
 
                         return parentSizing.FixedSize;
                     }
                     case Sizing.Mode.Grow:
                     {
-                        LVector2 newParentSize = LVector2.SetComponentValue(parent.GetTransform().Size, parentSizing.GrowRatio * growScaling, axis);
+                        containerSize = (int)(parentSizing.GrowRatio * growScaling);
+                        childGrowScaling = CalculateAxisGrowScaling(fixedSize, stretchSize, containerSize, (int)parentAxisPadding.X, (int)parentAxisPadding.Y, parentSpacing, parent.GetChildCount());
+                        LVector2 newParentSize = LVector2.SetComponentValue(parent.GetTransform().Size, containerSize, axis);
                         parent.GetTransform().Size = newParentSize;
                         DebugInfo($"Parent grow ratio: {parentSizing.GrowRatio}, grow scaling: {growScaling}, axis: {axis}");
                         DebugInfo($"Set parent size to {newParentSize}, parent size registering as {parent.GetTransform().Size}");
 
                         foreach (ILayoutable e in elements)
                         {
-                            CalculateLayoutScale(e, e.GetChildren(), childGrowScaling, axis, e.GetLayout().LayoutAxis == axis);
+                            CalculateLayoutScale(e, e.GetChildren(), e.GetLayout().Inline ? childGrowScaling : containerSize, axis, e.GetLayout().LayoutAxis == axis);
                         }
 
                         return (int)(parentSizing.GrowRatio * growScaling);
@@ -247,7 +257,7 @@ namespace Luna.UI.LayoutSystem
                     {
                         foreach (ILayoutable e in elements)
                         {
-                            CalculateLayoutScale(e, e.GetChildren(), childGrowScaling, axis, e.GetLayout().LayoutAxis == axis);
+                            CalculateLayoutScale(e, e.GetChildren(), e.GetLayout().Inline ? childGrowScaling : containerSize, axis, e.GetLayout().LayoutAxis == axis);
                         }
 
                         return (int)parent.GetTransform().Size.GetComponent(axis);
@@ -264,22 +274,26 @@ namespace Luna.UI.LayoutSystem
                 {
                     case Sizing.Mode.Fixed:
                     {
-                        parent.GetTransform().Size.SetComponentValue(parentSizing.FixedSize, axis);
+                        containerSize = parentSizing.FixedSize;
+                        childGrowScaling = (containerSize - parentAxisPadding.X - parentAxisPadding.Y) / maxStretchSize;
+                        parent.GetTransform().Size.SetComponentValue(containerSize, axis);
 
                         foreach (ILayoutable e in elements)
                         {
-                            CalculateLayoutScale(e, e.GetChildren(), childGrowScaling, axis, e.GetLayout().LayoutAxis == axis);
+                            CalculateLayoutScale(e, e.GetChildren(), e.GetLayout().Inline ? childGrowScaling : containerSize, axis, e.GetLayout().LayoutAxis == axis);
                         }
 
                         return parentSizing.FixedSize;
                     }
                     case Sizing.Mode.Grow:
                     {
-                        parent.GetTransform().Size.SetComponentValue(parentSizing.GrowRatio * growScaling, axis);
+                        containerSize = (int)(parentSizing.GrowRatio * growScaling);
+                        childGrowScaling = (containerSize - parentAxisPadding.X - parentAxisPadding.Y) / maxStretchSize;
+                        parent.GetTransform().Size.SetComponentValue(containerSize, axis);
 
                         foreach (ILayoutable e in elements)
                         {
-                            CalculateLayoutScale(e, e.GetChildren(), childGrowScaling, axis, e.GetLayout().LayoutAxis == axis);
+                            CalculateLayoutScale(e, e.GetChildren(), e.GetLayout().Inline ? childGrowScaling : containerSize, axis, e.GetLayout().LayoutAxis == axis);
                         }
 
                         return (int)(parentSizing.GrowRatio * growScaling);
@@ -303,7 +317,7 @@ namespace Luna.UI.LayoutSystem
                     {
                         foreach (ILayoutable e in elements)
                         {
-                            CalculateLayoutScale(e, e.GetChildren(), childGrowScaling, axis, e.GetLayout().LayoutAxis == axis);
+                            CalculateLayoutScale(e, e.GetChildren(), e.GetLayout().Inline ? childGrowScaling : containerSize, axis, e.GetLayout().LayoutAxis == axis);
                         }
 
                         return (int)parent.GetTransform().Size.GetComponent(axis);

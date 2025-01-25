@@ -183,7 +183,7 @@ namespace Luna.UI
         //Calls back to outside class to report that it's being moused
         private void CheckFocused(bool mouseOver)
         {
-            if (!mouseOver || focusIgnore) return;
+            if (!mouseOver || focusIgnore || !visible) return;
 
             //Passes the outside class a function to call if this has priority
             checkFocusCallback(() => SetFocused(true), () => SetFocused(false), priority);

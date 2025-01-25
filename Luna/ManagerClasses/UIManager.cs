@@ -15,6 +15,7 @@ namespace Luna.ManagerClasses
         private Texture2D pixelTexture;
 
         private UIComponent rootComponent;
+        private UIComponent overlayComponent;
         private (Action alertFocus, Action alertUnfocus, int priority) focusedComponent;
         private LUIVA luiva;
 
@@ -27,6 +28,17 @@ namespace Luna.ManagerClasses
                 LayoutHeight = Sizing.Grow(1),
                 LayoutAxis = LVector2.VERTICAL
             });
+
+            overlayComponent = new BlankUI();
+            overlayComponent.SetLayout(new Layout()
+            {
+                HorizontalAlignment = Alignment.Middle,
+                VerticalAlignment = Alignment.Middle,
+                LayoutWidth = Sizing.Grow(1),
+                LayoutHeight = Sizing.Grow(1),
+                Inline = false
+            });
+            overlayComponent.Visible = false;
 
             BlankUI topBar = new BlankUI();
             topBar.SetLayout(new Layout()
@@ -153,7 +165,7 @@ namespace Luna.ManagerClasses
             {
                 OrderBlock orderBlock = uiFactory.CreateOrder(o);
                 rightPanel.AddChild(orderBlock.Root);
-                orderBlock.Root.OnClick(() => { rightPanel.AddChild(uiFactory.CreateImageImporter(new LTexture2D(IOManager.LoadImageFromDialog()), ImportTextureAction).Root); });
+                orderBlock.Root.OnClick(() => { overlayComponent.Visible = true; overlayComponent.AddChild(uiFactory.CreateImageImporter(new LTexture2D(IOManager.LoadImageFromDialog()), ImportTextureAction).Root); });
             }
 
             mainPanel.AddChild(leftPanel);
@@ -172,6 +184,8 @@ namespace Luna.ManagerClasses
             rootComponent.AddChild(topBar);
             rootComponent.AddChild(mainPanel);
 
+            rootComponent.AddChild(overlayComponent);
+
             rootComponent.ForceSynchChildren();
             
             rootComponent.CascadeTheme(MainTheme);
@@ -187,6 +201,7 @@ namespace Luna.ManagerClasses
             l2.SetTheme(ButtonTheme);
             b3.SetTheme(ButtonTheme);
             rightPanel.SetTheme(BackgroundTheme);
+            overlayComponent.SetTheme(ShadowTheme);
 
             RecalculatePriority();
             rootComponent.SetCheckFocusCallback(CheckFocus);
@@ -249,6 +264,7 @@ namespace Luna.ManagerClasses
         private void ImportTextureAction(Texture2D texture)
         {
             Console.WriteLine("Importing Texture!");
+            overlayComponent.Visible = false;
         }
 
         public void SetUpdateScissorRectangleAction(GraphicsDevice graphicsDevice)
