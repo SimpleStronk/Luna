@@ -10,10 +10,12 @@ namespace Luna.UI
 {
     internal class UITexture : UIComponent
     {
-        private Texture2D pixel;
-        private LTexture2D texture;
+        protected Texture2D pixel;
+        protected LTexture2D texture;
         private float transformAspectRatio;
-        private int textureOffsetAxis;
+        protected int textureOffsetAxis;
+        protected int maxTextureOffset;
+        protected float manualTextureOffset;
 
         public UITexture()
         {
@@ -67,16 +69,17 @@ namespace Luna.UI
                 }
                 case LUIVA.Alignment.Middle:
                 {
-                    // NOT CORRECT - NEEDS TO BE SCALED CORRECTLY
-                    float padding = transform.Size.GetComponent(textureOffsetAxis) - texture.DisplayDimensions.GetComponent(textureOffsetAxis);
-                    offset.SetComponentValue(padding / 2.0f, textureOffsetAxis);
+                    offset.SetComponentValue((float)(maxTextureOffset / 2), textureOffsetAxis);
                     break;
                 }
                 case LUIVA.Alignment.End:
                 {
-                    // NOT CORRECT - NEEDS TO BE SCALED CORRECTLY
-                    float padding = transform.Size.GetComponent(textureOffsetAxis) - texture.DisplayDimensions.GetComponent(textureOffsetAxis);
-                    offset.SetComponentValue(padding, textureOffsetAxis);
+                    offset.SetComponentValue(maxTextureOffset, textureOffsetAxis);
+                    break;
+                }
+                case LUIVA.Alignment.Ignore:
+                {
+                    offset.SetComponentValue(manualTextureOffset, textureOffsetAxis);
                     break;
                 }
             }
@@ -103,6 +106,8 @@ namespace Luna.UI
                     break;
                 }
             }
+
+            maxTextureOffset = (int)(transform.Size.GetComponent(textureOffsetAxis) - texture.DisplayDimensions.GetComponent(textureOffsetAxis));
         }
 
         protected override string GetComponentType()

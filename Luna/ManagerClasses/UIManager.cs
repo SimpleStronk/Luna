@@ -234,6 +234,7 @@ namespace Luna.ManagerClasses
             MouseHandler.SetMouse();
             RecalculatePriority();
             luiva.CalculateLayout();
+            focusedComponent.alertUnfocus?.Invoke();
             focusedComponent = (null, null, -1);
             rootComponent.PreUpdate();
             focusedComponent.alertFocus?.Invoke();

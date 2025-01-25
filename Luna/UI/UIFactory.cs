@@ -123,15 +123,14 @@ namespace Luna.UI
                 LayoutAxis = LVector2.VERTICAL
             });
 
-            UITexture preview = new UITexture(texture);
+            UIDraggableTexture preview = new UIDraggableTexture(texture);
             preview.SetLayout(new Layout()
             {
                 LayoutWidth = Sizing.Grow(1),
                 LayoutHeight = Sizing.Grow(1),
-                ImageFitMode = Layout.FitMode.MinFit,
-                ImageAlignment = Alignment.Middle
+                ImageFitMode = Layout.FitMode.MaxFit
             });
-            preview.FocusIgnore = true;
+            preview.FocusIgnore = false;
             preview.RenderDefaultRect = false;
 
             Button buttonContainer = new Button();

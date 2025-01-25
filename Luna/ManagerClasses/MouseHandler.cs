@@ -53,6 +53,11 @@ namespace Luna.ManagerClasses
             return justUnclicked;
         }
 
+        public static bool IsClicked(MouseButton button)
+        {
+            return ButtonStateForButton(mouse, button) == ButtonState.Pressed;
+        }
+
         private static ButtonState ButtonStateForButton(MouseState mouse, MouseButton button)
         {
             switch (button)

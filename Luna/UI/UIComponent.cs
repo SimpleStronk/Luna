@@ -112,7 +112,7 @@ namespace Luna.UI
 
         private bool TestMouseCollision()
         {
-            return transform.GetGlobalRect().Contains(MouseHandler.Position);
+            return Rectangle.Intersect(CalculateScissorRectangle(), transform.GetGlobalRect()).Contains(MouseHandler.Position);
         }
 
         public int SetPriority(int p)
