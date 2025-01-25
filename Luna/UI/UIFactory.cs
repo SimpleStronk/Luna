@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Luna.UI.LayoutSystem;
 using static Luna.UI.LayoutSystem.LUIVA;
+using System;
 
 namespace Luna.UI
 {
@@ -111,7 +112,7 @@ namespace Luna.UI
             return new OrderBlock() { Root = root };
         }
 
-        public YesNoBlock CreateImageImporter(LTexture2D texture)
+        public YesNoBlock CreateImageImporter(LTexture2D texture, Action<Texture2D> importAction)
         {
             Button panel = new Button();
             panel.SetTheme(OrderTheme);
@@ -150,6 +151,7 @@ namespace Luna.UI
                 HorizontalAlignment = Alignment.Middle,
                 VerticalAlignment = Alignment.Middle
             });
+            yesButton.OnClick(() => { importAction(preview.GetVisibleSubtexture()); panel.Destroy(); panel = null; });
 
             Label yesLabel = new Label("Import", GraphicsHelper.GetDefaultFont());
 

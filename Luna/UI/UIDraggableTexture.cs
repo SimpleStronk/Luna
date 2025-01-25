@@ -28,8 +28,8 @@ namespace Luna.UI
         {
             if (dragging)
             {
-                if (textureOffsetAxis == LVector2.HORIZONTAL) manualTextureOffset += MouseHandler.DeltaPosition.X;
-                if (textureOffsetAxis == LVector2.VERTICAL) manualTextureOffset += MouseHandler.DeltaPosition.Y;
+                if (fitAxis == LVector2.VERTICAL) manualTextureOffset += MouseHandler.DeltaPosition.X;
+                if (fitAxis == LVector2.HORIZONTAL) manualTextureOffset += MouseHandler.DeltaPosition.Y;
             }
 
             if (maxTextureOffset < 0) manualTextureOffset = Math.Clamp(manualTextureOffset, maxTextureOffset, 0);
@@ -39,13 +39,11 @@ namespace Luna.UI
 
         private void DoDraggableCheck()
         {
-            Console.WriteLine("Draggable Check");
             if (maxTextureOffset >= 0) return;
 
             if (MouseHandler.IsJustClicked(MouseHandler.MouseButton.Left) && focused)
             {
                 dragging = true;
-                Console.WriteLine("Dragging");
             }
 
             if (!MouseHandler.IsClicked(MouseHandler.MouseButton.Left)) dragging = false;

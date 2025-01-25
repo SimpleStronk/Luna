@@ -68,9 +68,19 @@ namespace Luna.UI.LayoutSystem
             return new LVector2(left.X - right.X, left.Y - right.Y);
         }
 
+        public static LVector2 operator*(LVector2 left, LVector2 right)
+        {
+            return new LVector2(left.X * right.X, left.Y * right.Y);
+        }
+
         public static LVector2 operator*(LVector2 left, float right)
         {
             return new LVector2(left.X * right, left.Y * right);
+        }
+
+        public static LVector2 operator/(LVector2 left, LVector2 right)
+        {
+            return new LVector2(left.X / right.X, left.Y / right.Y);
         }
 
         public static LVector2 operator/(LVector2 left, float right)

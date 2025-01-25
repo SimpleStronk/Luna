@@ -153,7 +153,7 @@ namespace Luna.ManagerClasses
             {
                 OrderBlock orderBlock = uiFactory.CreateOrder(o);
                 rightPanel.AddChild(orderBlock.Root);
-                orderBlock.Root.OnClick(() => { rightPanel.AddChild(uiFactory.CreateImageImporter(new LTexture2D(IOManager.LoadImageFromDialog())).Root); });
+                orderBlock.Root.OnClick(() => { rightPanel.AddChild(uiFactory.CreateImageImporter(new LTexture2D(IOManager.LoadImageFromDialog()), ImportTextureAction).Root); });
             }
 
             mainPanel.AddChild(leftPanel);
@@ -244,6 +244,11 @@ namespace Luna.ManagerClasses
         {
             KeyboardHandler.SetOldKeyboard();
             MouseHandler.SetOldMouse();
+        }
+
+        private void ImportTextureAction(Texture2D texture)
+        {
+            Console.WriteLine("Importing Texture!");
         }
 
         public void SetUpdateScissorRectangleAction(GraphicsDevice graphicsDevice)

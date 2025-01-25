@@ -16,6 +16,7 @@ namespace Luna.UI
         protected UIComponent? parent;
         protected List<UIComponent> children = new List<UIComponent>();
         private List<UIComponent> childQueue = new List<UIComponent>();
+        private List<UIComponent> removeChildQueue = new List<UIComponent>();
         protected int priority = -1;
         protected bool focused = false, hovered = false;
         protected bool focusIgnore = false;
@@ -140,6 +141,11 @@ namespace Luna.UI
         {
             if (parent == null) return transform.GetGlobalRect();
             else return parent.transform.GetGlobalRect();
+        }
+
+        public void Destroy()
+        {
+            parent.RemoveChild(this);
         }
 
         #region debug_system
@@ -294,9 +300,14 @@ namespace Luna.UI
             transform.Parent = parent.transform;
         }
 
+        public UIComponent GetParent()
+        {
+            return parent;
+        }
+
         public void RemoveParent()
         {
-            this.parent = null;
+            parent = null;
             transform.Parent = null;
         }
 
@@ -316,8 +327,15 @@ namespace Luna.UI
             {
                 children.Add(c);
             }
+
+            foreach (UIComponent c in removeChildQueue)
+            {
+                c.RemoveParent();
+                children.Remove(c);
+            }
             
             childQueue.Clear();
+            removeChildQueue.Clear();
         }
 
         public void ForceSynchChildren()
@@ -332,8 +350,7 @@ namespace Luna.UI
 
         public void RemoveChild(UIComponent child)
         {
-            child.RemoveParent();
-            children.Remove(child);
+            removeChildQueue.Add(child);
         }
 
         public IEnumerable<ILayoutable> GetChildren()

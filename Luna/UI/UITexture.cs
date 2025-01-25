@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SharpDX.MediaFoundation;
 using Luna.UI.LayoutSystem;
+using Luna.DataClasses;
 
 namespace Luna.UI
 {
@@ -13,7 +14,7 @@ namespace Luna.UI
         protected Texture2D pixel;
         protected LTexture2D texture;
         private float transformAspectRatio;
-        protected int textureOffsetAxis;
+        protected int fitAxis;
         protected int maxTextureOffset;
         protected float manualTextureOffset;
 
@@ -69,17 +70,19 @@ namespace Luna.UI
                 }
                 case LUIVA.Alignment.Middle:
                 {
-                    offset.SetComponentValue((float)(maxTextureOffset / 2), textureOffsetAxis);
+                    manualTextureOffset = maxTextureOffset / 2;
+                    offset.SetComponentValue(manualTextureOffset, LVector2.AlternateAxis(fitAxis));
                     break;
                 }
                 case LUIVA.Alignment.End:
                 {
-                    offset.SetComponentValue(maxTextureOffset, textureOffsetAxis);
+                    manualTextureOffset = maxTextureOffset;
+                    offset.SetComponentValue(manualTextureOffset, LVector2.AlternateAxis(fitAxis));
                     break;
                 }
                 case LUIVA.Alignment.Ignore:
                 {
-                    offset.SetComponentValue(manualTextureOffset, textureOffsetAxis);
+                    offset.SetComponentValue(manualTextureOffset, LVector2.AlternateAxis(fitAxis));
                     break;
                 }
             }
@@ -93,21 +96,47 @@ namespace Luna.UI
             {
                 case LUIVA.Layout.FitMode.MinFit:
                 {
-                    textureOffsetAxis = texture.AspectRatio > transformAspectRatio ? LVector2.VERTICAL : LVector2.HORIZONTAL;
-                    int fitAxis = LVector2.AlternateAxis(textureOffsetAxis);
+                    fitAxis = texture.AspectRatio > transformAspectRatio ? LVector2.HORIZONTAL : LVector2.VERTICAL;
+                    int offsetAxis = LVector2.AlternateAxis(fitAxis);
                     texture.SetDisplayDimension(transform.Size.GetComponent(fitAxis), fitAxis);
                     break;
                 }
                 case LUIVA.Layout.FitMode.MaxFit:
                 {
-                    textureOffsetAxis = texture.AspectRatio > transformAspectRatio ? LVector2.HORIZONTAL : LVector2.VERTICAL;
-                    int fitAxis = LVector2.AlternateAxis(textureOffsetAxis);
+                    fitAxis = texture.AspectRatio > transformAspectRatio ? LVector2.VERTICAL : LVector2.HORIZONTAL;
+                    int offsetAxis = LVector2.AlternateAxis(fitAxis);
                     texture.SetDisplayDimension(transform.Size.GetComponent(fitAxis), fitAxis);
                     break;
                 }
             }
 
-            maxTextureOffset = (int)(transform.Size.GetComponent(textureOffsetAxis) - texture.DisplayDimensions.GetComponent(textureOffsetAxis));
+            maxTextureOffset = (int)(transform.Size.GetComponent(LVector2.AlternateAxis(fitAxis)) - texture.DisplayDimensions.GetComponent(LVector2.AlternateAxis(fitAxis)));
+        }
+
+        public Texture2D GetVisibleSubtexture()
+        {
+            Color[] imageData = new Color[texture.Width * texture.Height];
+            texture.Texture.GetData(imageData);
+
+            Rectangle textureRect = new Rectangle(0, 0, texture.Width, texture.Height);
+            Rectangle displayRect = GetDisplayRelativeToTexture();
+            Rectangle samplerRect = Rectangle.Intersect(textureRect, displayRect);
+
+            Color[] subTextureData = GraphicsHelper.GetImageData(imageData, texture.Width, samplerRect);
+            Texture2D subTexture = new Texture2D(GraphicsHelper.GetGraphicsDevice(), samplerRect.Width, samplerRect.Height);
+            subTexture.SetData(subTextureData);
+            
+            return subTexture;
+        }
+
+        private Rectangle GetDisplayRelativeToTexture()
+        {
+            // transform rect / scale of texture
+            LVector2 relativeOffset = LVector2.Zero;
+            relativeOffset.SetComponentValue(0, fitAxis);
+            relativeOffset.SetComponentValue(-manualTextureOffset / texture.Scale.GetComponent(LVector2.AlternateAxis(fitAxis)), LVector2.AlternateAxis(fitAxis));
+            LVector2 relativeSize = transform.Size / texture.Scale;
+            return new Rectangle((int)relativeOffset.X, (int)relativeOffset.Y, (int)relativeSize.X, (int)relativeSize.Y);
         }
 
         protected override string GetComponentType()

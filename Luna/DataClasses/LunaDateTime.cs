@@ -38,7 +38,12 @@ namespace Luna.DataClasses
 
         public string ShortDisplay
         {
-            get { return dateTime.ToShortDateString(); }
+            get { return $"{dateTime.ToShortDateString()} {dateTime.ToShortTimeString()}:{dateTime.Second}"; }
+        }
+
+        public string ShortDisplayAlt
+        {
+            get { return ShortDisplay.Replace('/', '-').Replace(':', '-'); }
         }
 
         public string LongDisplay
