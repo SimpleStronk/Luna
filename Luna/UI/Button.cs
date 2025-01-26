@@ -21,10 +21,10 @@ namespace Luna.UI
             tmp.ColourType = colourType;
             tmp.Rounded = true;
             SetTheme(tmp);
-            onHover += () => colour = theme.GetColour().ScaleValue(theme.HoverValue);
-            onClick += () => colour = theme.GetColour().ScaleValue(theme.SelectValue);
-            onUnhover += () => { if (!clicked) colour = theme.GetColour(); };
-            onUnclick += () => { colour = hovered ? theme.GetColour().ScaleValue(theme.HoverValue) : theme.GetColour(); };
+            onHover += () => colour = theme.GetColourPalette().HoveredColour;
+            onClick += () => colour = theme.GetColourPalette().SelectedColour;
+            onUnhover += () => { if (!clicked) colour = theme.GetColourPalette().MainColour; };
+            onUnclick += () => { colour = hovered ? theme.GetColourPalette().HoveredColour : theme.GetColourPalette().MainColour; };
             Initialise();
         }
 

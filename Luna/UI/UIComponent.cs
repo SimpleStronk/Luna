@@ -254,7 +254,7 @@ namespace Luna.UI
         public void SetTheme(UITheme theme)
         {
             this.theme = theme;
-            colour = textObject ? theme.GetTextColour() : theme.GetColour();
+            colour = textObject ? theme.GetColourPalette().TextColour : theme.GetColourPalette().MainColour;
         }
 
         public UITheme GetTheme()
@@ -266,7 +266,7 @@ namespace Luna.UI
         {
             this.cascadeTheme = theme;
             this.theme = theme;
-            colour = textObject ? theme.GetTextColour() : theme.GetColour();
+            colour = textObject ? theme.GetColourPalette().TextColour : theme.GetColourPalette().MainColour;
 
             foreach (UIComponent c in children)
             {

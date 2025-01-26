@@ -6,20 +6,18 @@ using Microsoft.Xna.Framework.Graphics;
 using Luna.UI.LayoutSystem;
 using System.Windows.Forms;
 using System.Security.Cryptography;
+using System.Drawing.Imaging;
 
 namespace Luna.UI
 {
     internal class UITheme
     {
-        private Colour mainColour;
-        private Colour mainColourSoft;
-        private Colour backgroundColour;
-        private Colour mainTextColour;
-        private Colour backgroundTextColour;
-        private Colour emergencyColour;
-        private Colour emergencyTextColour;
-        private Colour separatorColour;
-        private Colour shadowColour;
+        private ColourPalette mainColour;
+        private ColourPalette mainColourSoft;
+        private ColourPalette backgroundColour;
+        private ColourPalette emergencyColour;
+        private ColourPalette separatorColour;
+        private ColourPalette shadowColour;
         private float hoverValue;
         private float selectValue;
         private bool rounded;
@@ -28,55 +26,37 @@ namespace Luna.UI
         private (int topLeft, int topRight, int bottomLeft, int bottomRight) cornerRadius;
         private Texture2D tlTexture, trTexture, blTexture, brTexture;
 
-        public Colour MainColour
+        public ColourPalette MainColour
         {
             get { return mainColour; }
             set { mainColour = value; }
         }
         
-        public Colour MainColourSoft
+        public ColourPalette MainColourSoft
         {
             get { return mainColourSoft; }
             set { mainColourSoft = value; }
         }
 
-        public Colour BackgroundColour
+        public ColourPalette BackgroundColour
         {
             get { return backgroundColour; }
             set { backgroundColour = value; }
         }
 
-        public Colour MainTextColour
-        {
-            get { return mainTextColour; }
-            set { mainTextColour = value; }
-        }
-
-        public Colour BackgroundTextColour
-        {
-            get { return backgroundTextColour; }
-            set { backgroundTextColour = value; }
-        }
-
-        public Colour EmergencyColour
+        public ColourPalette EmergencyColour
         {
             get { return emergencyColour; }
             set { emergencyColour = value; }
         }
 
-        public Colour EmergencyTextColour
-        {
-            get { return emergencyTextColour; }
-            set { emergencyTextColour = value; }
-        }
-
-        public Colour SeparatorColour
+        public ColourPalette SeparatorColour
         {
             get { return separatorColour; }
             set { separatorColour = value; }
         }
 
-        public Colour ShadowColour
+        public ColourPalette ShadowColour
         {
             get { return shadowColour; }
             set { shadowColour = value; }
@@ -106,7 +86,7 @@ namespace Luna.UI
             set { colourType = value; }
         }
 
-        public Colour GetColour()
+        public ColourPalette GetColourPalette()
         {
             switch (colourType)
             {
@@ -116,23 +96,7 @@ namespace Luna.UI
                 case ColorType.Emergency: return emergencyColour;
                 case ColorType.Shadow: return shadowColour;
                 case ColorType.Separator: return separatorColour;
-                case ColorType.Placeholder: return new Colour() *0f;
-            }
-
-            return new();
-        }
-
-        public Colour GetTextColour()
-        {
-            switch (colourType)
-            {
-                case ColorType.Main: return mainTextColour;
-                case ColorType.MainSoft: return mainColourSoft;
-                case ColorType.Background: return backgroundTextColour;
-                case ColorType.Emergency: return emergencyTextColour;
-                case ColorType.Shadow: return shadowColour;
-                case ColorType.Separator: return separatorColour;
-                case ColorType.Placeholder: return new Colour() *0f;
+                case ColorType.Placeholder: return ColourPalette.Transparent;
             }
 
             return new();

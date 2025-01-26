@@ -77,7 +77,7 @@ namespace Luna.ManagerClasses
             topBar.SetLayout(new Layout()
             {
                 LayoutWidth = Sizing.Grow(1),
-                LayoutHeight = Sizing.Fixed(50),
+                LayoutHeight = Sizing.Fixed(65),
                 Padding = new Tetra(5),
                 Spacing = 5
             });
@@ -201,9 +201,11 @@ namespace Luna.ManagerClasses
             {
                 LayoutWidth = Sizing.Grow(1)
             });
+            Label l3 = new Label("Holy hell!", GraphicsHelper.GetDefaultFont(), UIFactory.PlumTheme, UITheme.ColorType.Background);
 
             b1.AddChild(l1);
             b2.AddChild(l2);
+            b3.AddChild(l3);
 
             contentContainer.AddChild(b1);
             contentContainer.AddChild(b2);

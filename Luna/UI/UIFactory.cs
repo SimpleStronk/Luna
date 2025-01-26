@@ -189,17 +189,29 @@ namespace Luna.UI
             {
                 return new UITheme()
                 {
-                    MainColour = new Colour(96, 30, 112),
-                    MainColourSoft = new Colour(240, 230, 242),
-                    MainTextColour = new Colour(255, 255, 255),
-                    BackgroundColour = new Colour(255, 255, 255),
-                    BackgroundTextColour = new Colour(30, 30, 30),
-                    EmergencyColour = new Colour(255, 0, 0),
-                    EmergencyTextColour = new Colour(255, 255, 255),
-                    SeparatorColour = new Colour(227, 218, 230),
-                    ShadowColour = new Colour(0, 0, 0) * 0.5f,
-                    HoverValue = 0.9f,
-                    SelectValue = 0.8f,
+                    MainColour = new ColourPalette().SetMainColour(new Color(96, 30, 112)).SetHoveredColour(new Color(79, 25, 93)).SetSelectedColour(new Color(62, 19, 73)).SetTextColour(new Color(255, 255, 255)),
+                    MainColourSoft = new ColourPalette().SetMainColour(new Color(240, 230, 242)),
+                    BackgroundColour = new ColourPalette().SetMainColour(new Color(255, 255, 255)).SetHoveredColour(new Color(233, 218, 236)).SetSelectedColour(new Color(223, 201, 227)).SetTextColour(new Color(30, 30, 30)),
+                    EmergencyColour = new ColourPalette().SetMainColour(new Color(255, 0, 0)).SetHoveredColour(new Color(235, 0, 0)).SetSelectedColour(new Color(215, 0, 0)).SetTextColour(new Color(255, 255, 255)),
+                    SeparatorColour = new ColourPalette().SetMainColour(new Color(60, 36, 66)),
+                    ShadowColour = new ColourPalette().SetMainColour(new Color(0, 0, 0) * 0.5f),
+                    CornerRadius = (7, 7, 7, 7)
+                };
+            }
+        }
+
+        public static UITheme PlumTheme2
+        {
+            get
+            {
+                return new UITheme()
+                {
+                    MainColour = new ColourPalette().SetMainColour(new Color(0, 92, 255)).SetHoveredColour(new Color(0, 84, 230)).SetSelectedColour(new Color(0, 75, 204)).SetTextColour(new Color(255, 255, 255)),
+                    MainColourSoft = new ColourPalette().SetMainColour(new Color(217, 226, 242)),
+                    BackgroundColour = new ColourPalette().SetMainColour(new Color(255, 255, 255)).SetHoveredColour(new Color(198, 212, 236)).SetSelectedColour(new Color(179, 197, 230)).SetTextColour(new Color(30, 30, 30)),
+                    EmergencyColour = new ColourPalette().SetMainColour(new Color(255, 0, 0)).SetHoveredColour(new Color(235, 0, 0)).SetSelectedColour(new Color(215, 0, 0)).SetTextColour(new Color(255, 255, 255)),
+                    SeparatorColour = new ColourPalette().SetMainColour(new Color(36, 47, 66)),
+                    ShadowColour = new ColourPalette().SetMainColour(new Color(0, 0, 0) * 0.5f),
                     CornerRadius = (7, 7, 7, 7)
                 };
             }
