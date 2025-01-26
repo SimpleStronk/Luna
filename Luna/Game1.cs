@@ -41,7 +41,7 @@ public class Game1 : Game
         IOManager.SetGraphicsDevice(GraphicsDevice);
         GraphicsHelper.SetGraphicsDevice(GraphicsDevice);
         GraphicsHelper.SetDefaultFont(Content.Load<SpriteFont>(@"MontserratLight"));
-        uiManager = new UIManager(Window, GraphicsDevice, systemManager);
+        uiManager = new UIManager(Window, Exit, GraphicsDevice, systemManager);
         uiManager.SetPixelTexture(GraphicsHelper.GeneratePixelTexture());
 
         s = new RasterizerState { ScissorTestEnable = true };
@@ -65,7 +65,7 @@ public class Game1 : Game
     {
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
-        _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, s, null, null);
+        _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, null, s, null, null);
 
         uiManager.Draw(_spriteBatch);
 

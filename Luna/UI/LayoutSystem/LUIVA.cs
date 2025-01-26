@@ -56,7 +56,7 @@ namespace Luna.UI.LayoutSystem
                     LVector2 parentPadding = GetElementPaddingByAxis(parent, axis);
                     int parentSpacing = parent.GetLayout().Spacing;
                     int currentPosition = -1;
-                    //int totalElementsSize = GetTotalAxisSize(elements, parentSpacing, axis);
+                    int totalElementsSize = GetTotalAxisSize(elements, parentSpacing, axis);
 
                     for (int i = 0; i < elements.Count(); i++)
                     {
@@ -75,12 +75,12 @@ namespace Luna.UI.LayoutSystem
                                 }
                                 case Alignment.Middle:
                                 {
-                                    currentPosition = (int)(((float)parentSize / 2) - ((float) elementSize / 2));
+                                    currentPosition = (int)(((float)parentSize / 2) - ((float)totalElementsSize / 2));
                                     break;
                                 }
                                 case Alignment.End:
                                 {
-                                    currentPosition = parentSize - (int)parentPadding.Y - elementSize;
+                                    currentPosition = parentSize - (int)parentPadding.Y - totalElementsSize;
                                     break;
                                 }
                             }

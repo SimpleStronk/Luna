@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 
 namespace Luna.UI.LayoutSystem
@@ -8,6 +9,8 @@ namespace Luna.UI.LayoutSystem
         public const int VERTICAL = 1;
 
         private float[] components = [0,0];
+
+        private Action onChanged;
 
         public LVector2()
         {
@@ -27,13 +30,13 @@ namespace Luna.UI.LayoutSystem
         public float X
         {
             get { return components[HORIZONTAL]; }
-            set { components[HORIZONTAL] = value; }
+            set { components[HORIZONTAL] = value; onChanged?.Invoke(); }
         }
 
         public float Y
         {
             get { return components[VERTICAL]; }
-            set { components[VERTICAL] = value; }
+            set { components[VERTICAL] = value; onChanged?.Invoke(); }
         }
 
         public Vector2 ToVector2()
@@ -49,6 +52,7 @@ namespace Luna.UI.LayoutSystem
         public void SetComponentValue(float component, int axis)
         {
             components[axis] = component;
+            onChanged?.Invoke();
         }
 
         public static LVector2 SetComponentValue(LVector2 value, float component, int axis)
@@ -96,6 +100,11 @@ namespace Luna.UI.LayoutSystem
         public static int AlternateAxis(int axis)
         {
             return 1 - axis;
+        }
+
+        public void OnChanged(Action e)
+        {
+            onChanged += e;
         }
 
         public override string ToString()

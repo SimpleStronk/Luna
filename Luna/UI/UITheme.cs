@@ -4,40 +4,138 @@ using Luna.HelperClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Luna.UI.LayoutSystem;
+using System.Windows.Forms;
+using System.Security.Cryptography;
 
 namespace Luna.UI
 {
     internal class UITheme
     {
-        private Color mainColour;
-        private Color secondaryColour;
-        private Color hoveredColour;
-        private Color selectedColour;
+        private Colour mainColour;
+        private Colour mainColourSoft;
+        private Colour backgroundColour;
+        private Colour mainTextColour;
+        private Colour backgroundTextColour;
+        private Colour emergencyColour;
+        private Colour emergencyTextColour;
+        private Colour separatorColour;
+        private Colour shadowColour;
+        private float hoverValue;
+        private float selectValue;
+        private bool rounded;
+        public enum ColorType { Main, MainSoft, Background, Emergency, Shadow, Separator, Placeholder };
+        private ColorType colourType = ColorType.Background;
         private (int topLeft, int topRight, int bottomLeft, int bottomRight) cornerRadius;
         private Texture2D tlTexture, trTexture, blTexture, brTexture;
 
-        public Color MainColour
+        public Colour MainColour
         {
             get { return mainColour; }
             set { mainColour = value; }
         }
-
-        public Color SecondaryColour
+        
+        public Colour MainColourSoft
         {
-            get { return secondaryColour; }
-            set { secondaryColour = value; }
+            get { return mainColourSoft; }
+            set { mainColourSoft = value; }
         }
 
-        public Color HoveredColour
+        public Colour BackgroundColour
         {
-            get { return hoveredColour; }
-            set { hoveredColour = value; }
+            get { return backgroundColour; }
+            set { backgroundColour = value; }
         }
 
-        public Color SelectedColour
+        public Colour MainTextColour
         {
-            get { return selectedColour; }
-            set { selectedColour = value; }
+            get { return mainTextColour; }
+            set { mainTextColour = value; }
+        }
+
+        public Colour BackgroundTextColour
+        {
+            get { return backgroundTextColour; }
+            set { backgroundTextColour = value; }
+        }
+
+        public Colour EmergencyColour
+        {
+            get { return emergencyColour; }
+            set { emergencyColour = value; }
+        }
+
+        public Colour EmergencyTextColour
+        {
+            get { return emergencyTextColour; }
+            set { emergencyTextColour = value; }
+        }
+
+        public Colour SeparatorColour
+        {
+            get { return separatorColour; }
+            set { separatorColour = value; }
+        }
+
+        public Colour ShadowColour
+        {
+            get { return shadowColour; }
+            set { shadowColour = value; }
+        }
+
+        public float HoverValue
+        {
+            get { return hoverValue; }
+            set { hoverValue = value; }
+        }
+
+        public float SelectValue
+        {
+            get { return selectValue; }
+            set { selectValue = value; }
+        }
+
+        public bool Rounded
+        {
+            get { return rounded; }
+            set { rounded = value; }
+        }
+
+        public ColorType ColourType
+        {
+            get { return colourType; }
+            set { colourType = value; }
+        }
+
+        public Colour GetColour()
+        {
+            switch (colourType)
+            {
+                case ColorType.Main: return mainColour;
+                case ColorType.MainSoft: return mainColourSoft;
+                case ColorType.Background: return backgroundColour;
+                case ColorType.Emergency: return emergencyColour;
+                case ColorType.Shadow: return shadowColour;
+                case ColorType.Separator: return separatorColour;
+                case ColorType.Placeholder: return new Colour() *0f;
+            }
+
+            return new();
+        }
+
+        public Colour GetTextColour()
+        {
+            switch (colourType)
+            {
+                case ColorType.Main: return mainTextColour;
+                case ColorType.MainSoft: return mainColourSoft;
+                case ColorType.Background: return backgroundTextColour;
+                case ColorType.Emergency: return emergencyTextColour;
+                case ColorType.Shadow: return shadowColour;
+                case ColorType.Separator: return separatorColour;
+                case ColorType.Placeholder: return new Colour() *0f;
+            }
+
+            return new();
         }
 
         public (int TopLeft, int TopRight, int BottomLeft, int BottomRight) CornerRadius

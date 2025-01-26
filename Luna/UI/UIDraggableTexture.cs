@@ -48,5 +48,10 @@ namespace Luna.UI
 
             if (!MouseHandler.IsClicked(MouseHandler.MouseButton.Left)) dragging = false;
         }
+
+        protected override void OnResize()
+        {
+            base.OnResize();
+        }
     }
 }

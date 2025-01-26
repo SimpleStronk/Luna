@@ -10,7 +10,7 @@ namespace Luna.UI
     internal abstract class UIComponent : ILayoutable
     {
         protected static Texture2D pixelTexture;
-        protected UITheme theme, cascadeTheme;
+        protected UITheme theme = new UITheme(), cascadeTheme;
         protected LUIVA.Layout layout = new LUIVA.Layout();
         protected UITransform transform = new UITransform();
         protected UIComponent? parent;
@@ -32,6 +32,7 @@ namespace Luna.UI
         protected bool visible = true;
         protected bool ignoreScissorRect = false;
         protected int elementId;
+        protected bool textObject = false;
 
         private static int currentElement = 0;
 
@@ -39,7 +40,7 @@ namespace Luna.UI
         {
             elementId = NewElementId();
             SetDebugActions();
-            transform.OnResize(OnResize);
+            transform.Size.OnChanged(OnResize);
         }
 
         public void PreUpdate()
@@ -78,7 +79,7 @@ namespace Luna.UI
             {
                 if (pixelTexture == null) throw new Exception("pixelTexture not initialised in class UIComponent");
 
-                if (theme.CornerRadius == (0, 0, 0, 0))
+                if (theme.CornerRadius == (0, 0, 0, 0) || !theme.Rounded)
                 {
                     s.Draw(pixelTexture, transform.GetGlobalRect(), new Rectangle(0, 0, 1, 1),
                         colour, 0, new Vector2(0, 0), SpriteEffects.None, 1);
@@ -253,14 +254,19 @@ namespace Luna.UI
         public void SetTheme(UITheme theme)
         {
             this.theme = theme;
-            colour = theme.MainColour;
+            colour = textObject ? theme.GetTextColour() : theme.GetColour();
+        }
+
+        public UITheme GetTheme()
+        {
+            return theme;
         }
 
         public void CascadeTheme(UITheme theme)
         {
             this.cascadeTheme = theme;
             this.theme = theme;
-            colour = theme.MainColour;
+            colour = textObject ? theme.GetTextColour() : theme.GetColour();
 
             foreach (UIComponent c in children)
             {
@@ -270,12 +276,11 @@ namespace Luna.UI
 
         private void PassiveCascadeTheme(UITheme theme)
         {
-            this.theme = theme;
-            colour = theme.MainColour;
+            if (this.theme == null) this.theme = theme;
 
             foreach (UIComponent c in children)
             {
-                if (c.cascadeTheme == null) c.CascadeTheme(theme);
+                if (c.cascadeTheme == null) c.PassiveCascadeTheme(theme);
             }
         }
 
@@ -317,6 +322,7 @@ namespace Luna.UI
             {
                 c.SetParent(this);
                 if (checkFocusCallback != null) c.SetCheckFocusCallback(checkFocusCallback);
+                c.PassiveCascadeTheme(cascadeTheme);
                 childQueue.Add(c);
             }
         }

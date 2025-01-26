@@ -16,10 +16,14 @@ namespace Luna.UI
         string displayText;
         SpriteFont font;
 
-        public Label(string text, SpriteFont font)
+        public Label(string text, SpriteFont font, UITheme theme, UITheme.ColorType colourType)
         {
+            textObject = true;
             this.text = text;
             this.font = font;
+            UITheme tmp = theme;
+            tmp.ColourType = colourType;
+            SetTheme(tmp);
             transform.Size = new LVector2(font.MeasureString(text));
             RenderDefaultRect = false;
             FocusIgnore = true;
@@ -44,7 +48,7 @@ namespace Luna.UI
         protected override void Draw(SpriteBatch s)
         {
             Rectangle globalRect = GetTransform().GetGlobalRect();
-            s.DrawString(font, displayText, new Vector2(globalRect.X, globalRect.Y), theme.SecondaryColour);
+            s.DrawString(font, displayText, new Vector2(globalRect.X, globalRect.Y), theme.GetTextColour());
         }
 
         public override string GetTag()

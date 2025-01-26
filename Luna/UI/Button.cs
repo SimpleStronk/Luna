@@ -15,12 +15,16 @@ namespace Luna.UI
         enum ButtonState { None, Hovered, Selected };
         ButtonState buttonState = ButtonState.None;
 
-        public Button()
+        public Button(UITheme theme, UITheme.ColorType colourType)
         {
-            onHover += () => colour = theme.HoveredColour;
-            onClick += () => colour = theme.SelectedColour;
-            onUnhover += () => { if (!clicked) colour = theme.MainColour; };
-            onUnclick += () => { colour = hovered ? theme.HoveredColour : theme.MainColour; };
+            UITheme tmp = theme;
+            tmp.ColourType = colourType;
+            tmp.Rounded = true;
+            SetTheme(tmp);
+            onHover += () => colour = theme.GetColour().ScaleValue(theme.HoverValue);
+            onClick += () => colour = theme.GetColour().ScaleValue(theme.SelectValue);
+            onUnhover += () => { if (!clicked) colour = theme.GetColour(); };
+            onUnclick += () => { colour = hovered ? theme.GetColour().ScaleValue(theme.HoverValue) : theme.GetColour(); };
             Initialise();
         }
 

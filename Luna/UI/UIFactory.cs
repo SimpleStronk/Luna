@@ -59,7 +59,7 @@ namespace Luna.UI
             //  ├─Product 2
             //
 
-            Button root = new Button();
+            Button root = new Button(PlumTheme, UITheme.ColorType.Background);
             root.SetLayout(new Layout()
             {
                 LayoutWidth = Sizing.Grow(1),
@@ -69,10 +69,10 @@ namespace Luna.UI
                 LayoutAxis = LVector2.HORIZONTAL
             });
 
-            Button titleBox = new Button();
+            Button titleBox = new Button(PlumTheme, UITheme.ColorType.Background);
             titleBox.SetLayout(new Layout()
             {
-                LayoutWidth = Sizing.Fixed(120),
+                LayoutWidth = Sizing.Fixed(150),
                 LayoutHeight = Sizing.Wrap(),
                 HorizontalAlignment = Alignment.Middle,
                 Padding = new Tetra(10),
@@ -81,10 +81,10 @@ namespace Luna.UI
             titleBox.RenderDefaultRect = false;
             titleBox.FocusIgnore = true;
 
-            Label title = new Label($"{CustomerManager.GetCustomerByID(order.GetCustomerID()).FullName}", GraphicsHelper.GetDefaultFont());
-            Label productInfo = new Label(order.GetOrderStatus().ToString(), GraphicsHelper.GetDefaultFont());
+            Label title = new Label($"{CustomerManager.GetCustomerByID(order.GetCustomerID()).FullName}", GraphicsHelper.GetDefaultFont(), PlumTheme, UITheme.ColorType.Background);
+            Label productInfo = new Label(order.GetOrderStatus().ToString(), GraphicsHelper.GetDefaultFont(), PlumTheme, UITheme.ColorType.Background);
 
-            Button infoBox = new Button();
+            Button infoBox = new Button(PlumTheme, UITheme.ColorType.Background);
             infoBox.SetLayout(new Layout()
             {
                 LayoutWidth = Sizing.Grow(1),
@@ -95,7 +95,7 @@ namespace Luna.UI
             infoBox.RenderDefaultRect = false;
             infoBox.FocusIgnore = true;
 
-            Label productTitle = new Label(ProductManager.GetProductByID(order.GetProductIDs()[0]).GetName(), GraphicsHelper.GetDefaultFont());
+            Label productTitle = new Label(ProductManager.GetProductByID(order.GetProductIDs()[0]).GetName(), GraphicsHelper.GetDefaultFont(), PlumTheme, UITheme.ColorType.Background);
 
             infoBox.AddChild(productTitle);
 
@@ -106,44 +106,44 @@ namespace Luna.UI
             root.AddChild(infoBox);
 
             root.ForceSynchChildren();
-
-            root.CascadeTheme(MainTheme);
-            root.SetTheme(OrderTheme);
             return new OrderBlock() { Root = root };
         }
 
-        public YesNoBlock CreateImageImporter(LTexture2D texture, Action<Texture2D> importAction)
+        public YesNoBlock CreateImageImporter(LTexture2D texture, Action<Texture2D> importAction, Action cancelAction)
         {
-            Button panel = new Button();
-            panel.SetTheme(OrderTheme);
+            Button panel = new Button(PlumTheme, UITheme.ColorType.Background);
             panel.SetLayout(new Layout()
             {
-                LayoutWidth = Sizing.Fixed(400),
-                LayoutHeight = Sizing.Fixed(400),
+                LayoutWidth = Sizing.Wrap(),
+                LayoutHeight = Sizing.Wrap(),
                 Padding = new Tetra(20),
-                LayoutAxis = LVector2.VERTICAL
+                Spacing = 20,
+                LayoutAxis = LVector2.VERTICAL,
+                HorizontalAlignment = Alignment.Middle
             });
+            panel.FocusIgnore = true;
 
             UIDraggableTexture preview = new UIDraggableTexture(texture);
             preview.SetLayout(new Layout()
             {
-                LayoutWidth = Sizing.Grow(1),
-                LayoutHeight = Sizing.Grow(1),
+                LayoutWidth = Sizing.Fixed(400),
+                LayoutHeight = Sizing.Fixed(400),
                 ImageFitMode = Layout.FitMode.MaxFit
             });
             preview.FocusIgnore = false;
             preview.RenderDefaultRect = false;
 
-            Button buttonContainer = new Button();
-            buttonContainer.SetTheme(OrderTheme);
+            Button buttonContainer = new Button(PlumTheme, UITheme.ColorType.Background);
             buttonContainer.SetLayout(new Layout()
             {
-                LayoutWidth = Sizing.Grow(1),
-                LayoutHeight = Sizing.Fixed(30),
+                LayoutWidth = Sizing.Fixed(250),
+                LayoutHeight = Sizing.Fixed(40),
+                Spacing = 20,
                 LayoutAxis = LVector2.HORIZONTAL
             });
+            buttonContainer.FocusIgnore = true;
 
-            Button yesButton = new Button();
+            Button yesButton = new Button(PlumTheme, UITheme.ColorType.Main);
             yesButton.SetLayout(new Layout()
             {
                 LayoutWidth = Sizing.Grow(1),
@@ -152,12 +152,14 @@ namespace Luna.UI
                 VerticalAlignment = Alignment.Middle
             });
             yesButton.OnClick(() => { importAction(preview.GetVisibleSubtexture()); panel.Destroy(); panel = null; });
+            yesButton.GetTheme().ColourType = UITheme.ColorType.Main;
 
-            Label yesLabel = new Label("Import", GraphicsHelper.GetDefaultFont());
+            Label yesLabel = new Label("Import", GraphicsHelper.GetDefaultFont(), PlumTheme, UITheme.ColorType.Main);
+            yesLabel.GetTheme().ColourType = UITheme.ColorType.Main;
 
             yesButton.AddChild(yesLabel);
 
-            Button noButton = new Button();
+            Button noButton = new Button(PlumTheme, UITheme.ColorType.Emergency);
             noButton.SetLayout(new Layout()
             {
                 LayoutWidth = Sizing.Grow(1),
@@ -165,8 +167,11 @@ namespace Luna.UI
                 HorizontalAlignment = Alignment.Middle,
                 VerticalAlignment = Alignment.Middle
             });
+            noButton.OnClick(() => { cancelAction(); panel.Destroy(); panel = null; });
+            noButton.GetTheme().ColourType = UITheme.ColorType.Emergency;
 
-            Label noLabel = new Label("Cancel", GraphicsHelper.GetDefaultFont());
+            Label noLabel = new Label("Cancel", GraphicsHelper.GetDefaultFont(), PlumTheme, UITheme.ColorType.Emergency);
+            noLabel.GetTheme().ColourType = UITheme.ColorType.Emergency;
 
             noButton.AddChild(noLabel);
 
@@ -175,66 +180,26 @@ namespace Luna.UI
 
             panel.ForceSynchChildren();
 
-            panel.CascadeTheme(OrderTheme);
-            yesButton.CascadeTheme(YesButtonTheme);
-            noButton.CascadeTheme(NoButtonTheme);
-
             return new YesNoBlock() { Root = panel, Yes = yesButton, No = noButton };
         }
 
-        private UITheme OrderTheme
+        public static UITheme PlumTheme
         {
             get
             {
                 return new UITheme()
                 {
-                    MainColour = new Color(255, 255, 255, 255),
-                    SecondaryColour = new Color(0, 0, 0, 255),
-                    HoveredColour = new Color(240, 240, 255, 255),
-                    CornerRadius = (7, 7, 7, 7)
-                };
-            }
-        }
-
-        private UITheme MainTheme
-        {
-            get
-            {
-                return new UITheme()
-                {
-                    MainColour = new Color(255, 255, 255, 255),
-                    SecondaryColour = new Color(0, 0, 0, 255),
-                    HoveredColour = new Color(240, 240, 240, 255),
-                    CornerRadius = (7, 7, 7, 7)
-                };
-            }
-        }
-
-        private UITheme YesButtonTheme
-        {
-            get
-            {
-                return new UITheme()
-                {
-                    MainColour = new Color(0, 178, 255, 255),
-                    SecondaryColour = new Color(255, 255, 255, 255),
-                    HoveredColour = new Color(0, 170, 245, 255),
-                    SelectedColour = new Color(0, 162, 235, 255),
-                    CornerRadius = (7, 7, 7, 7)
-                };
-            }
-        }
-
-        private UITheme NoButtonTheme
-        {
-            get
-            {
-                return new UITheme()
-                {
-                    MainColour = new Color(255, 0, 0, 255),
-                    SecondaryColour = new Color(255, 255, 255, 255),
-                    HoveredColour = new Color(245, 0, 0, 255),
-                    SelectedColour = new Color(235, 0, 0, 255),
+                    MainColour = new Colour(96, 30, 112),
+                    MainColourSoft = new Colour(240, 230, 242),
+                    MainTextColour = new Colour(255, 255, 255),
+                    BackgroundColour = new Colour(255, 255, 255),
+                    BackgroundTextColour = new Colour(30, 30, 30),
+                    EmergencyColour = new Colour(255, 0, 0),
+                    EmergencyTextColour = new Colour(255, 255, 255),
+                    SeparatorColour = new Colour(227, 218, 230),
+                    ShadowColour = new Colour(0, 0, 0) * 0.5f,
+                    HoverValue = 0.9f,
+                    SelectValue = 0.8f,
                     CornerRadius = (7, 7, 7, 7)
                 };
             }

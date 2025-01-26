@@ -7,6 +7,8 @@ using static Luna.UI.LayoutSystem.LUIVA;
 using Luna.DataClasses;
 using static Luna.UI.UIFactory;
 using Luna.UI;
+using System.IO;
+using System.Windows.Forms.VisualStyles;
 
 namespace Luna.ManagerClasses
 {
@@ -16,12 +18,19 @@ namespace Luna.ManagerClasses
 
         private UIComponent rootComponent;
         private UIComponent overlayComponent;
+        private UIComponent windowControlsPanel, windowControlsParentTop;
         private (Action alertFocus, Action alertUnfocus, int priority) focusedComponent;
+        private Action quitAction;
         private LUIVA luiva;
+        private GameWindow window;
+        private bool windowBorderless;
 
-        public UIManager(GameWindow window, GraphicsDevice graphicsDevice, SystemManager systemManager)
+        public UIManager(GameWindow window, Action quitAction, GraphicsDevice graphicsDevice, SystemManager systemManager)
         {
-            rootComponent = new BlankUI();
+            this.window = window;
+            this.quitAction = quitAction;
+
+            rootComponent = new BlankUI(PlumTheme, UITheme.ColorType.Background);
             rootComponent.SetLayout(new Layout()
             {
                 LayoutWidth = Sizing.Grow(1),
@@ -29,7 +38,7 @@ namespace Luna.ManagerClasses
                 LayoutAxis = LVector2.VERTICAL
             });
 
-            overlayComponent = new BlankUI();
+            overlayComponent = new BlankUI(PlumTheme, UITheme.ColorType.Shadow);
             overlayComponent.SetLayout(new Layout()
             {
                 HorizontalAlignment = Alignment.Middle,
@@ -40,7 +49,31 @@ namespace Luna.ManagerClasses
             });
             overlayComponent.Visible = false;
 
-            BlankUI topBar = new BlankUI();
+            windowControlsPanel = new BlankUI(PlumTheme, UITheme.ColorType.Placeholder);
+            windowControlsPanel.SetLayout(new Layout()
+            {
+                LayoutWidth = Sizing.Grow(1),
+                LayoutHeight = Sizing.Grow(1),
+                Inline = false,
+            });
+            windowControlsPanel.FocusIgnore = true;
+
+            windowControlsParentTop = new BlankUI(PlumTheme, UITheme.ColorType.Placeholder);
+            windowControlsParentTop.SetLayout(new Layout()
+            {
+                LayoutWidth = Sizing.Grow(1),
+                LayoutHeight = Sizing.Fixed(30),
+                LayoutAxis = LVector2.HORIZONTAL,
+                HorizontalAlignment = Alignment.End
+            });
+            windowControlsParentTop.FocusIgnore = true;
+
+            windowControlsPanel.AddChild(windowControlsParentTop);
+
+            if (window.IsBorderless) AddWindowControls();
+            windowBorderless = window.IsBorderless;
+
+            BlankUI topBar = new BlankUI(PlumTheme, UITheme.ColorType.Main);
             topBar.SetLayout(new Layout()
             {
                 LayoutWidth = Sizing.Grow(1),
@@ -49,7 +82,7 @@ namespace Luna.ManagerClasses
                 Spacing = 5
             });
 
-            Button logoContainer = new Button();
+            Button logoContainer = new Button(PlumTheme, UITheme.ColorType.Main);
             logoContainer.SetLayout(new Layout()
             {
                 LayoutWidth = Sizing.Fixed(120),
@@ -58,29 +91,40 @@ namespace Luna.ManagerClasses
                 VerticalAlignment = Alignment.Middle
             });
 
-            Label logo = new Label("Luna", GraphicsHelper.GetDefaultFont());
+            Label logo = new Label("Luna", GraphicsHelper.GetDefaultFont(), PlumTheme, UITheme.ColorType.Main);
 
-            Button dashboardContainer = new Button();
+            Button dashboardContainer = new Button(PlumTheme, UITheme.ColorType.Main);
             dashboardContainer.SetLayout(new Layout()
             {
                 LayoutWidth = Sizing.Wrap(),
                 LayoutHeight = Sizing.Grow(1),
-                Padding = new Tetra(10)
+                Padding = new Tetra(10),
+                HorizontalAlignment = Alignment.Middle,
+                VerticalAlignment = Alignment.Middle
             });
 
-            Label dashboardLabel = new Label("Ay up", GraphicsHelper.GetDefaultFont());
+            Label dashboardLabel = new Label("Ay up", GraphicsHelper.GetDefaultFont(), PlumTheme, UITheme.ColorType.Main);
 
-            Button ordersContainer = new Button();
+            Button ordersContainer = new Button(PlumTheme, UITheme.ColorType.Main);
             ordersContainer.SetLayout(new Layout()
             {
                 LayoutWidth = Sizing.Wrap(),
                 LayoutHeight = Sizing.Grow(1),
-                Padding = new Tetra(10)
+                Padding = new Tetra(10),
+                HorizontalAlignment = Alignment.Middle,
+                VerticalAlignment = Alignment.Middle
             });
 
-            Label ordersLabel = new Label("This button must conform to the whim of the text", GraphicsHelper.GetDefaultFont());
+            Label ordersLabel = new Label("This button must conform to the whim of the text", GraphicsHelper.GetDefaultFont(), PlumTheme, UITheme.ColorType.Main);
 
-            BlankUI mainPanel = new BlankUI();
+            BlankUI topBarSeparator = new BlankUI(PlumTheme, UITheme.ColorType.Background);
+            topBarSeparator.SetLayout(new Layout()
+            {
+                LayoutWidth = Sizing.Grow(1),
+                LayoutHeight = Sizing.Fixed(2)
+            });
+
+            BlankUI mainPanel = new BlankUI(PlumTheme, UITheme.ColorType.Background);
             mainPanel.SetLayout(new Layout()
             {
                 LayoutWidth = Sizing.Grow(1),
@@ -88,7 +132,7 @@ namespace Luna.ManagerClasses
                 LayoutAxis = LVector2.HORIZONTAL
             });
 
-            BlankUI leftPanel = new BlankUI();
+            BlankUI leftPanel = new BlankUI(PlumTheme, UITheme.ColorType.Background);
             leftPanel.SetLayout(new Layout()
             {
                 LayoutWidth = Sizing.Grow(1),
@@ -97,7 +141,7 @@ namespace Luna.ManagerClasses
                 Spacing = 10
             });
 
-            BlankUI rightPanel = new BlankUI();
+            BlankUI rightPanel = new BlankUI(PlumTheme, UITheme.ColorType.MainSoft);
             rightPanel.SetLayout(new Layout()
             {
                 LayoutWidth = Sizing.Grow(2),
@@ -106,7 +150,7 @@ namespace Luna.ManagerClasses
                 LayoutAxis = LVector2.VERTICAL
             });
 
-            BlankUI contentContainer = new BlankUI();
+            BlankUI contentContainer = new BlankUI(PlumTheme, UITheme.ColorType.Background);
             contentContainer.SetLayout(new Layout()
             {
                 LayoutWidth = Sizing.Grow(1),
@@ -116,7 +160,7 @@ namespace Luna.ManagerClasses
                 Spacing = 10
             });
 
-            Button b1 = new Button();
+            Button b1 = new Button(PlumTheme, UITheme.ColorType.Background);
             b1.SetLayout(new Layout()
             {
                 LayoutWidth = Sizing.Grow(1),
@@ -125,7 +169,7 @@ namespace Luna.ManagerClasses
                 VerticalAlignment = Alignment.Middle
             });
 
-            Button b2 = new Button();
+            Button b2 = new Button(PlumTheme, UITheme.ColorType.Background);
             b2.SetLayout(new Layout()
             {
                 LayoutWidth = Sizing.Grow(1),
@@ -135,7 +179,7 @@ namespace Luna.ManagerClasses
                 Padding = new Tetra(10)
             });
 
-            Button b3 = new Button();
+            Button b3 = new Button(PlumTheme, UITheme.ColorType.Background);
             b3.SetLayout(new Layout()
             {
                 LayoutWidth = Sizing.Grow(1),
@@ -144,8 +188,15 @@ namespace Luna.ManagerClasses
                 VerticalAlignment = Alignment.Middle
             });
 
-            Label l1 = new Label("Testing", GraphicsHelper.GetDefaultFont());
-            Label l2 = new Label("This label is definitely too big. Let's have a moment of silence. In fact, notice how this button is bigger because the text is longer!", GraphicsHelper.GetDefaultFont());
+            BlankUI contentSeparator = new(PlumTheme, UITheme.ColorType.Background);
+            contentSeparator.SetLayout(new Layout()
+            {
+                LayoutWidth = Sizing.Fixed(2),
+                LayoutHeight = Sizing.Grow(1)
+            });
+
+            Label l1 = new Label("Testing", GraphicsHelper.GetDefaultFont(), PlumTheme, UITheme.ColorType.Background);
+            Label l2 = new Label("This label is definitely too big. Let's have a moment of silence. In fact, notice how this button is bigger because the text is longer!", GraphicsHelper.GetDefaultFont(), PlumTheme, UITheme.ColorType.Background);
             l2.SetLayout(new Layout()
             {
                 LayoutWidth = Sizing.Grow(1)
@@ -163,12 +214,27 @@ namespace Luna.ManagerClasses
             UIFactory uiFactory = new UIFactory();
             foreach (Order o in systemManager.GetOrders())
             {
+                if (rightPanel.GetChildCount() != 0)
+                {
+                    BlankUI separator = new BlankUI(PlumTheme, UITheme.ColorType.Background);
+                    separator.SetLayout(new Layout()
+                    {
+                        LayoutWidth = Sizing.Grow(1),
+                        LayoutHeight = Sizing.Fixed(2)
+                    });
+                    separator.GetTheme().ColourType = UITheme.ColorType.Separator;
+                    rightPanel.AddChild(separator);
+                }
                 OrderBlock orderBlock = uiFactory.CreateOrder(o);
                 rightPanel.AddChild(orderBlock.Root);
-                orderBlock.Root.OnClick(() => { overlayComponent.Visible = true; overlayComponent.AddChild(uiFactory.CreateImageImporter(new LTexture2D(IOManager.LoadImageFromDialog()), ImportTextureAction).Root); });
+                orderBlock.Root.OnClick(() => { Texture2D tex = IOManager.LoadImageFromDialog();
+                    if (tex == null) return;
+                    overlayComponent.Visible = true;
+                    overlayComponent.AddChild(uiFactory.CreateImageImporter(new LTexture2D(tex), ImportTextureAction, CancelImportAction).Root); });
             }
 
             mainPanel.AddChild(leftPanel);
+            mainPanel.AddChild(contentSeparator);
             mainPanel.AddChild(rightPanel);
 
             logoContainer.AddChild(logo);
@@ -182,26 +248,13 @@ namespace Luna.ManagerClasses
             topBar.AddChild(ordersContainer);
 
             rootComponent.AddChild(topBar);
+            //rootComponent.AddChild(topBarSeparator);
             rootComponent.AddChild(mainPanel);
 
             rootComponent.AddChild(overlayComponent);
+            rootComponent.AddChild(windowControlsPanel);
 
             rootComponent.ForceSynchChildren();
-            
-            rootComponent.CascadeTheme(MainTheme);
-            logoContainer.SetTheme(ButtonTheme);
-            logo.SetTheme(ButtonTheme);
-            dashboardContainer.SetTheme(ButtonTheme);
-            dashboardLabel.SetTheme(ButtonTheme);
-            ordersContainer.SetTheme(ButtonTheme);
-            ordersLabel.SetTheme(ButtonTheme);
-            b1.SetTheme(ButtonTheme);
-            l1.SetTheme(ButtonTheme);
-            b2.SetTheme(ButtonTheme);
-            l2.SetTheme(ButtonTheme);
-            b3.SetTheme(ButtonTheme);
-            rightPanel.SetTheme(BackgroundTheme);
-            overlayComponent.SetTheme(ShadowTheme);
 
             RecalculatePriority();
             rootComponent.SetCheckFocusCallback(CheckFocus);
@@ -247,6 +300,14 @@ namespace Luna.ManagerClasses
         {
             KeyboardHandler.SetKeyboard();
             MouseHandler.SetMouse();
+
+            if (window.IsBorderless != windowBorderless)
+            {
+                if (window.IsBorderless) AddWindowControls();
+                else RemoveWindowControls();
+                windowBorderless = window.IsBorderless;
+            }
+
             RecalculatePriority();
             luiva.CalculateLayout();
             focusedComponent.alertUnfocus?.Invoke();
@@ -265,76 +326,78 @@ namespace Luna.ManagerClasses
         {
             Console.WriteLine("Importing Texture!");
             overlayComponent.Visible = false;
+
+            string filePath = $"C:\\Users\\bill\\Documents\\C#\\{LunaDateTime.Now.ShortDisplayAlt}.png";
+            Console.WriteLine(filePath);
+            FileStream s = new FileStream(filePath, FileMode.Create);
+            texture.SaveAsPng(s, texture.Width, texture.Height);
+            s.Close();
+        }
+
+        private void CancelImportAction()
+        {
+            overlayComponent.Visible = false;
+        }
+
+        private void AddWindowControls()
+        {
+            Button minimise = new Button(PlumTheme, UITheme.ColorType.Background);
+            minimise.SetLayout(new Layout()
+            {
+                LayoutWidth = Sizing.Fixed(50),
+                LayoutHeight = Sizing.Grow(1),
+                HorizontalAlignment = Alignment.Middle,
+                VerticalAlignment = Alignment.Middle
+            });
+            minimise.GetTheme().CornerRadius = (0, 0, 7, 0);
+            minimise.OnClick(() => NativeWindowHelper.ShowWindow(window.Handle, NativeWindowHelper.SW_MINIMISE));
+
+            Label minimiseLabel = new Label("_", GraphicsHelper.GetDefaultFont(), PlumTheme, UITheme.ColorType.Background);
+            minimise.AddChild(minimiseLabel);
+
+            Button maximise = new Button(PlumTheme, UITheme.ColorType.Background);
+            maximise.SetLayout(new Layout()
+            {
+                LayoutWidth = Sizing.Fixed(50),
+                LayoutHeight = Sizing.Grow(1),
+                HorizontalAlignment = Alignment.Middle,
+                VerticalAlignment = Alignment.Middle
+            });
+            maximise.OnClick(() => NativeWindowHelper.ShowWindow(window.Handle, NativeWindowHelper.IsZoomed(window.Handle) ? NativeWindowHelper.SW_RESTORE : NativeWindowHelper.SW_MAXIMISE));
+
+            Label maximiseLabel = new Label("O", GraphicsHelper.GetDefaultFont(), PlumTheme, UITheme.ColorType.Background);
+            maximise.AddChild(maximiseLabel);
+            
+            Button quit = new Button(PlumTheme, UITheme.ColorType.Emergency);
+            quit.SetLayout(new Layout()
+            {
+                LayoutWidth = Sizing.Fixed(50),
+                LayoutHeight = Sizing.Grow(1),
+                HorizontalAlignment = Alignment.Middle,
+                VerticalAlignment = Alignment.Middle
+            });
+            quit.GetTheme().ColourType = UITheme.ColorType.Emergency;
+            quit.OnClick(quitAction);
+
+            Label quitButton = new Label("X", GraphicsHelper.GetDefaultFont(), PlumTheme, UITheme.ColorType.Emergency);
+            quit.AddChild(quitButton);
+
+            windowControlsParentTop.AddChild(minimise);
+            windowControlsParentTop.AddChild(maximise);
+            windowControlsParentTop.AddChild(quit);
+        }
+
+        private void RemoveWindowControls()
+        {
+            foreach (UIComponent c in windowControlsParentTop.GetChildren())
+            {
+                c.Destroy();
+            }
         }
 
         public void SetUpdateScissorRectangleAction(GraphicsDevice graphicsDevice)
         {
             UIComponent.SetUpdateScissorRectangleAction((Rectangle r) => { graphicsDevice.ScissorRectangle = r; });
         }
-
-        #region themes
-        private UITheme MainTheme
-        {
-            get
-            {
-                return new UITheme()
-                {
-                    MainColour = new Color(70, 70, 70, 255),
-                    SecondaryColour = new Color(255, 255, 255, 255),
-                    HoveredColour = new Color(80, 80, 80, 255),
-                    SelectedColour = new Color(90, 90, 90, 255)
-                };
-            }
-        }
-
-        private UITheme ButtonTheme
-        {
-            get
-            {
-                return new UITheme()
-                {
-                    MainColour = new Color(0, 178, 255, 255),
-                    SecondaryColour = new Color(255, 255, 255, 255),
-                    HoveredColour = new Color(0, 170, 245, 255),
-                    SelectedColour = new Color(0, 162, 235, 255),
-                    CornerRadius = (7, 7, 7, 7)
-                };
-            }
-        }
-
-        private UITheme OrderTheme
-        {
-            get
-            {
-                return new UITheme()
-                {
-                    MainColour = new Color(230, 230, 230, 255),
-                    CornerRadius = (7, 7, 7, 7)
-                };
-            }
-        }
-
-        private UITheme BackgroundTheme
-        {
-            get
-            {
-                return new UITheme()
-                {
-                    MainColour = new Color(50, 50, 50, 255)
-                };
-            }
-        }
-
-        private UITheme ShadowTheme
-        {
-            get
-            {
-                return new UITheme()
-                {
-                    MainColour = new Color(0, 0, 0, 255) * 0.5f
-                };
-            }
-        }
-        #endregion
     }
 }
