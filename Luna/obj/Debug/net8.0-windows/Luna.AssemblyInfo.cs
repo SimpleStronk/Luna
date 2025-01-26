@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Luna")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6457f9977c15f724bcb1f9bd471abe9944a01dbc")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b67cff6c4346573c11602729f860cc614dce5e1b")]
 [assembly: System.Reflection.AssemblyProductAttribute("Luna")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Luna")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

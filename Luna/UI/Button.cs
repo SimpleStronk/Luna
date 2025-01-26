@@ -15,16 +15,18 @@ namespace Luna.UI
         enum ButtonState { None, Hovered, Selected };
         ButtonState buttonState = ButtonState.None;
 
-        public Button(UITheme theme, UITheme.ColorType colourType)
+        public Button(UITheme.ColorType colourType)
         {
-            UITheme tmp = theme;
-            tmp.ColourType = colourType;
-            tmp.Rounded = true;
-            SetTheme(tmp);
-            onHover += () => colour = theme.GetColourPalette().HoveredColour;
-            onClick += () => colour = theme.GetColourPalette().SelectedColour;
-            onUnhover += () => { if (!clicked) colour = theme.GetColourPalette().MainColour; };
-            onUnclick += () => { colour = hovered ? theme.GetColourPalette().HoveredColour : theme.GetColourPalette().MainColour; };
+            // UITheme tmp = theme;
+            // tmp.ColourType = colourType;
+            // tmp.Rounded = true;
+            // SetTheme(tmp);
+            theme.ColourType = colourType;
+            theme.Rounded = true;
+            onHover += () => buttonState = ButtonState.Hovered; colour = theme.GetColourPalette(cascadeTheme).HoveredColour;
+            onClick += () => { clicked = true; buttonState = ButtonState.Selected; };
+            onUnhover += () => { if (!clicked) buttonState = ButtonState.None; };
+            onUnclick += () => { buttonState = hovered ? ButtonState.Hovered : ButtonState.None; };
             Initialise();
         }
 
@@ -32,6 +34,25 @@ namespace Luna.UI
         {
             if (hovered) if (IsJustClicked(MouseButton.Left)) SetClicked(true);
             if (clicked) if (IsJustUnclicked(MouseButton.Left)) SetClicked(false);
+
+            switch (buttonState)
+            {
+                case ButtonState.None:
+                {
+                    colour = theme.GetColourPalette(cascadeTheme).MainColour;
+                    break;
+                }
+                case ButtonState.Hovered:
+                {
+                    colour = theme.GetColourPalette(cascadeTheme).HoveredColour;
+                    break;
+                }
+                case ButtonState.Selected:
+                {
+                    colour = theme.GetColourPalette(cascadeTheme).SelectedColour;
+                    break;
+                }
+            }
         }
 
         protected override void Draw(SpriteBatch s)

@@ -59,7 +59,7 @@ namespace Luna.UI
             //  ├─Product 2
             //
 
-            Button root = new Button(PlumTheme, UITheme.ColorType.Background);
+            Button root = new Button(UITheme.ColorType.Background);
             root.SetLayout(new Layout()
             {
                 LayoutWidth = Sizing.Grow(1),
@@ -69,7 +69,7 @@ namespace Luna.UI
                 LayoutAxis = LVector2.HORIZONTAL
             });
 
-            Button titleBox = new Button(PlumTheme, UITheme.ColorType.Background);
+            Button titleBox = new Button(UITheme.ColorType.Background);
             titleBox.SetLayout(new Layout()
             {
                 LayoutWidth = Sizing.Fixed(150),
@@ -81,10 +81,10 @@ namespace Luna.UI
             titleBox.RenderDefaultRect = false;
             titleBox.FocusIgnore = true;
 
-            Label title = new Label($"{CustomerManager.GetCustomerByID(order.GetCustomerID()).FullName}", GraphicsHelper.GetDefaultFont(), PlumTheme, UITheme.ColorType.Background);
-            Label productInfo = new Label(order.GetOrderStatus().ToString(), GraphicsHelper.GetDefaultFont(), PlumTheme, UITheme.ColorType.Background);
+            Label title = new Label($"{CustomerManager.GetCustomerByID(order.GetCustomerID()).FullName}", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Background);
+            Label productInfo = new Label(order.GetOrderStatus().ToString(), GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Background);
 
-            Button infoBox = new Button(PlumTheme, UITheme.ColorType.Background);
+            Button infoBox = new Button(UITheme.ColorType.Background);
             infoBox.SetLayout(new Layout()
             {
                 LayoutWidth = Sizing.Grow(1),
@@ -95,7 +95,7 @@ namespace Luna.UI
             infoBox.RenderDefaultRect = false;
             infoBox.FocusIgnore = true;
 
-            Label productTitle = new Label(ProductManager.GetProductByID(order.GetProductIDs()[0]).GetName(), GraphicsHelper.GetDefaultFont(), PlumTheme, UITheme.ColorType.Background);
+            Label productTitle = new Label(ProductManager.GetProductByID(order.GetProductIDs()[0]).GetName(), GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Background);
 
             infoBox.AddChild(productTitle);
 
@@ -111,7 +111,7 @@ namespace Luna.UI
 
         public YesNoBlock CreateImageImporter(LTexture2D texture, Action<Texture2D> importAction, Action cancelAction)
         {
-            Button panel = new Button(PlumTheme, UITheme.ColorType.Background);
+            Button panel = new Button(UITheme.ColorType.Background);
             panel.SetLayout(new Layout()
             {
                 LayoutWidth = Sizing.Wrap(),
@@ -133,7 +133,7 @@ namespace Luna.UI
             preview.FocusIgnore = false;
             preview.RenderDefaultRect = false;
 
-            Button buttonContainer = new Button(PlumTheme, UITheme.ColorType.Background);
+            Button buttonContainer = new Button(UITheme.ColorType.Background);
             buttonContainer.SetLayout(new Layout()
             {
                 LayoutWidth = Sizing.Fixed(250),
@@ -143,7 +143,7 @@ namespace Luna.UI
             });
             buttonContainer.FocusIgnore = true;
 
-            Button yesButton = new Button(PlumTheme, UITheme.ColorType.Main);
+            Button yesButton = new Button(UITheme.ColorType.Main);
             yesButton.SetLayout(new Layout()
             {
                 LayoutWidth = Sizing.Grow(1),
@@ -152,14 +152,14 @@ namespace Luna.UI
                 VerticalAlignment = Alignment.Middle
             });
             yesButton.OnClick(() => { importAction(preview.GetVisibleSubtexture()); panel.Destroy(); panel = null; });
-            yesButton.GetTheme().ColourType = UITheme.ColorType.Main;
+            yesButton.SetTheme(new UITheme(){ ColourType = UITheme.ColorType.Main });
 
-            Label yesLabel = new Label("Import", GraphicsHelper.GetDefaultFont(), PlumTheme, UITheme.ColorType.Main);
-            yesLabel.GetTheme().ColourType = UITheme.ColorType.Main;
+            Label yesLabel = new Label("Import", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Main);
+            yesLabel.SetTheme(new UITheme(){ ColourType = UITheme.ColorType.Main });
 
             yesButton.AddChild(yesLabel);
 
-            Button noButton = new Button(PlumTheme, UITheme.ColorType.Emergency);
+            Button noButton = new Button(UITheme.ColorType.Emergency);
             noButton.SetLayout(new Layout()
             {
                 LayoutWidth = Sizing.Grow(1),
@@ -168,10 +168,10 @@ namespace Luna.UI
                 VerticalAlignment = Alignment.Middle
             });
             noButton.OnClick(() => { cancelAction(); panel.Destroy(); panel = null; });
-            noButton.GetTheme().ColourType = UITheme.ColorType.Emergency;
+            noButton.SetTheme(new UITheme(){ ColourType = UITheme.ColorType.Emergency });
 
-            Label noLabel = new Label("Cancel", GraphicsHelper.GetDefaultFont(), PlumTheme, UITheme.ColorType.Emergency);
-            noLabel.GetTheme().ColourType = UITheme.ColorType.Emergency;
+            Label noLabel = new Label("Cancel", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Emergency);
+            noLabel.SetTheme(new UITheme(){ ColourType = UITheme.ColorType.Emergency });
 
             noButton.AddChild(noLabel);
 

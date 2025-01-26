@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using Luna.UI.LayoutSystem;
+using SharpDX.MediaFoundation;
 
 namespace Luna.UI
 {
@@ -79,19 +80,20 @@ namespace Luna.UI
             {
                 if (pixelTexture == null) throw new Exception("pixelTexture not initialised in class UIComponent");
 
-                if (theme.CornerRadius == (0, 0, 0, 0) || !theme.Rounded)
+                if (GetCorrectTheme(theme.CornerRadiusChanged).CornerRadius == (0, 0, 0, 0) || !GetCorrectTheme(theme.RoundedChanged).Rounded)
                 {
                     s.Draw(pixelTexture, transform.GetGlobalRect(), new Rectangle(0, 0, 1, 1),
                         colour, 0, new Vector2(0, 0), SpriteEffects.None, 1);
                 }
                 else
                 {
-                    if (theme.CornerRadius.TopLeft > 0) s.Draw(theme.TopLeftTexture, UITheme.TopLeftRect(theme, transform), new Rectangle(0, 0, theme.CornerRadius.TopLeft, theme.CornerRadius.TopLeft), colour, 0, new Vector2(0, 0), SpriteEffects.None, 1);
-                    if (theme.CornerRadius.TopRight > 0) s.Draw(theme.TopRightTexture, UITheme.TopRightRect(theme, transform), new Rectangle(theme.CornerRadius.TopRight, 0, theme.CornerRadius.TopRight, theme.CornerRadius.TopRight), colour, 0, new Vector2(0, 0), SpriteEffects.None, 1);
-                    if (theme.CornerRadius.BottomLeft > 0) s.Draw(theme.BottomLeftTexture, UITheme.BottomLeftRect(theme, transform), new Rectangle(0, theme.CornerRadius.BottomLeft, theme.CornerRadius.BottomLeft, theme.CornerRadius.BottomLeft), colour, 0, new Vector2(0, 0), SpriteEffects.None, 1);
-                    if (theme.CornerRadius.BottomRight > 0) s.Draw(theme.BottomRightTexture, UITheme.BottomRightRect(theme, transform), new Rectangle(theme.CornerRadius.BottomRight, theme.CornerRadius.BottomRight, theme.CornerRadius.BottomRight, theme.CornerRadius.BottomRight), colour, 0, new Vector2(0, 0), SpriteEffects.None, 1);
+                    UITheme correctTheme = GetCorrectTheme(theme.CornerRadiusChanged);
+                    if (correctTheme.CornerRadius.TopLeft > 0) s.Draw(correctTheme.TopLeftTexture, UITheme.TopLeftRect(correctTheme, transform), new Rectangle(0, 0, correctTheme.CornerRadius.TopLeft, correctTheme.CornerRadius.TopLeft), colour, 0, new Vector2(0, 0), SpriteEffects.None, 1);
+                    if (correctTheme.CornerRadius.TopRight > 0) s.Draw(correctTheme.TopRightTexture, UITheme.TopRightRect(correctTheme, transform), new Rectangle(correctTheme.CornerRadius.TopRight, 0, correctTheme.CornerRadius.TopRight, correctTheme.CornerRadius.TopRight), colour, 0, new Vector2(0, 0), SpriteEffects.None, 1);
+                    if (correctTheme.CornerRadius.BottomLeft > 0) s.Draw(correctTheme.BottomLeftTexture, UITheme.BottomLeftRect(correctTheme, transform), new Rectangle(0, correctTheme.CornerRadius.BottomLeft, correctTheme.CornerRadius.BottomLeft, correctTheme.CornerRadius.BottomLeft), colour, 0, new Vector2(0, 0), SpriteEffects.None, 1);
+                    if (correctTheme.CornerRadius.BottomRight > 0) s.Draw(correctTheme.BottomRightTexture, UITheme.BottomRightRect(correctTheme, transform), new Rectangle(correctTheme.CornerRadius.BottomRight, correctTheme.CornerRadius.BottomRight, correctTheme.CornerRadius.BottomRight, correctTheme.CornerRadius.BottomRight), colour, 0, new Vector2(0, 0), SpriteEffects.None, 1);
 
-                    foreach (Rectangle r in UITheme.FillRectangles(theme, transform))
+                    foreach (Rectangle r in UITheme.FillRectangles(correctTheme, transform))
                     {
                         s.Draw(pixelTexture, r, new Rectangle(0, 0, 1, 1), colour, 0, new Vector2(0, 0), SpriteEffects.None, 1);
                     }
@@ -253,8 +255,8 @@ namespace Luna.UI
 
         public void SetTheme(UITheme theme)
         {
-            this.theme = theme;
-            colour = textObject ? theme.GetColourPalette().TextColour : theme.GetColourPalette().MainColour;
+            this.theme.UpdateTheme(theme);
+            colour = textObject ? theme.GetColourPalette(cascadeTheme).TextColour : theme.GetColourPalette(cascadeTheme).MainColour;
         }
 
         public UITheme GetTheme()
@@ -262,25 +264,16 @@ namespace Luna.UI
             return theme;
         }
 
-        public void CascadeTheme(UITheme theme)
+        public void CascadeTheme(UITheme cascadeTheme)
         {
-            this.cascadeTheme = theme;
-            this.theme = theme;
-            colour = textObject ? theme.GetColourPalette().TextColour : theme.GetColourPalette().MainColour;
+            if (cascadeTheme == null) return;
+
+            this.cascadeTheme = cascadeTheme;
+            colour = textObject ? theme.GetColourPalette(cascadeTheme).TextColour : theme.GetColourPalette(cascadeTheme).MainColour;
 
             foreach (UIComponent c in children)
             {
-                if (c.cascadeTheme == null) c.PassiveCascadeTheme(theme);
-            }
-        }
-
-        private void PassiveCascadeTheme(UITheme theme)
-        {
-            if (this.theme == null) this.theme = theme;
-
-            foreach (UIComponent c in children)
-            {
-                if (c.cascadeTheme == null) c.PassiveCascadeTheme(theme);
+                c.CascadeTheme(cascadeTheme);
             }
         }
 
@@ -322,7 +315,7 @@ namespace Luna.UI
             {
                 c.SetParent(this);
                 if (checkFocusCallback != null) c.SetCheckFocusCallback(checkFocusCallback);
-                c.PassiveCascadeTheme(cascadeTheme);
+                c.cascadeTheme = cascadeTheme;
                 childQueue.Add(c);
             }
         }
@@ -331,6 +324,7 @@ namespace Luna.UI
         {
             foreach (UIComponent c in childQueue)
             {
+                c.CascadeTheme(cascadeTheme);
                 children.Add(c);
             }
 
@@ -406,6 +400,23 @@ namespace Luna.UI
             get { return renderDefaultRect; }
             set { renderDefaultRect = value; }
         }
+
+        // private ColourPalette mainColour;
+        // private ColourPalette mainColourSoft;
+        // private ColourPalette backgroundColour;
+        // private ColourPalette emergencyColour;
+        // private ColourPalette separatorColour;
+        // private ColourPalette shadowColour;
+        // private float hoverValue;
+        // private float selectValue;
+        // private bool rounded;
+
+        protected UITheme GetCorrectTheme(bool propertyChanged)
+        {
+            // Returns cascadeTheme or theme depending on whether theme's property has been changed
+            return propertyChanged ? theme : cascadeTheme;
+        }
+
         #endregion
 
         protected virtual void OnResize()

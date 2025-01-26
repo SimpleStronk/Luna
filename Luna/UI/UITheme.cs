@@ -7,77 +7,66 @@ using Luna.UI.LayoutSystem;
 using System.Windows.Forms;
 using System.Security.Cryptography;
 using System.Drawing.Imaging;
+using SharpDX.MediaFoundation.DirectX;
 
 namespace Luna.UI
 {
     internal class UITheme
     {
-        private ColourPalette mainColour;
-        private ColourPalette mainColourSoft;
-        private ColourPalette backgroundColour;
-        private ColourPalette emergencyColour;
-        private ColourPalette separatorColour;
-        private ColourPalette shadowColour;
-        private float hoverValue;
-        private float selectValue;
+        private ColourPalette mainColour = new();
+        private ColourPalette mainColourSoft = new();
+        private ColourPalette backgroundColour = new();
+        private ColourPalette emergencyColour = new();
+        private ColourPalette separatorColour = new();
+        private ColourPalette shadowColour = new();
         private bool rounded;
         public enum ColorType { Main, MainSoft, Background, Emergency, Shadow, Separator, Placeholder };
         private ColorType colourType = ColorType.Background;
         private (int topLeft, int topRight, int bottomLeft, int bottomRight) cornerRadius;
         private Texture2D tlTexture, trTexture, blTexture, brTexture;
+        private bool mainColourChanged, mainColourSoftChanged, backgroundColourChanged, emergencyColourChanged,
+            separatorColourChanged, shadowColourChanged, roundedChanged, cornerRadiusChanged;
 
         public ColourPalette MainColour
         {
             get { return mainColour; }
-            set { mainColour = value; }
+            set { mainColour = value; mainColourChanged = true; }
         }
         
         public ColourPalette MainColourSoft
         {
             get { return mainColourSoft; }
-            set { mainColourSoft = value; }
+            set { mainColourSoft = value; mainColourSoftChanged = true; }
         }
 
         public ColourPalette BackgroundColour
         {
             get { return backgroundColour; }
-            set { backgroundColour = value; }
+            set { backgroundColour = value; backgroundColourChanged = true; }
         }
 
         public ColourPalette EmergencyColour
         {
             get { return emergencyColour; }
-            set { emergencyColour = value; }
+            set { emergencyColour = value; emergencyColourChanged = true; }
         }
 
         public ColourPalette SeparatorColour
         {
             get { return separatorColour; }
-            set { separatorColour = value; }
+            set { separatorColour = value; separatorColourChanged = true; }
         }
 
         public ColourPalette ShadowColour
         {
             get { return shadowColour; }
-            set { shadowColour = value; }
-        }
-
-        public float HoverValue
-        {
-            get { return hoverValue; }
-            set { hoverValue = value; }
-        }
-
-        public float SelectValue
-        {
-            get { return selectValue; }
-            set { selectValue = value; }
+            set { shadowColour = value; shadowColourChanged = true; }
         }
 
         public bool Rounded
         {
             get { return rounded; }
-            set { rounded = value; }
+            set { rounded = value; roundedChanged = true; }
         }
 
         public ColorType ColourType
@@ -86,16 +75,31 @@ namespace Luna.UI
             set { colourType = value; }
         }
 
-        public ColourPalette GetColourPalette()
+        public ColourPalette GetColourPalette(UITheme cascadeTheme)
         {
+            if (cascadeTheme == null)
+            {
+                switch (colourType)
+                {
+                    case ColorType.Main: return mainColour;
+                    case ColorType.MainSoft: return mainColourSoft;
+                    case ColorType.Background: return backgroundColour;
+                    case ColorType.Emergency: return emergencyColour;
+                    case ColorType.Shadow: return shadowColour;
+                    case ColorType.Separator: return separatorColour;
+                    case ColorType.Placeholder: return ColourPalette.Transparent;
+                }
+                return new();
+            }
+
             switch (colourType)
             {
-                case ColorType.Main: return mainColour;
-                case ColorType.MainSoft: return mainColourSoft;
-                case ColorType.Background: return backgroundColour;
-                case ColorType.Emergency: return emergencyColour;
-                case ColorType.Shadow: return shadowColour;
-                case ColorType.Separator: return separatorColour;
+                case ColorType.Main: return mainColourChanged ? mainColour : cascadeTheme.mainColour;
+                case ColorType.MainSoft: return mainColourSoftChanged ? mainColourSoft : cascadeTheme.mainColourSoft;
+                case ColorType.Background: return backgroundColourChanged ? backgroundColour : cascadeTheme.backgroundColour;
+                case ColorType.Emergency: return emergencyColourChanged ? emergencyColour : cascadeTheme.emergencyColour;
+                case ColorType.Shadow: return shadowColourChanged ? shadowColour : cascadeTheme.shadowColour;
+                case ColorType.Separator: return separatorColourChanged ? separatorColour : cascadeTheme.separatorColour;
                 case ColorType.Placeholder: return ColourPalette.Transparent;
             }
 
@@ -112,6 +116,7 @@ namespace Luna.UI
                 trTexture = GraphicsHelper.GenerateCircleTexture(value.TopRight * 2);
                 blTexture = GraphicsHelper.GenerateCircleTexture(value.BottomLeft * 2);
                 brTexture = GraphicsHelper.GenerateCircleTexture(value.BottomRight * 2);
+                cornerRadiusChanged = true;
             }
         }
 
@@ -133,6 +138,58 @@ namespace Luna.UI
         public Texture2D BottomRightTexture
         {
             get { return brTexture; }
+        }
+
+        public bool MainColourChanged
+        {
+            get { return mainColourChanged; }
+        }
+
+        public bool MainColourSoftChanged
+        {
+            get { return mainColourSoftChanged; }
+        }
+
+        public bool BackgroundColourChanged
+        {
+            get { return backgroundColourChanged; }
+        }
+
+        public bool EmergencyColourChanged
+        {
+            get { return emergencyColourChanged; }
+        }
+
+        public bool SeparatorColourChanged
+        {
+            get { return separatorColourChanged; }
+        }
+
+        public bool ShadowColourChanged
+        {
+            get { return shadowColourChanged; }
+        }
+
+        public bool RoundedChanged
+        {
+            get { return roundedChanged; }
+        }
+
+        public bool CornerRadiusChanged
+        {
+            get { return cornerRadiusChanged; }
+        }
+
+        public void UpdateTheme(UITheme theme)
+        {
+            if (theme.mainColourChanged) mainColour = theme.mainColour;
+            if (theme.mainColourSoftChanged) mainColourSoft = theme.mainColourSoft;
+            if (theme.backgroundColourChanged) backgroundColour = theme.backgroundColour;
+            if (theme.emergencyColourChanged) emergencyColour = theme.emergencyColour;
+            if (theme.separatorColourChanged) separatorColour = theme.separatorColour;
+            if (theme.shadowColourChanged) shadowColour = theme.shadowColour;
+            if (theme.roundedChanged) rounded = theme.rounded;
+            if (theme.cornerRadiusChanged) cornerRadius = theme.cornerRadius;
         }
 
         public static Rectangle TopLeftRect(UITheme theme, UITransform transform)
