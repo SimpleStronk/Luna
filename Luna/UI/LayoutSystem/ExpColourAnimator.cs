@@ -5,7 +5,7 @@ using SharpDX.Direct3D11;
 
 namespace Luna.UI.LayoutSystem
 {
-    internal class ExpColourAnimator : ColourAnimator
+    internal class ExpColourAnimator : IColourAnimator
     {
         private Colour currentColour;
         private Colour targetColour;

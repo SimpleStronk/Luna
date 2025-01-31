@@ -26,7 +26,7 @@ namespace Luna.UI
         protected Action<Action, Action, int> checkFocusCallback;
         private static Action<Rectangle> updateScissorRectangle;
         //REPLACE WITH COLOUR ANIMATOR
-        protected ColourAnimator colourAnimator = new ExpColourAnimator();
+        protected IColourAnimator colourAnimator = new ExpColourAnimator();
         protected bool debugMode = false;
         private bool renderDefaultRect = true;
 
@@ -325,7 +325,6 @@ namespace Luna.UI
             foreach (UIComponent c in children)
             {
                 c.SetParent(this);
-                if (checkFocusCallback != null) c.SetCheckFocusCallback(checkFocusCallback);
                 c.cascadeTheme = cascadeTheme;
                 childQueue.Add(c);
             }
@@ -336,6 +335,7 @@ namespace Luna.UI
             foreach (UIComponent c in childQueue)
             {
                 c.CascadeTheme(cascadeTheme);
+                if (checkFocusCallback != null) c.SetCheckFocusCallback(checkFocusCallback);
                 children.Add(c);
             }
 
@@ -347,16 +347,6 @@ namespace Luna.UI
             
             childQueue.Clear();
             removeChildQueue.Clear();
-        }
-
-        public void ForceSynchChildren()
-        {
-            SyncChildren();
-
-            foreach (UIComponent c in children)
-            {
-                c.ForceSynchChildren();
-            }
         }
 
         public void RemoveChild(UIComponent child)
@@ -379,7 +369,7 @@ namespace Luna.UI
             UIComponent.updateScissorRectangle = updateScissorRectangle;
         }
 
-        public ColourAnimator ColourAnimator
+        public IColourAnimator ColourAnimator
         {
             get { return colourAnimator; }
         }

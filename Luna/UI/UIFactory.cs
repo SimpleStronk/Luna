@@ -11,6 +11,24 @@ namespace Luna.UI
 {
     internal class UIFactory
     {
+        public struct TextButton
+        {
+            private Button root;
+            private Label label;
+
+            public Button Root
+            {
+                get { return root; }
+                set { root = value; }
+            }
+
+            public Label Label
+            {
+                get { return label; }
+                set { label = value; }
+            }
+        }
+
         public struct OrderBlock
         {
             Button root;
@@ -50,7 +68,7 @@ namespace Luna.UI
         public struct TopBarBlock
         {
             UIComponent root;
-            Button dashboard, orders;
+            TextButton dashboard, orders;
 
             public UIComponent Root
             {
@@ -58,13 +76,13 @@ namespace Luna.UI
                 set { root = value; }
             }
 
-            public Button Dashboard
+            public TextButton Dashboard
             {
                 get { return dashboard; }
                 set { dashboard = value; }
             }
 
-            public Button Orders
+            public TextButton Orders
             {
                 get { return orders; }
                 set { orders = value; }
@@ -92,6 +110,17 @@ namespace Luna.UI
             {
                 get { return mainPanel; }
                 set { mainPanel = value; }
+            }
+        }
+
+        public struct OrdersBlock
+        {
+            private UIComponent root;
+
+            public UIComponent Root
+            {
+                get { return root; }
+                set { root = value; }
             }
         }
 
@@ -153,7 +182,6 @@ namespace Luna.UI
             root.AddChild(titleBox);
             root.AddChild(infoBox);
 
-            root.ForceSynchChildren();
             return new OrderBlock() { Root = root };
         }
 
@@ -227,8 +255,6 @@ namespace Luna.UI
             buttonContainer.AddChild(yesButton, noButton);
             panel.AddChild(preview, buttonContainer);
 
-            panel.ForceSynchChildren();
-
             return new YesNoBlock() { Root = panel, Yes = yesButton, No = noButton };
         }
 
@@ -243,10 +269,14 @@ namespace Luna.UI
                 Spacing = 5
             });
 
-            Button logoContainer = new Button(UITheme.ColorType.Main);
+            BlankUI logoContainer = new BlankUI(UITheme.ColorType.Main);
             logoContainer.SetLayout(TopBarButtonLayout);
+            logoContainer.SetLayout(new Layout() { LayoutWidth = Sizing.Fixed(150), HorizontalAlignment = Alignment.Begin });
 
             Label logo = new Label("LUNΛ", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Main);
+
+            BlankUI separator = new BlankUI(UITheme.ColorType.Separator);
+            separator.SetLayout(SeparatorVerticalLayout);
 
             Button dashboardContainer = new Button(UITheme.ColorType.Main);
             dashboardContainer.SetLayout(TopBarButtonLayout);
@@ -268,10 +298,11 @@ namespace Luna.UI
             ordersContainer.AddChild(ordersLabel);
 
             root.AddChild(logoContainer);
+            root.AddChild(separator);
             root.AddChild(dashboardContainer);
             root.AddChild(ordersContainer);
 
-            return new TopBarBlock() { Root = root, Dashboard = dashboardContainer, Orders = ordersContainer };
+            return new TopBarBlock() { Root = root, Dashboard = new TextButton() { Root = dashboardContainer, Label = dashboardLabel }, Orders = new TextButton() { Root = ordersContainer, Label = ordersLabel } };
         }
 
         public DashboardBlock CreateDashboard()
@@ -341,7 +372,7 @@ namespace Luna.UI
                 VerticalAlignment = Alignment.Middle
             });
 
-            BlankUI contentSeparator = new(UITheme.ColorType.Background);
+            BlankUI contentSeparator = new(UITheme.ColorType.Separator);
             contentSeparator.SetLayout(new Layout()
             {
                 LayoutWidth = Sizing.Fixed(2),
@@ -370,12 +401,10 @@ namespace Luna.UI
             mainPanel.AddChild(contentSeparator);
             mainPanel.AddChild(rightPanel);
 
-            mainPanel.ForceSynchChildren();
-
             return new DashboardBlock() { Root = mainPanel, LeftPanel = leftPanel, MainPanel = rightPanel };
         }
 
-        public BlankUI CreateBlankUI()
+        public OrdersBlock CreateOrders()
         {
             BlankUI blank = new BlankUI(UITheme.ColorType.Background);
             blank.SetLayout(new Layout()
@@ -394,9 +423,7 @@ namespace Luna.UI
 
             blank.AddChild(b);
 
-            blank.ForceSynchChildren();
-
-            return blank;
+            return new OrdersBlock() { Root = blank };
         }
 
         private Layout TopBarButtonLayout
@@ -407,7 +434,7 @@ namespace Luna.UI
                 {
                     LayoutWidth = Sizing.Wrap(),
                     LayoutHeight = Sizing.Grow(1),
-                    Padding = new Tetra(10),
+                    Padding = new Tetra(15),
                     HorizontalAlignment = Alignment.Middle,
                     VerticalAlignment = Alignment.Middle
                 };
@@ -426,6 +453,18 @@ namespace Luna.UI
             }
         }
 
+        private Layout SeparatorVerticalLayout
+        {
+            get
+            {
+                return new Layout()
+                {
+                    LayoutWidth = Sizing.Fixed(2),
+                    LayoutHeight = Sizing.Grow(1)
+                };
+            }
+        }
+
         public static UITheme PlumTheme
         {
             get
@@ -434,9 +473,10 @@ namespace Luna.UI
                 {
                     MainColour = new ColourPalette().SetMainColour(new Color(96, 30, 112)).SetHoveredColour(new Color(79, 25, 93)).SetSelectedColour(new Color(62, 19, 73)).SetTextColour(new Color(255, 255, 255)),
                     MainColourSoft = new ColourPalette().SetMainColour(new Color(240, 230, 242)),
+                    HighlitColour = new ColourPalette().SetMainColour(new Color(131, 41, 153)).SetHoveredColour(new Color(131, 41, 153)).SetSelectedColour(new Color(131, 41, 153)).SetTextColour(new Color(255, 255, 255)),
                     BackgroundColour = new ColourPalette().SetMainColour(new Color(255, 255, 255)).SetHoveredColour(new Color(233, 218, 236)).SetSelectedColour(new Color(223, 201, 227)).SetTextColour(new Color(30, 30, 30)),
                     EmergencyColour = new ColourPalette().SetMainColour(new Color(255, 0, 0)).SetHoveredColour(new Color(235, 0, 0)).SetSelectedColour(new Color(215, 0, 0)).SetTextColour(new Color(255, 255, 255)),
-                    SeparatorColour = new ColourPalette().SetMainColour(new Color(60, 36, 66)),
+                    SeparatorColour = new ColourPalette().SetMainColour(new Color(30, 30, 30) * 0.2f),
                     ShadowColour = new ColourPalette().SetMainColour(new Color(0, 0, 0) * 0.5f),
                     CornerRadius = (10, 10, 10, 10)
                 };
@@ -451,9 +491,10 @@ namespace Luna.UI
                 {
                     MainColour = new ColourPalette().SetMainColour(new Color(0, 92, 255)).SetHoveredColour(new Color(0, 84, 230)).SetSelectedColour(new Color(0, 75, 204)).SetTextColour(new Color(255, 255, 255)),
                     MainColourSoft = new ColourPalette().SetMainColour(new Color(217, 226, 242)),
+                    HighlitColour = new ColourPalette().SetMainColour(new Color(51, 126, 255)).SetHoveredColour(new Color(51, 126, 255)).SetSelectedColour(new Color(51, 126, 255)).SetTextColour(new Color(255, 255, 255)),
                     BackgroundColour = new ColourPalette().SetMainColour(new Color(255, 255, 255)).SetHoveredColour(new Color(198, 212, 236)).SetSelectedColour(new Color(179, 197, 230)).SetTextColour(new Color(30, 30, 30)),
                     EmergencyColour = new ColourPalette().SetMainColour(new Color(255, 0, 0)).SetHoveredColour(new Color(235, 0, 0)).SetSelectedColour(new Color(215, 0, 0)).SetTextColour(new Color(255, 255, 255)),
-                    SeparatorColour = new ColourPalette().SetMainColour(new Color(36, 47, 66)),
+                    SeparatorColour = new ColourPalette().SetMainColour(new Color(30, 30, 30) * 0.2f),
                     ShadowColour = new ColourPalette().SetMainColour(new Color(0, 0, 0) * 0.5f),
                     CornerRadius = (10, 10, 10, 10)
                };

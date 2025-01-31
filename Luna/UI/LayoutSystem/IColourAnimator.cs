@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 
 namespace Luna.UI.LayoutSystem
 {
-    internal interface ColourAnimator
+    internal interface IColourAnimator
     {
         public void Update();
 

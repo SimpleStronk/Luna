@@ -15,6 +15,7 @@ namespace Luna.ManagerClasses
     internal class UIManager
     {
         private Texture2D pixelTexture;
+        private SystemManager systemManager;
 
         private UIComponent rootComponent;
         private UIComponent overlayComponent;
@@ -28,10 +29,14 @@ namespace Luna.ManagerClasses
         private bool windowBorderless;
         bool themeToggle = false;
 
+        enum MainWindowState { Dashboard, Orders };
+        MainWindowState mainWindowState = MainWindowState.Dashboard;
+        private TopBarBlock topBarBlock;
         UIComponent currentWindow;
 
         public UIManager(GameWindow window, Action quitAction, GraphicsDevice graphicsDevice, SystemManager systemManager)
         {
+            this.systemManager = systemManager;
             this.window = window;
             this.quitAction = quitAction;
             pixelTexture = GraphicsHelper.GeneratePixelTexture();
@@ -80,10 +85,10 @@ namespace Luna.ManagerClasses
             if (window.IsBorderless) AddWindowControls();
             windowBorderless = window.IsBorderless;
 
-            TopBarBlock topBarBlock = uiFactory.CreateTopBar();
+            topBarBlock = uiFactory.CreateTopBar();
             UIComponent topBar = topBarBlock.Root;
-            topBarBlock.Orders.OnClick(() => { themeToggle = !themeToggle; UIComponent c = uiFactory.CreateDashboard().Root; mainWindowContainer.AddChild(c); c.ColourAnimator.OnTransitionAction(() => { mainWindowContainer.RemoveChild(currentWindow); currentWindow = c; }); } );
-            topBarBlock.Dashboard.OnClick(() => { UIComponent c = uiFactory.CreateBlankUI(); mainWindowContainer.AddChild(c); c.ColourAnimator.OnTransitionAction(() => { mainWindowContainer.RemoveChild(currentWindow); currentWindow = c; }); });
+            topBarBlock.Orders.Root.OnClick(() => { SetMainWindowState(MainWindowState.Orders); } );
+            topBarBlock.Dashboard.Root.OnClick(() => { SetMainWindowState(MainWindowState.Dashboard); });
 
             mainWindowContainer = new BlankUI(UITheme.ColorType.Background);
             mainWindowContainer.SetLayout(new Layout()
@@ -92,42 +97,18 @@ namespace Luna.ManagerClasses
                 LayoutHeight = Sizing.Grow(1),
             });
 
-            DashboardBlock dashboardBlock = uiFactory.CreateDashboard();
+            UIComponent dashboard = SetupDashboard(uiFactory.CreateDashboard());
 
-            currentWindow = dashboardBlock.Root;
+            currentWindow = dashboard;
+            HighlightTopBar(MainWindowState.Dashboard);
 
-            mainWindowContainer.AddChild(dashboardBlock.Root);
-
-            foreach (Order o in systemManager.GetOrders())
-            {
-                if (dashboardBlock.MainPanel.GetChildCount() != 0)
-                {
-                    BlankUI separator = new BlankUI(UITheme.ColorType.Background);
-                    separator.SetLayout(new Layout()
-                    {
-                        LayoutWidth = Sizing.Grow(1),
-                        LayoutHeight = Sizing.Fixed(2)
-                    });
-                    separator.SetTheme(new UITheme() { ColourType = UITheme.ColorType.Separator });
-                    dashboardBlock.MainPanel.AddChild(separator);
-                }
-                OrderBlock orderBlock = uiFactory.CreateOrder(o);
-                dashboardBlock.MainPanel.AddChild(orderBlock.Root);
-                orderBlock.Root.OnClick(() => { Texture2D tex = IOManager.LoadImageFromDialog();
-                    if (tex == null) return;
-                    overlayComponent.Visible = true;
-                    YesNoBlock imageImporter = uiFactory.CreateImageImporter(new LTexture2D(tex), ImportTextureAction, CancelImportAction);
-                    imageImporter.Root.ForceTransparent();
-                    overlayComponent.AddChild(imageImporter.Root); });
-            }
+            mainWindowContainer.AddChild(dashboard);
 
             rootComponent.AddChild(topBar);
             rootComponent.AddChild(mainWindowContainer);
 
             rootComponent.AddChild(overlayComponent);
             rootComponent.AddChild(windowControlsPanel);
-
-            rootComponent.ForceSynchChildren();
 
             RecalculatePriority();
             rootComponent.SetCheckFocusCallback(CheckFocus);
@@ -269,6 +250,90 @@ namespace Luna.ManagerClasses
             foreach (UIComponent c in windowControlsParentTop.GetChildren())
             {
                 c.Destroy();
+            }
+        }
+
+        private void SetMainWindowState(MainWindowState mainWindowState)
+        {
+            if (this.mainWindowState == mainWindowState) return;
+
+            this.mainWindowState = mainWindowState;
+
+            switch (mainWindowState)
+            {
+                case MainWindowState.Dashboard:
+                {
+                    InitiateFadeTransition(SetupDashboard(uiFactory.CreateDashboard()));
+                    HighlightTopBar(MainWindowState.Dashboard);
+                    break;
+                }
+                case MainWindowState.Orders:
+                {
+                    InitiateFadeTransition(SetupOrders(uiFactory.CreateOrders()));
+                    HighlightTopBar(MainWindowState.Orders);
+                    break;
+                }
+            }
+        }
+
+        private UIComponent SetupDashboard(DashboardBlock dashboardBlock)
+        {
+            foreach (Order o in systemManager.GetOrders())
+            {
+                if (dashboardBlock.MainPanel.GetChildCount() != 0)
+                {
+                    BlankUI separator = new BlankUI(UITheme.ColorType.Background);
+                    separator.SetLayout(new Layout()
+                    {
+                        LayoutWidth = Sizing.Grow(1),
+                        LayoutHeight = Sizing.Fixed(2)
+                    });
+                    separator.SetTheme(new UITheme() { ColourType = UITheme.ColorType.Separator });
+                    dashboardBlock.MainPanel.AddChild(separator);
+                }
+                OrderBlock orderBlock = uiFactory.CreateOrder(o);
+                dashboardBlock.MainPanel.AddChild(orderBlock.Root);
+                orderBlock.Root.OnClick(() => { Texture2D tex = IOManager.LoadImageFromDialog();
+                    if (tex == null) return;
+                    overlayComponent.Visible = true;
+                    YesNoBlock imageImporter = uiFactory.CreateImageImporter(new LTexture2D(tex), ImportTextureAction, CancelImportAction);
+                    imageImporter.Root.ForceTransparent();
+                    overlayComponent.AddChild(imageImporter.Root); });
+            }
+
+            return dashboardBlock.Root;
+        }
+
+        private UIComponent SetupOrders(OrdersBlock ordersBlock)
+        {
+            return ordersBlock.Root;
+        }
+
+        private void InitiateFadeTransition(UIComponent newWindow)
+        {
+            mainWindowContainer.AddChild(newWindow); newWindow.ColourAnimator.OnTransitionAction(() => { mainWindowContainer.RemoveChild(currentWindow); currentWindow = newWindow; });
+        }
+
+        private void HighlightTopBar(MainWindowState mainWindowState)
+        {
+            switch (mainWindowState)
+            {
+                case MainWindowState.Dashboard:
+                {
+                    topBarBlock.Dashboard.Root.SetTheme(new UITheme() { ColourType = UITheme.ColorType.Highlit });
+                    topBarBlock.Dashboard.Label.SetTheme(new UITheme() { ColourType = UITheme.ColorType.Highlit });
+                    topBarBlock.Orders.Root.SetTheme(new UITheme() { ColourType = UITheme.ColorType.Main });
+                    topBarBlock.Orders.Label.SetTheme(new UITheme() { ColourType = UITheme.ColorType.Main });
+                    break;
+                }
+                case MainWindowState.Orders:
+                {
+                    topBarBlock.Dashboard.Root.SetTheme(new UITheme() { ColourType = UITheme.ColorType.Main });
+                    topBarBlock.Dashboard.Label.SetTheme(new UITheme() { ColourType = UITheme.ColorType.Main });
+                    topBarBlock.Orders.Root.SetTheme(new UITheme() { ColourType = UITheme.ColorType.Highlit });
+                    topBarBlock.Orders.Label.SetTheme(new UITheme() { ColourType = UITheme.ColorType.Highlit });
+                    break;
+                }
             }
         }
 

@@ -15,17 +15,16 @@ namespace Luna.UI
     {
         private ColourPalette mainColour = new();
         private ColourPalette mainColourSoft = new();
+        private ColourPalette highlitColour = new();
         private ColourPalette backgroundColour = new();
         private ColourPalette emergencyColour = new();
         private ColourPalette separatorColour = new();
         private ColourPalette shadowColour = new();
         private bool rounded;
-        public enum ColorType { Main, MainSoft, Background, Emergency, Shadow, Separator, Placeholder };
+        public enum ColorType { Main, MainSoft, Highlit, Background, Emergency, Shadow, Separator, Placeholder };
         private ColorType colourType = ColorType.Background;
         private (int topLeft, int topRight, int bottomLeft, int bottomRight) cornerRadius;
-        private (int width, int height) transformDimensions;
-        private Texture2D tlTexture, trTexture, blTexture, brTexture;
-        private bool mainColourChanged, mainColourSoftChanged, backgroundColourChanged, emergencyColourChanged,
+        private bool mainColourChanged, mainColourSoftChanged, highlitColourChanged, backgroundColourChanged, emergencyColourChanged,
             separatorColourChanged, shadowColourChanged, roundedChanged, colourTypeChanged, cornerRadiusChanged;
 
         public ColourPalette MainColour
@@ -38,6 +37,12 @@ namespace Luna.UI
         {
             get { return mainColourSoft; }
             set { mainColourSoft = value; mainColourSoftChanged = true; }
+        }
+
+        public ColourPalette HighlitColour
+        {
+            get { return highlitColour; }
+            set { highlitColour = value; }
         }
 
         public ColourPalette BackgroundColour
@@ -84,6 +89,7 @@ namespace Luna.UI
                 {
                     case ColorType.Main: return mainColour;
                     case ColorType.MainSoft: return mainColourSoft;
+                    case ColorType.Highlit: return highlitColour;
                     case ColorType.Background: return backgroundColour;
                     case ColorType.Emergency: return emergencyColour;
                     case ColorType.Shadow: return shadowColour;
@@ -97,6 +103,7 @@ namespace Luna.UI
             {
                 case ColorType.Main: return mainColourChanged ? mainColour : cascadeTheme.mainColour;
                 case ColorType.MainSoft: return mainColourSoftChanged ? mainColourSoft : cascadeTheme.mainColourSoft;
+                case ColorType.Highlit: return highlitColourChanged ? highlitColour : cascadeTheme.highlitColour;
                 case ColorType.Background: return backgroundColourChanged ? backgroundColour : cascadeTheme.backgroundColour;
                 case ColorType.Emergency: return emergencyColourChanged ? emergencyColour : cascadeTheme.emergencyColour;
                 case ColorType.Shadow: return shadowColourChanged ? shadowColour : cascadeTheme.shadowColour;
@@ -150,6 +157,11 @@ namespace Luna.UI
             get { return mainColourSoftChanged; }
         }
 
+        public bool HighlitColourChanged
+        {
+            get { return highlitColourChanged; }
+        }
+
         public bool BackgroundColourChanged
         {
             get { return backgroundColourChanged; }
@@ -195,6 +207,7 @@ namespace Luna.UI
         {
             if (theme.mainColourChanged) MainColour = theme.mainColour;
             if (theme.mainColourSoftChanged) MainColourSoft = theme.mainColourSoft;
+            if (theme.highlitColourChanged) HighlitColour = theme.highlitColour;
             if (theme.backgroundColourChanged) BackgroundColour = theme.backgroundColour;
             if (theme.emergencyColourChanged) EmergencyColour = theme.emergencyColour;
             if (theme.separatorColourChanged) SeparatorColour = theme.separatorColour;
