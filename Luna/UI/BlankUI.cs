@@ -11,7 +11,7 @@ namespace Luna.UI
     {
         public BlankUI(UITheme.ColorType colourType)
         {
-            theme.ColourType = colourType;
+            overrideTheme.ColourType = colourType;
         }
 
         protected override void Update()

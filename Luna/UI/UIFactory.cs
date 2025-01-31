@@ -47,6 +47,54 @@ namespace Luna.UI
             }
         }
 
+        public struct TopBarBlock
+        {
+            UIComponent root;
+            Button dashboard, orders;
+
+            public UIComponent Root
+            {
+                get { return root; }
+                set { root = value; }
+            }
+
+            public Button Dashboard
+            {
+                get { return dashboard; }
+                set { dashboard = value; }
+            }
+
+            public Button Orders
+            {
+                get { return orders; }
+                set { orders = value; }
+            }
+        }
+
+        public struct DashboardBlock
+        {
+            private UIComponent root;
+            private UIComponent leftPanel, mainPanel;
+
+            public UIComponent Root
+            {
+                get { return root; }
+                set { root = value; }
+            }
+
+            public UIComponent LeftPanel
+            {
+                get { return leftPanel; }
+                set { leftPanel = value; }
+            }
+
+            public UIComponent MainPanel
+            {
+                get { return mainPanel; }
+                set { mainPanel = value; }
+            }
+        }
+
         public OrderBlock CreateOrder(Order order)
         {
             //
@@ -142,6 +190,7 @@ namespace Luna.UI
                 LayoutAxis = LVector2.HORIZONTAL
             });
             buttonContainer.FocusIgnore = true;
+            buttonContainer.RenderDefaultRect = false;
 
             Button yesButton = new Button(UITheme.ColorType.Main);
             yesButton.SetLayout(new Layout()
@@ -183,6 +232,173 @@ namespace Luna.UI
             return new YesNoBlock() { Root = panel, Yes = yesButton, No = noButton };
         }
 
+        public TopBarBlock CreateTopBar()
+        {
+            BlankUI root = new BlankUI(UITheme.ColorType.Main);
+            root.SetLayout(new Layout()
+            {
+                LayoutWidth = Sizing.Grow(1),
+                LayoutHeight = Sizing.Fixed(65),
+                Padding = new Tetra(5),
+                Spacing = 5
+            });
+
+            Button logoContainer = new Button(UITheme.ColorType.Main);
+            logoContainer.SetLayout(TopBarButtonLayout);
+
+            Label logo = new Label("LUNΛ", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Main);
+
+            Button dashboardContainer = new Button(UITheme.ColorType.Main);
+            dashboardContainer.SetLayout(TopBarButtonLayout);
+
+            Label dashboardLabel = new Label("Dashboard", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Main);
+
+            Button ordersContainer = new Button(UITheme.ColorType.Main);
+            ordersContainer.SetLayout(TopBarButtonLayout);
+
+            Label ordersLabel = new Label("Orders", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Main);
+
+            BlankUI topBarSeparator = new BlankUI(UITheme.ColorType.Background);
+            topBarSeparator.SetLayout(SeparatorHorizontalLayout);
+            
+            logoContainer.AddChild(logo);
+
+            dashboardContainer.AddChild(dashboardLabel);
+
+            ordersContainer.AddChild(ordersLabel);
+
+            root.AddChild(logoContainer);
+            root.AddChild(dashboardContainer);
+            root.AddChild(ordersContainer);
+
+            return new TopBarBlock() { Root = root, Dashboard = dashboardContainer, Orders = ordersContainer };
+        }
+
+        public DashboardBlock CreateDashboard()
+        {
+            BlankUI mainPanel = new BlankUI(UITheme.ColorType.Background);
+            mainPanel.SetLayout(new Layout()
+            {
+                LayoutWidth = Sizing.Grow(1),
+                LayoutHeight = Sizing.Grow(1),
+                LayoutAxis = LVector2.HORIZONTAL
+            });
+
+            BlankUI leftPanel = new BlankUI(UITheme.ColorType.Background);
+            leftPanel.SetLayout(new Layout()
+            {
+                LayoutWidth = Sizing.Grow(1),
+                LayoutHeight = Sizing.Grow(1),
+                Padding = new Tetra(10),
+                Spacing = 10
+            });
+
+            BlankUI rightPanel = new BlankUI(UITheme.ColorType.MainSoft);
+            rightPanel.SetLayout(new Layout()
+            {
+                LayoutWidth = Sizing.Grow(2),
+                LayoutHeight = Sizing.Grow(1),
+                Padding = new Tetra(20),
+                LayoutAxis = LVector2.VERTICAL
+            });
+
+            BlankUI contentContainer = new BlankUI(UITheme.ColorType.Background);
+            contentContainer.SetLayout(new Layout()
+            {
+                LayoutWidth = Sizing.Grow(1),
+                LayoutHeight = Sizing.Wrap(),
+                LayoutAxis = LVector2.VERTICAL,
+                Padding = new Tetra(10),
+                Spacing = 10
+            });
+
+            Button b1 = new Button(UITheme.ColorType.Background);
+            b1.SetLayout(new Layout()
+            {
+                LayoutWidth = Sizing.Grow(1),
+                LayoutHeight = Sizing.Fixed(70),
+                HorizontalAlignment = Alignment.Middle,
+                VerticalAlignment = Alignment.Middle
+            });
+
+            Button b2 = new Button(UITheme.ColorType.Background);
+            b2.SetLayout(new Layout()
+            {
+                LayoutWidth = Sizing.Grow(1),
+                LayoutHeight = Sizing.Wrap(),
+                HorizontalAlignment = Alignment.Middle,
+                VerticalAlignment = Alignment.Middle,
+                Padding = new Tetra(10)
+            });
+
+            Button b3 = new Button(UITheme.ColorType.Background);
+            b3.SetLayout(new Layout()
+            {
+                LayoutWidth = Sizing.Grow(1),
+                LayoutHeight = Sizing.Fixed(70),
+                HorizontalAlignment = Alignment.Middle,
+                VerticalAlignment = Alignment.Middle
+            });
+
+            BlankUI contentSeparator = new(UITheme.ColorType.Background);
+            contentSeparator.SetLayout(new Layout()
+            {
+                LayoutWidth = Sizing.Fixed(2),
+                LayoutHeight = Sizing.Grow(1)
+            });
+
+            Label l1 = new Label("Testing", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Background);
+            Label l2 = new Label("This label is definitely too big. Let's have a moment of silence. In fact, notice how this button is bigger because the text is longer!", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Background);
+            l2.SetLayout(new Layout()
+            {
+                LayoutWidth = Sizing.Grow(1)
+            });
+            Label l3 = new Label("Holy hell!", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Background);
+
+            b1.AddChild(l1);
+            b2.AddChild(l2);
+            b3.AddChild(l3);
+
+            contentContainer.AddChild(b1);
+            contentContainer.AddChild(b2);
+            contentContainer.AddChild(b3);
+
+            leftPanel.AddChild(contentContainer);
+
+            mainPanel.AddChild(leftPanel);
+            mainPanel.AddChild(contentSeparator);
+            mainPanel.AddChild(rightPanel);
+
+            return new DashboardBlock() { Root = mainPanel, LeftPanel = leftPanel, MainPanel = rightPanel };
+        }
+
+        private Layout TopBarButtonLayout
+        {
+            get
+            {
+                return new Layout()
+                {
+                    LayoutWidth = Sizing.Wrap(),
+                    LayoutHeight = Sizing.Grow(1),
+                    Padding = new Tetra(10),
+                    HorizontalAlignment = Alignment.Middle,
+                    VerticalAlignment = Alignment.Middle
+                };
+            }
+        }
+
+        private Layout SeparatorHorizontalLayout
+        {
+            get
+            {
+                return new Layout()
+                {
+                    LayoutWidth = Sizing.Grow(1),
+                    LayoutHeight = Sizing.Fixed(2)
+                };
+            }
+        }
+
         public static UITheme PlumTheme
         {
             get
@@ -195,7 +411,7 @@ namespace Luna.UI
                     EmergencyColour = new ColourPalette().SetMainColour(new Color(255, 0, 0)).SetHoveredColour(new Color(235, 0, 0)).SetSelectedColour(new Color(215, 0, 0)).SetTextColour(new Color(255, 255, 255)),
                     SeparatorColour = new ColourPalette().SetMainColour(new Color(60, 36, 66)),
                     ShadowColour = new ColourPalette().SetMainColour(new Color(0, 0, 0) * 0.5f),
-                    CornerRadius = (7, 7, 7, 7)
+                    CornerRadius = (10, 10, 10, 10)
                 };
             }
         }
@@ -212,8 +428,8 @@ namespace Luna.UI
                     EmergencyColour = new ColourPalette().SetMainColour(new Color(255, 0, 0)).SetHoveredColour(new Color(235, 0, 0)).SetSelectedColour(new Color(215, 0, 0)).SetTextColour(new Color(255, 255, 255)),
                     SeparatorColour = new ColourPalette().SetMainColour(new Color(36, 47, 66)),
                     ShadowColour = new ColourPalette().SetMainColour(new Color(0, 0, 0) * 0.5f),
-                    CornerRadius = (7, 7, 7, 7)
-                };
+                    CornerRadius = (10, 10, 10, 10)
+               };
             }
         }
     }

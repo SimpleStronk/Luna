@@ -67,6 +67,16 @@ namespace Luna.UI.LayoutSystem
             get { return size; }
             set { size = value; onResize?.Invoke(); }
         }
+
+        public int MinDimension
+        {
+            get { return (int)Math.Min(size.X, size.Y); }
+        }
+
+        public int MaxDimension
+        {
+            get { return (int)Math.Max(size.X, size.Y); }
+        }
         #endregion
 
         public void OnResize(Action e)

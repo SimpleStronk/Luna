@@ -21,35 +21,35 @@ namespace Luna.UI
             // tmp.ColourType = colourType;
             // tmp.Rounded = true;
             // SetTheme(tmp);
-            theme.ColourType = colourType;
-            theme.Rounded = true;
-            onHover += () => buttonState = ButtonState.Hovered; colour = theme.GetColourPalette(cascadeTheme).HoveredColour;
+            overrideTheme.ColourType = colourType;
+            overrideTheme.Rounded = true;
+            onHover += () => { buttonState = ButtonState.Hovered; colourAnimator.SetColour(overrideTheme.GetColourPalette(cascadeTheme).HoveredColour); };
             onClick += () => { clicked = true; buttonState = ButtonState.Selected; };
             onUnhover += () => { if (!clicked) buttonState = ButtonState.None; };
-            onUnclick += () => { buttonState = hovered ? ButtonState.Hovered : ButtonState.None; };
+            onUnclick += () => { buttonState = hovered ? ButtonState.Hovered : ButtonState.None; clicked = false; };
             Initialise();
         }
 
         protected override void Update()
         {
             if (hovered) if (IsJustClicked(MouseButton.Left)) SetClicked(true);
-            if (clicked) if (IsJustUnclicked(MouseButton.Left)) SetClicked(false);
+            if (clicked) if (IsJustUnclicked(MouseButton.Left)) { SetClicked(false); Console.WriteLine("What"); }
 
             switch (buttonState)
             {
                 case ButtonState.None:
                 {
-                    colour = theme.GetColourPalette(cascadeTheme).MainColour;
+                    colourAnimator.SetColour(overrideTheme.GetColourPalette(cascadeTheme).MainColour);
                     break;
                 }
                 case ButtonState.Hovered:
                 {
-                    colour = theme.GetColourPalette(cascadeTheme).HoveredColour;
+                    colourAnimator.SetColour(overrideTheme.GetColourPalette(cascadeTheme).HoveredColour);
                     break;
                 }
                 case ButtonState.Selected:
                 {
-                    colour = theme.GetColourPalette(cascadeTheme).SelectedColour;
+                    colourAnimator.SetColour(overrideTheme.GetColourPalette(cascadeTheme).SelectedColour);
                     break;
                 }
             }
@@ -62,10 +62,12 @@ namespace Luna.UI
 
         private void SetClicked(bool clicked)
         {
+            this.clicked = clicked;
+            if (!clicked) { onUnclick?.Invoke(); return; }
+
             if (!focused) return;
 
-            if (clicked) onClick?.Invoke();
-            else onUnclick?.Invoke();
+            onClick?.Invoke();
         }
 
         public void OnClick(Action e)
@@ -81,8 +83,6 @@ namespace Luna.UI
         protected override void SetFocused(bool focused)
         {
             base.SetFocused(focused);
-
-            if (!focused) clicked = false;
         }
 
         protected override void DebugAction(string action)

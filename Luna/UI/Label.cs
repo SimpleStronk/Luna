@@ -24,7 +24,7 @@ namespace Luna.UI
             // UITheme tmp = theme;
             // tmp.ColourType = colourType;
             // SetTheme(tmp);
-            theme.ColourType = colourType;
+            overrideTheme.ColourType = colourType;
             transform.Size = new LVector2(font.MeasureString(text));
             RenderDefaultRect = false;
             FocusIgnore = true;
@@ -49,7 +49,7 @@ namespace Luna.UI
         protected override void Draw(SpriteBatch s)
         {
             Rectangle globalRect = GetTransform().GetGlobalRect();
-            s.DrawString(font, displayText, new Vector2(globalRect.X, globalRect.Y), theme.GetColourPalette(cascadeTheme).TextColour);
+            s.DrawString(font, displayText, new Vector2(globalRect.X, globalRect.Y), overrideTheme.GetColourPalette(cascadeTheme).TextColour);
         }
 
         public override string GetTag()

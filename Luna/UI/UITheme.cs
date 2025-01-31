@@ -23,9 +23,10 @@ namespace Luna.UI
         public enum ColorType { Main, MainSoft, Background, Emergency, Shadow, Separator, Placeholder };
         private ColorType colourType = ColorType.Background;
         private (int topLeft, int topRight, int bottomLeft, int bottomRight) cornerRadius;
+        private (int width, int height) transformDimensions;
         private Texture2D tlTexture, trTexture, blTexture, brTexture;
         private bool mainColourChanged, mainColourSoftChanged, backgroundColourChanged, emergencyColourChanged,
-            separatorColourChanged, shadowColourChanged, roundedChanged, cornerRadiusChanged;
+            separatorColourChanged, shadowColourChanged, roundedChanged, colourTypeChanged, cornerRadiusChanged;
 
         public ColourPalette MainColour
         {
@@ -72,7 +73,7 @@ namespace Luna.UI
         public ColorType ColourType
         {
             get { return colourType; }
-            set { colourType = value; }
+            set { colourType = value; colourTypeChanged = true; }
         }
 
         public ColourPalette GetColourPalette(UITheme cascadeTheme)
@@ -92,7 +93,7 @@ namespace Luna.UI
                 return new();
             }
 
-            switch (colourType)
+            switch (colourTypeChanged ? colourType : cascadeTheme.colourType)
             {
                 case ColorType.Main: return mainColourChanged ? mainColour : cascadeTheme.mainColour;
                 case ColorType.MainSoft: return mainColourSoftChanged ? mainColourSoft : cascadeTheme.mainColourSoft;
@@ -108,36 +109,35 @@ namespace Luna.UI
 
         public (int TopLeft, int TopRight, int BottomLeft, int BottomRight) CornerRadius
         {
-            get { return cornerRadius; }
             set
             {
                 cornerRadius = value;
-                tlTexture = GraphicsHelper.GenerateCircleTexture(value.TopLeft * 2);
-                trTexture = GraphicsHelper.GenerateCircleTexture(value.TopRight * 2);
-                blTexture = GraphicsHelper.GenerateCircleTexture(value.BottomLeft * 2);
-                brTexture = GraphicsHelper.GenerateCircleTexture(value.BottomRight * 2);
                 cornerRadiusChanged = true;
             }
         }
 
-        public Texture2D TopLeftTexture
+        public static Texture2D TopLeftTexture(UITheme theme, UITransform transform)
         {
-            get { return tlTexture; }
+            int radius = ClipRadius(theme.cornerRadius.topLeft, transform);
+            return GraphicsHelper.GenerateCircleTexture(radius * 2);
         }
 
-        public Texture2D TopRightTexture
+        public static Texture2D TopRightTexture(UITheme theme, UITransform transform)
         {
-            get { return trTexture; }
+            int radius = ClipRadius(theme.cornerRadius.topRight, transform);
+            return GraphicsHelper.GenerateCircleTexture(radius * 2);
         }
 
-        public Texture2D BottomLeftTexture
+        public static Texture2D BottomLeftTexture(UITheme theme, UITransform transform)
         {
-            get { return blTexture; }
+            int radius = ClipRadius(theme.cornerRadius.bottomLeft, transform);
+            return GraphicsHelper.GenerateCircleTexture(radius * 2);
         }
 
-        public Texture2D BottomRightTexture
+        public static Texture2D BottomRightTexture(UITheme theme, UITransform transform)
         {
-            get { return brTexture; }
+            int radius = ClipRadius(theme.cornerRadius.bottomRight, transform);
+            return GraphicsHelper.GenerateCircleTexture(radius * 2);
         }
 
         public bool MainColourChanged
@@ -175,90 +175,102 @@ namespace Luna.UI
             get { return roundedChanged; }
         }
 
+        public bool ColourTypeChanged
+        {
+            get { return colourTypeChanged; }
+        }
+
         public bool CornerRadiusChanged
         {
             get { return cornerRadiusChanged; }
         }
 
+        public static (int topLeft, int topRight, int bottomLeft, int bottomRight) GetCornerRadius(UITheme theme, UITransform transform)
+        {
+            return (ClipRadius(theme.cornerRadius.topLeft, transform), ClipRadius(theme.cornerRadius.topRight, transform),
+                ClipRadius(theme.cornerRadius.bottomLeft, transform), ClipRadius(theme.cornerRadius.bottomRight, transform));
+        }
+
         public void UpdateTheme(UITheme theme)
         {
-            if (theme.mainColourChanged) mainColour = theme.mainColour;
-            if (theme.mainColourSoftChanged) mainColourSoft = theme.mainColourSoft;
-            if (theme.backgroundColourChanged) backgroundColour = theme.backgroundColour;
-            if (theme.emergencyColourChanged) emergencyColour = theme.emergencyColour;
-            if (theme.separatorColourChanged) separatorColour = theme.separatorColour;
-            if (theme.shadowColourChanged) shadowColour = theme.shadowColour;
-            if (theme.roundedChanged) rounded = theme.rounded;
-            if (theme.cornerRadiusChanged) cornerRadius = theme.cornerRadius;
+            if (theme.mainColourChanged) MainColour = theme.mainColour;
+            if (theme.mainColourSoftChanged) MainColourSoft = theme.mainColourSoft;
+            if (theme.backgroundColourChanged) BackgroundColour = theme.backgroundColour;
+            if (theme.emergencyColourChanged) EmergencyColour = theme.emergencyColour;
+            if (theme.separatorColourChanged) SeparatorColour = theme.separatorColour;
+            if (theme.shadowColourChanged) ShadowColour = theme.shadowColour;
+            if (theme.roundedChanged) Rounded = theme.rounded;
+            if (theme.colourTypeChanged) ColourType = theme.colourType;
+            if (theme.cornerRadiusChanged) CornerRadius = theme.cornerRadius;
         }
 
         public static Rectangle TopLeftRect(UITheme theme, UITransform transform)
         {
             Rectangle componentRect = transform.GetGlobalRect();
-            int radius = theme.cornerRadius.topLeft;
+            int radius = ClipRadius(theme.cornerRadius.topLeft, transform);
             return new Rectangle(componentRect.X, componentRect.Y, radius, radius);
         }
 
         public static Rectangle TopRightRect(UITheme theme, UITransform transform)
         {
             Rectangle componentRect = transform.GetGlobalRect();
-            int radius = theme.cornerRadius.topRight;
+            int radius = ClipRadius(theme.cornerRadius.topRight, transform);
             return new Rectangle(componentRect.X + componentRect.Width - radius, componentRect.Y, radius, radius);
         }
 
         public static Rectangle BottomLeftRect(UITheme theme, UITransform transform)
         {
             Rectangle componentRect = transform.GetGlobalRect();
-            int radius = theme.cornerRadius.bottomLeft;
+            int radius = ClipRadius(theme.cornerRadius.bottomLeft, transform);
             return new Rectangle(componentRect.X, componentRect.Y + componentRect.Height - radius, radius, radius);
         }
 
         public static Rectangle BottomRightRect(UITheme theme, UITransform transform)
         {
             Rectangle componentRect = transform.GetGlobalRect();
-            int radius = theme.cornerRadius.bottomRight;
+            int radius = ClipRadius(theme.cornerRadius.bottomRight, transform);
             return new Rectangle(componentRect.X + componentRect.Width - radius, componentRect.Y + componentRect.Height - radius, radius, radius);
         }
 
         public static Rectangle LeftRect(UITheme theme, UITransform transform)
         {
             Rectangle componentRect = transform.GetGlobalRect();
-            int topRadius = theme.cornerRadius.topLeft;
-            int bottomRadius = theme.cornerRadius.bottomLeft;
+            int topRadius = ClipRadius(theme.cornerRadius.topLeft, transform);
+            int bottomRadius = ClipRadius(theme.cornerRadius.bottomLeft, transform);
             return new Rectangle(componentRect.X, componentRect.Y + topRadius, Math.Max(topRadius, bottomRadius), componentRect.Height - topRadius - bottomRadius);
         }
 
         public static Rectangle TopRect(UITheme theme, UITransform transform)
         {
             Rectangle componentRect = transform.GetGlobalRect();
-            int leftRadius = theme.cornerRadius.topLeft;
-            int rightRadius = theme.cornerRadius.topRight;
+            int leftRadius = ClipRadius(theme.cornerRadius.topLeft, transform);
+            int rightRadius = ClipRadius(theme.cornerRadius.topRight, transform);
             return new Rectangle(componentRect.X + leftRadius, componentRect.Y, componentRect.Width - leftRadius - rightRadius, Math.Max(leftRadius, rightRadius));
         }
 
         public static Rectangle BottomRect(UITheme theme, UITransform transform)
         {
             Rectangle componentRect = transform.GetGlobalRect();
-            int leftRadius = theme.cornerRadius.bottomLeft;
-            int rightRadius = theme.cornerRadius.bottomRight;
+            int leftRadius = ClipRadius(theme.cornerRadius.bottomLeft, transform);
+            int rightRadius = ClipRadius(theme.cornerRadius.bottomRight, transform);
             return new Rectangle(componentRect.X + leftRadius, componentRect.Y + componentRect.Height - Math.Max(leftRadius, rightRadius), componentRect.Width - leftRadius - rightRadius, Math.Max(leftRadius, rightRadius));
         }
 
         public static Rectangle RightRect(UITheme theme, UITransform transform)
         {
             Rectangle componentRect = transform.GetGlobalRect();
-            int topRadius = theme.cornerRadius.topRight;
-            int bottomRadius = theme.cornerRadius.bottomRight;
+            int topRadius = ClipRadius(theme.cornerRadius.topRight, transform);
+            int bottomRadius = ClipRadius(theme.cornerRadius.bottomRight, transform);
             return new Rectangle(componentRect.X + componentRect.Width - Math.Max(topRadius, bottomRadius), componentRect.Y + topRadius, Math.Max(topRadius, bottomRadius), componentRect.Height - topRadius - bottomRadius);
         }
 
         public static Rectangle CentreRect(UITheme theme, UITransform transform)
         {
             Rectangle componentRect = transform.GetGlobalRect();
-            int tlRadius = theme.cornerRadius.topLeft;
-            int trRadius = theme.cornerRadius.topRight;
-            int blRadius = theme.cornerRadius.bottomLeft;
-            int brRadius = theme.cornerRadius.bottomRight;
+            int tlRadius = ClipRadius(theme.cornerRadius.topLeft, transform);
+            int trRadius = ClipRadius(theme.cornerRadius.topRight, transform);
+            int blRadius = ClipRadius(theme.cornerRadius.bottomLeft, transform);
+            int brRadius = ClipRadius(theme.cornerRadius.bottomRight, transform);
 
             int left = Math.Max(tlRadius, blRadius);
             int right = Math.Max(trRadius, brRadius);
@@ -271,6 +283,11 @@ namespace Luna.UI
         public static Rectangle[] FillRectangles(UITheme theme, UITransform transform)
         {
             return [TopRect(theme, transform), BottomRect(theme, transform), LeftRect(theme, transform), RightRect(theme, transform), CentreRect(theme, transform)];
+        }
+
+        private static int ClipRadius(int radius, UITransform transform)
+        {
+            return Math.Min(radius, transform.MinDimension / 2);
         }
     }
 }

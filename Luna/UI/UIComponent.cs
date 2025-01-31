@@ -5,13 +5,14 @@ using System;
 using System.Collections.Generic;
 using Luna.UI.LayoutSystem;
 using SharpDX.MediaFoundation;
+using SharpDX.Direct2D1.Effects;
 
 namespace Luna.UI
 {
     internal abstract class UIComponent : ILayoutable
     {
         protected static Texture2D pixelTexture;
-        protected UITheme theme = new UITheme(), cascadeTheme;
+        protected UITheme cascadeTheme, overrideTheme = new UITheme();
         protected LUIVA.Layout layout = new LUIVA.Layout();
         protected UITransform transform = new UITransform();
         protected UIComponent? parent;
@@ -25,7 +26,7 @@ namespace Luna.UI
         protected Action<Action, Action, int> checkFocusCallback;
         private static Action<Rectangle> updateScissorRectangle;
         //REPLACE WITH COLOUR ANIMATOR
-        protected Color colour;
+        protected ColourAnimator colourAnimator = new ExpColourAnimator();
         protected bool debugMode = false;
         private bool renderDefaultRect = true;
 
@@ -59,7 +60,7 @@ namespace Luna.UI
         {
             SyncChildren();
 
-            if (!visible) return;
+            if (!visible) { colourAnimator.SetColour(new Color(0, 0, 0, 0)); return; }
 
             foreach (UIComponent c in children)
             {
@@ -70,32 +71,42 @@ namespace Luna.UI
             Update();
         }
 
+        public void PostUpdate()
+        {
+            colourAnimator.Update();
+
+            foreach (UIComponent c in children)
+            {
+                c.PostUpdate();
+            }
+        }
+
         public void BaseDraw(SpriteBatch s)
         {
-            if (!visible) return;
-
             updateScissorRectangle(ignoreScissorRect ? GetRootRectangle() : CalculateScissorRectangle());
 
             if (renderDefaultRect)
             {
                 if (pixelTexture == null) throw new Exception("pixelTexture not initialised in class UIComponent");
 
-                if (GetCorrectTheme(theme.CornerRadiusChanged).CornerRadius == (0, 0, 0, 0) || !GetCorrectTheme(theme.RoundedChanged).Rounded)
+                (int tl, int tr, int bl, int br) = UITheme.GetCornerRadius(GetCorrectTheme(overrideTheme.CornerRadiusChanged), transform);
+
+                if (UITheme.GetCornerRadius(GetCorrectTheme(overrideTheme.CornerRadiusChanged), transform) == (0, 0, 0, 0) || !GetCorrectTheme(overrideTheme.RoundedChanged).Rounded)
                 {
                     s.Draw(pixelTexture, transform.GetGlobalRect(), new Rectangle(0, 0, 1, 1),
-                        colour, 0, new Vector2(0, 0), SpriteEffects.None, 1);
+                        colourAnimator.GetColour(), 0, new Vector2(0, 0), SpriteEffects.None, 1);
                 }
                 else
                 {
-                    UITheme correctTheme = GetCorrectTheme(theme.CornerRadiusChanged);
-                    if (correctTheme.CornerRadius.TopLeft > 0) s.Draw(correctTheme.TopLeftTexture, UITheme.TopLeftRect(correctTheme, transform), new Rectangle(0, 0, correctTheme.CornerRadius.TopLeft, correctTheme.CornerRadius.TopLeft), colour, 0, new Vector2(0, 0), SpriteEffects.None, 1);
-                    if (correctTheme.CornerRadius.TopRight > 0) s.Draw(correctTheme.TopRightTexture, UITheme.TopRightRect(correctTheme, transform), new Rectangle(correctTheme.CornerRadius.TopRight, 0, correctTheme.CornerRadius.TopRight, correctTheme.CornerRadius.TopRight), colour, 0, new Vector2(0, 0), SpriteEffects.None, 1);
-                    if (correctTheme.CornerRadius.BottomLeft > 0) s.Draw(correctTheme.BottomLeftTexture, UITheme.BottomLeftRect(correctTheme, transform), new Rectangle(0, correctTheme.CornerRadius.BottomLeft, correctTheme.CornerRadius.BottomLeft, correctTheme.CornerRadius.BottomLeft), colour, 0, new Vector2(0, 0), SpriteEffects.None, 1);
-                    if (correctTheme.CornerRadius.BottomRight > 0) s.Draw(correctTheme.BottomRightTexture, UITheme.BottomRightRect(correctTheme, transform), new Rectangle(correctTheme.CornerRadius.BottomRight, correctTheme.CornerRadius.BottomRight, correctTheme.CornerRadius.BottomRight, correctTheme.CornerRadius.BottomRight), colour, 0, new Vector2(0, 0), SpriteEffects.None, 1);
+                    UITheme correctTheme = GetCorrectTheme(overrideTheme.CornerRadiusChanged);
+                    if (tl > 0) s.Draw(UITheme.TopLeftTexture(correctTheme, transform), UITheme.TopLeftRect(correctTheme, transform), new Rectangle(0, 0, tl, tl), colourAnimator.GetColour(), 0, new Vector2(0, 0), SpriteEffects.None, 1);
+                    if (tr > 0) s.Draw(UITheme.TopRightTexture(correctTheme, transform), UITheme.TopRightRect(correctTheme, transform), new Rectangle(tr, 0, tr, tr), colourAnimator.GetColour(), 0, new Vector2(0, 0), SpriteEffects.None, 1);
+                    if (bl > 0) s.Draw(UITheme.BottomLeftTexture(correctTheme, transform), UITheme.BottomLeftRect(correctTheme, transform), new Rectangle(0, bl, bl, bl), colourAnimator.GetColour(), 0, new Vector2(0, 0), SpriteEffects.None, 1);
+                    if (br > 0) s.Draw(UITheme.BottomRightTexture(correctTheme,transform), UITheme.BottomRightRect(correctTheme, transform), new Rectangle(br, br, br, br), colourAnimator.GetColour(), 0, new Vector2(0, 0), SpriteEffects.None, 1);
 
                     foreach (Rectangle r in UITheme.FillRectangles(correctTheme, transform))
                     {
-                        s.Draw(pixelTexture, r, new Rectangle(0, 0, 1, 1), colour, 0, new Vector2(0, 0), SpriteEffects.None, 1);
+                        s.Draw(pixelTexture, r, new Rectangle(0, 0, 1, 1), colourAnimator.GetColour(), 0, new Vector2(0, 0), SpriteEffects.None, 1);
                     }
                 }
             }
@@ -255,13 +266,13 @@ namespace Luna.UI
 
         public void SetTheme(UITheme theme)
         {
-            this.theme.UpdateTheme(theme);
-            colour = textObject ? theme.GetColourPalette(cascadeTheme).TextColour : theme.GetColourPalette(cascadeTheme).MainColour;
+            overrideTheme.UpdateTheme(theme);
+            colourAnimator.SetColour(textObject ? theme.GetColourPalette(cascadeTheme).TextColour : theme.GetColourPalette(cascadeTheme).MainColour);
         }
 
         public UITheme GetTheme()
         {
-            return theme;
+            return overrideTheme;
         }
 
         public void CascadeTheme(UITheme cascadeTheme)
@@ -269,7 +280,7 @@ namespace Luna.UI
             if (cascadeTheme == null) return;
 
             this.cascadeTheme = cascadeTheme;
-            colour = textObject ? theme.GetColourPalette(cascadeTheme).TextColour : theme.GetColourPalette(cascadeTheme).MainColour;
+            colourAnimator.SetColour(textObject ? overrideTheme.GetColourPalette(cascadeTheme).TextColour : overrideTheme.GetColourPalette(cascadeTheme).MainColour);
 
             foreach (UIComponent c in children)
             {
@@ -374,6 +385,15 @@ namespace Luna.UI
             set { CascadeUnhover(); visible = value; }
         }
 
+        public void ForceTransparent()
+        {
+            colourAnimator.ForceColour(new Color(0, 0, 0, 0));
+            foreach (UIComponent c in children)
+            {
+                c.ForceTransparent();
+            }
+        }
+
         public bool IgnoreScissorRect
         {
             get { return ignoreScissorRect; }
@@ -414,14 +434,14 @@ namespace Luna.UI
         protected UITheme GetCorrectTheme(bool propertyChanged)
         {
             // Returns cascadeTheme or theme depending on whether theme's property has been changed
-            return propertyChanged ? theme : cascadeTheme;
+            return propertyChanged ? overrideTheme : cascadeTheme;
         }
 
         #endregion
 
         protected virtual void OnResize()
         {
-            
+
         }
     }
 }
