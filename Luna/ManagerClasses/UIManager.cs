@@ -18,6 +18,7 @@ namespace Luna.ManagerClasses
 
         private UIComponent rootComponent;
         private UIComponent overlayComponent;
+        private UIComponent mainWindowContainer;
         private UIComponent windowControlsPanel, windowControlsParentTop;
         private (Action alertFocus, Action alertUnfocus, int priority) focusedComponent;
         private Action quitAction;
@@ -81,7 +82,16 @@ namespace Luna.ManagerClasses
             UIComponent topBar = topBarBlock.Root;
             topBarBlock.Orders.OnClick(() => { themeToggle = !themeToggle; } );
 
+            mainWindowContainer = new BlankUI(UITheme.ColorType.Background);
+            mainWindowContainer.SetLayout(new Layout()
+            {
+                LayoutWidth = Sizing.Grow(1),
+                LayoutHeight = Sizing.Grow(1),
+            });
+
             DashboardBlock dashboardBlock = uiFactory.CreateDashboard();
+
+            mainWindowContainer.AddChild(dashboardBlock.Root);
 
             foreach (Order o in systemManager.GetOrders())
             {
@@ -107,7 +117,7 @@ namespace Luna.ManagerClasses
             }
 
             rootComponent.AddChild(topBar);
-            rootComponent.AddChild(dashboardBlock.Root);
+            rootComponent.AddChild(mainWindowContainer);
 
             rootComponent.AddChild(overlayComponent);
             rootComponent.AddChild(windowControlsPanel);

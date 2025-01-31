@@ -281,7 +281,8 @@ namespace Luna.UI
             {
                 LayoutWidth = Sizing.Grow(1),
                 LayoutHeight = Sizing.Grow(1),
-                LayoutAxis = LVector2.HORIZONTAL
+                LayoutAxis = LVector2.HORIZONTAL,
+                Inline = false
             });
 
             BlankUI leftPanel = new BlankUI(UITheme.ColorType.Background);
