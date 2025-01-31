@@ -28,6 +28,8 @@ namespace Luna.ManagerClasses
         private bool windowBorderless;
         bool themeToggle = false;
 
+        UIComponent currentWindow;
+
         public UIManager(GameWindow window, Action quitAction, GraphicsDevice graphicsDevice, SystemManager systemManager)
         {
             this.window = window;
@@ -80,7 +82,8 @@ namespace Luna.ManagerClasses
 
             TopBarBlock topBarBlock = uiFactory.CreateTopBar();
             UIComponent topBar = topBarBlock.Root;
-            topBarBlock.Orders.OnClick(() => { themeToggle = !themeToggle; } );
+            topBarBlock.Orders.OnClick(() => { themeToggle = !themeToggle; UIComponent c = uiFactory.CreateDashboard().Root; mainWindowContainer.AddChild(c); c.ColourAnimator.OnTransitionAction(() => { mainWindowContainer.RemoveChild(currentWindow); currentWindow = c; }); } );
+            topBarBlock.Dashboard.OnClick(() => { UIComponent c = uiFactory.CreateBlankUI(); mainWindowContainer.AddChild(c); c.ColourAnimator.OnTransitionAction(() => { mainWindowContainer.RemoveChild(currentWindow); currentWindow = c; }); });
 
             mainWindowContainer = new BlankUI(UITheme.ColorType.Background);
             mainWindowContainer.SetLayout(new Layout()
@@ -90,6 +93,8 @@ namespace Luna.ManagerClasses
             });
 
             DashboardBlock dashboardBlock = uiFactory.CreateDashboard();
+
+            currentWindow = dashboardBlock.Root;
 
             mainWindowContainer.AddChild(dashboardBlock.Root);
 

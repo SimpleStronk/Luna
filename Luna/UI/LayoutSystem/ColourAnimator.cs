@@ -12,5 +12,7 @@ namespace Luna.UI.LayoutSystem
         public void ForceColour(Color color);
 
         public Color GetColour();
+
+        public void OnTransitionAction(Action e);
     }
 }

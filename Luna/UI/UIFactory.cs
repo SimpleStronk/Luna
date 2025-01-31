@@ -370,7 +370,33 @@ namespace Luna.UI
             mainPanel.AddChild(contentSeparator);
             mainPanel.AddChild(rightPanel);
 
+            mainPanel.ForceSynchChildren();
+
             return new DashboardBlock() { Root = mainPanel, LeftPanel = leftPanel, MainPanel = rightPanel };
+        }
+
+        public BlankUI CreateBlankUI()
+        {
+            BlankUI blank = new BlankUI(UITheme.ColorType.Background);
+            blank.SetLayout(new Layout()
+            {
+                LayoutWidth = Sizing.Grow(1),
+                LayoutHeight = Sizing.Grow(1),
+                Inline = false
+            });
+
+            Button b = new Button(UITheme.ColorType.Main);
+            b.SetLayout(new Layout()
+            {
+                LayoutWidth = Sizing.Fixed(300),
+                LayoutHeight = Sizing.Fixed(300)
+            });
+
+            blank.AddChild(b);
+
+            blank.ForceSynchChildren();
+
+            return blank;
         }
 
         private Layout TopBarButtonLayout

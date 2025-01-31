@@ -379,6 +379,11 @@ namespace Luna.UI
             UIComponent.updateScissorRectangle = updateScissorRectangle;
         }
 
+        public ColourAnimator ColourAnimator
+        {
+            get { return colourAnimator; }
+        }
+
         public bool Visible
         {
             get { return visible; }

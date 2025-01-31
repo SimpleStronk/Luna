@@ -10,10 +10,17 @@ namespace Luna.UI.LayoutSystem
         private Colour currentColour;
         private Colour targetColour;
         private float dampingFactor = 5f;
+        Action onTransitionAction;
 
         public void Update()
         {
             currentColour += (targetColour - currentColour) / dampingFactor;
+
+            if (GetColour() == Colour.ToColor(targetColour) && onTransitionAction != null)
+            {
+                onTransitionAction.Invoke();
+                onTransitionAction = null;
+            }
         }
 
         public void SetColour(Color colour)
@@ -29,6 +36,11 @@ namespace Luna.UI.LayoutSystem
         public Color GetColour()
         {
             return Colour.ToColor(currentColour);
+        }
+
+        public void OnTransitionAction(Action e)
+        {
+            onTransitionAction += e;
         }
 
         struct Colour
