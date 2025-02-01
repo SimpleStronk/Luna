@@ -19,13 +19,12 @@ namespace Luna.UI
         public Label(string text, SpriteFont font, UITheme.ColorType colourType)
         {
             textObject = true;
-            this.text = text;
             this.font = font;
+            SetText(text);
             // UITheme tmp = theme;
             // tmp.ColourType = colourType;
             // SetTheme(tmp);
             overrideTheme.ColourType = colourType;
-            transform.Size = new LVector2(font.MeasureString(text));
             RenderDefaultRect = false;
             FocusIgnore = true;
 
@@ -55,6 +54,12 @@ namespace Luna.UI
         public override string GetTag()
         {
             return $"{base.GetTag()} \"{text}\"";
+        }
+
+        public void SetText(string text)
+        {
+            this.text = text;
+            transform.Size = new LVector2(font.MeasureString(text));
         }
 
         private string DisplayText

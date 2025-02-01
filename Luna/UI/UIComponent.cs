@@ -325,7 +325,6 @@ namespace Luna.UI
             foreach (UIComponent c in children)
             {
                 c.SetParent(this);
-                c.cascadeTheme = cascadeTheme;
                 childQueue.Add(c);
             }
         }
@@ -415,16 +414,6 @@ namespace Luna.UI
             get { return renderDefaultRect; }
             set { renderDefaultRect = value; }
         }
-
-        // private ColourPalette mainColour;
-        // private ColourPalette mainColourSoft;
-        // private ColourPalette backgroundColour;
-        // private ColourPalette emergencyColour;
-        // private ColourPalette separatorColour;
-        // private ColourPalette shadowColour;
-        // private float hoverValue;
-        // private float selectValue;
-        // private bool rounded;
 
         protected UITheme GetCorrectTheme(bool propertyChanged)
         {

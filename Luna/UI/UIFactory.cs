@@ -380,7 +380,7 @@ namespace Luna.UI
             });
 
             Label l1 = new Label("Testing", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Background);
-            Label l2 = new Label("This label is definitely too big. Let's have a moment of silence. In fact, notice how this button is bigger because the text is longer!", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Background);
+            Label l2 = new Label("Enjoy the money, I hope it makes you happy. Dear lord, what a sad little life, Jane. You ruined my night completely so you could have the money and I hope now you can spend it on lessons in grace and decorum. Because you have all the grace of a reversing dump truck without any tyres on.", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Background);
             l2.SetLayout(new Layout()
             {
                 LayoutWidth = Sizing.Grow(1)
@@ -394,6 +394,10 @@ namespace Luna.UI
             contentContainer.AddChild(b1);
             contentContainer.AddChild(b2);
             contentContainer.AddChild(b3);
+
+            Toggle t = new Toggle(UITheme.ColorType.Background);
+            t.SetLayout(new Layout() { LayoutWidth = Sizing.Grow(1), LayoutHeight = Sizing.Fixed(40) });
+            contentContainer.AddChild(t);
 
             leftPanel.AddChild(contentContainer);
 
@@ -478,7 +482,7 @@ namespace Luna.UI
                     EmergencyColour = new ColourPalette().SetMainColour(new Color(255, 0, 0)).SetHoveredColour(new Color(235, 0, 0)).SetSelectedColour(new Color(215, 0, 0)).SetTextColour(new Color(255, 255, 255)),
                     SeparatorColour = new ColourPalette().SetMainColour(new Color(30, 30, 30) * 0.2f),
                     ShadowColour = new ColourPalette().SetMainColour(new Color(0, 0, 0) * 0.5f),
-                    CornerRadius = (10, 10, 10, 10)
+                    CornerRadius = (7, 7, 7, 7)
                 };
             }
         }

@@ -12,8 +12,8 @@ namespace Luna.UI
     {
         protected bool clicked;
         protected Action onClick, onUnclick;
-        enum ButtonState { None, Hovered, Selected };
-        ButtonState buttonState = ButtonState.None;
+        protected enum ButtonState { None, Hovered, Selected };
+        protected ButtonState buttonState = ButtonState.None;
 
         public Button(UITheme.ColorType colourType)
         {
