@@ -88,7 +88,7 @@ namespace Luna.UI.LayoutSystem
                         
                         if (!element.GetLayout().Inline) continue;
 
-                        element.GetTransform().Position.SetComponentValue(currentPosition, axis);
+                        element.GetTransform().SetPositionComponentValue(currentPosition, axis);
                         currentPosition += elementSize + parentSpacing;
                     }
                 }
@@ -128,7 +128,7 @@ namespace Luna.UI.LayoutSystem
                             }
                         }
 
-                        element.GetTransform().Position.SetComponentValue(position, axis);
+                        element.GetTransform().SetPositionComponentValue(position, axis);
                     }
                 }
 

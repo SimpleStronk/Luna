@@ -38,6 +38,7 @@ namespace Luna.UI.LayoutSystem
             return Colour.ToColor(currentColour);
         }
 
+        // NOTE - THIS IS CURRENTLY PRONE TO EXPERIENCING ISSUES IF ANOTHER TRANSITION IS TRIGGERED BEFORE TARGET IS REACHED
         public void OnTransitionAction(Action e)
         {
             onTransitionAction += e;

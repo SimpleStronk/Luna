@@ -33,7 +33,7 @@ namespace Luna.UI
         protected override void Update()
         {
             if (hovered) if (IsJustClicked(MouseButton.Left)) SetClicked(true);
-            if (clicked) if (IsJustUnclicked(MouseButton.Left)) { SetClicked(false); Console.WriteLine("What"); }
+            if (clicked) if (IsJustUnclicked(MouseButton.Left)) { SetClicked(false); }
 
             switch (buttonState)
             {

@@ -48,6 +48,7 @@ namespace Luna.UI
         public void PreUpdate()
         {
             CheckFocused(TestMouseCollision());
+            transform.Update();
 
             foreach (UIComponent c in children)
             {

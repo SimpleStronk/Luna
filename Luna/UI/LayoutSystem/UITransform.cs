@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using SharpDX.MediaFoundation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,29 +13,34 @@ namespace Luna.UI.LayoutSystem
     internal class UITransform
     {
         private UITransform? parent;
-        private LVector2 position = new LVector2();
+        private IPositionAnimator positionAnimator = new ExpPositionAnimator();
         private LVector2 size = new LVector2();
         private Action onResize;
+
+        public void Update()
+        {
+            positionAnimator.Update();
+        }
 
         #region getters_setters
         public Rectangle GetLocalRect()
         {
-            return new Rectangle((int)position.X, (int)position.Y, (int)size.X, (int)size.Y);
+            return new Rectangle((int)positionAnimator.GetCurrentPosition().X, (int)positionAnimator.GetCurrentPosition().Y, (int)size.X, (int)size.Y);
         }
 
         public Rectangle GetGlobalRect()
         {
-            return new Rectangle((int)(position.X + GetParentPosition().X), (int)(position.Y + GetParentPosition().Y), (int)size.X, (int)size.Y);
+            return new Rectangle((int)(positionAnimator.GetCurrentPosition().X + GetParentPosition().X), (int)(positionAnimator.GetCurrentPosition().Y + GetParentPosition().Y), (int)size.X, (int)size.Y);
         }
 
         public LVector2 GetLocalCentre()
         {
-            return position + (size / 2);
+            return positionAnimator.GetCurrentPosition() + (size / 2);
         }
 
         public LVector2 GetGlobalCentre()
         {
-            return position + GetParentPosition() + (size / 2);
+            return positionAnimator.GetCurrentPosition() + GetParentPosition() + (size / 2);
         }
 
         private LVector2 GetParentPosition()
@@ -44,22 +50,35 @@ namespace Luna.UI.LayoutSystem
             return parent.GlobalPosition;
         }
 
+        public void SetPositionComponentValue(float component, int axis)
+        {
+            LVector2 targetPos = positionAnimator.GetTargetPosition();
+            targetPos.SetComponentValue(component, axis);
+            positionAnimator.SetPosition(targetPos);
+        }
+
         public UITransform Parent
         {
             get { return parent; }
             set { parent = value; }
         }
 
-        public LVector2 Position
+        public LVector2 CurrentPosition
         {
-            get { return position; }
-            set { position = value; }
+            get { return positionAnimator.GetCurrentPosition(); }
+            set { positionAnimator.SetPosition(value); }
+        }
+
+        public LVector2 TargetPosition
+        {
+            get { return positionAnimator.GetTargetPosition(); }
+            set { positionAnimator.SetPosition(value); }
         }
 
         public LVector2 GlobalPosition
         {
-            get { return position + GetParentPosition(); }
-            set { position = value - GetParentPosition(); }
+            get { return positionAnimator.GetCurrentPosition() + GetParentPosition(); }
+            set { positionAnimator.SetPosition(value - GetParentPosition()); }
         }
 
         public LVector2 Size
