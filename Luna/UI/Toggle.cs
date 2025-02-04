@@ -13,7 +13,7 @@ namespace Luna.UI
         private bool isOn;
         private Action<bool> onValueChanged;
 
-        public Toggle(UITheme.ColorType colourType) : base(colourType)
+        public Toggle(UITheme.ColorType colourType) : base(VisualResponse.ColourChange, colourType)
         {
             SetLayout(new Layout()
             {
@@ -24,21 +24,19 @@ namespace Luna.UI
             });
             overrideTheme.ColourType = colourType;
             overrideTheme.Rounded = true;
-            onHover += () => { buttonState = ButtonState.Hovered; colourAnimator.SetColour(overrideTheme.GetColourPalette(cascadeTheme).HoveredColour); };
-            onClick += () => { clicked = true; buttonState = ButtonState.Selected; IsOn = !IsOn; };
-            onUnhover += () => { if (!clicked) buttonState = ButtonState.None; };
-            onUnclick += () => { buttonState = hovered ? ButtonState.Hovered : ButtonState.None; clicked = false; };
+            onClick += () => { IsOn = !IsOn; };
             Initialise();
 
             indicatorContainer = new BlankUI(UITheme.ColorType.Separator);
             indicatorContainer.SetLayout(new Layout()
             {
-                LayoutWidth = Sizing.Fixed(40),
+                LayoutWidth = Sizing.Fixed(50),
                 LayoutHeight = Sizing.Fixed(30),
                 HorizontalAlignment = Alignment.Begin,
                 Padding = new Tetra(5)
             });
             indicatorContainer.SetTheme(new UITheme() { Rounded = true });
+            indicatorContainer.FocusIgnore = true;
 
             indicator = new BlankUI(UITheme.ColorType.MainSoft);
             indicator.SetLayout(new Layout()
@@ -47,6 +45,7 @@ namespace Luna.UI
                 LayoutHeight = Sizing.Grow(1),
             });
             indicator.SetTheme(new UITheme(){ Rounded = true });
+            indicator.FocusIgnore = true;
 
             indicatorContainer.AddChild(indicator);
 
@@ -69,6 +68,7 @@ namespace Luna.UI
 
             this.isOn = isOn;
             onValueChanged?.Invoke(isOn);
+
             indicatorContainer.SetLayout(new Layout() { HorizontalAlignment = isOn ? Alignment.End : Alignment.Begin });
 
             indicator.SetTheme(new UITheme() { ColourType = isOn ? UITheme.ColorType.Main : UITheme.ColorType.MainSoft });
@@ -77,6 +77,11 @@ namespace Luna.UI
         public void OnValueChanged(Action<bool> onValueChanged)
         {
             this.onValueChanged = onValueChanged;
+        }
+
+        public Label Label
+        {
+            get { return label; }
         }
     }
 }

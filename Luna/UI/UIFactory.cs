@@ -397,6 +397,27 @@ namespace Luna.UI
 
             Toggle t = new Toggle(UITheme.ColorType.Background);
             t.SetLayout(new Layout() { LayoutWidth = Sizing.Grow(1), LayoutHeight = Sizing.Fixed(40) });
+            t.SetTheme(new UITheme() { Rounded = true });
+
+            Slider s = new Slider(LVector2.HORIZONTAL, UITheme.ColorType.Background);
+            s.SetLayout(new Layout() { LayoutWidth = Sizing.Grow(1) });
+            s.SetTheme(new UITheme() { Rounded = true });
+            s.MinimumValue = 0;
+            s.MaximumValue = 5;
+            s.Increment = 1;
+            s.OnValueChanged((float value) => t.Label.SetText($"{value} spiders"));
+
+            Slider s2 = new Slider(LVector2.HORIZONTAL, UITheme.ColorType.Background);
+            s2.SetLayout(new Layout() { LayoutWidth = Sizing.Grow(1) });
+            s2.SetTheme(new UITheme() { Rounded = true });
+            s2.MinimumValue = 0;
+            s2.MaximumValue = 1;
+            s2.Increment = 0;
+
+            Label label = new Label("1 Slider", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Background);
+            contentContainer.AddChild(s2);
+            contentContainer.AddChild(label);
+            contentContainer.AddChild(s);
             contentContainer.AddChild(t);
 
             leftPanel.AddChild(contentContainer);
@@ -482,7 +503,7 @@ namespace Luna.UI
                     EmergencyColour = new ColourPalette().SetMainColour(new Color(255, 0, 0)).SetHoveredColour(new Color(235, 0, 0)).SetSelectedColour(new Color(215, 0, 0)).SetTextColour(new Color(255, 255, 255)),
                     SeparatorColour = new ColourPalette().SetMainColour(new Color(30, 30, 30) * 0.2f),
                     ShadowColour = new ColourPalette().SetMainColour(new Color(0, 0, 0) * 0.5f),
-                    CornerRadius = (7, 7, 7, 7)
+                    CornerRadius = (10, 10, 10, 10)
                 };
             }
         }

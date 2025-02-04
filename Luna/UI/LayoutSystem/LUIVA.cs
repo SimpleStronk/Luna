@@ -86,7 +86,28 @@ namespace Luna.UI.LayoutSystem
                             }
                         }
                         
-                        if (!element.GetLayout().Inline) continue;
+                        if (!element.GetLayout().Inline)
+                        {
+                            switch (alignment)
+                            {
+                                case Alignment.Begin:
+                                {
+                                    element.GetTransform().SetPositionComponentValue((int)parentPadding.X, axis);
+                                    break;
+                                }
+                                case Alignment.Middle:
+                                {
+                                    element.GetTransform().SetPositionComponentValue((int)(((float)parentSize / 2) - ((float)elementSize / 2)), axis);
+                                    break;
+                                }
+                                case Alignment.End:
+                                {
+                                    element.GetTransform().SetPositionComponentValue(parentSize - (int)parentPadding.Y - elementSize, axis);
+                                    break;
+                                }
+                            }
+                            continue;
+                        }
 
                         element.GetTransform().SetPositionComponentValue(currentPosition, axis);
                         currentPosition += elementSize + parentSpacing;
@@ -103,7 +124,7 @@ namespace Luna.UI.LayoutSystem
                     {
                         ILayoutable element = elements.ElementAt(i);
 
-                        if (!element.GetLayout().Inline) continue;
+                        //if (!element.GetLayout().Inline) continue;
 
                         Alignment alignment = parent.GetLayout().GetAlignmentFromAxis(axis);
                         int elementSize = (int)element.GetTransform().Size.GetComponent(axis);
@@ -147,6 +168,8 @@ namespace Luna.UI.LayoutSystem
 
             foreach (ILayoutable e in elements)
             {
+                if (!e.GetLayout().Inline) continue;
+                
                 totalSize += (int)e.GetTransform().Size.GetComponent(axis);
             }
 
@@ -420,7 +443,7 @@ namespace Luna.UI.LayoutSystem
             private bool paddingChanged, layoutAxisChanged,
                 horizontalAlignmentChanged, verticalAlignmentChanged, imageFitModeChanged,
                 imageAlignmentChanged, layoutWidthChanged, LayoutHeightChanged, spacingChanged,
-                inlineChanged;
+                clipChildrenChanged, inlineChanged;
 
             public Layout()
             {
@@ -511,7 +534,7 @@ namespace Luna.UI.LayoutSystem
             public bool ClipChildren
             {
                 get { return clipChildren; }
-                set { clipChildren = value; }
+                set { clipChildren = value; clipChildrenChanged = true; }
             }
 
             public bool Inline
@@ -537,6 +560,7 @@ namespace Luna.UI.LayoutSystem
                 if (layout.layoutWidthChanged) layoutSizing[LVector2.HORIZONTAL] = layout.layoutSizing[LVector2.HORIZONTAL];
                 if (layout.LayoutHeightChanged) layoutSizing[LVector2.VERTICAL] = layout.layoutSizing[LVector2.VERTICAL];
                 if (layout.spacingChanged) spacing = layout.spacing;
+                if (layout.clipChildrenChanged) clipChildren = layout.clipChildren;
                 if (layout.inlineChanged) inline = layout.inline;
             }
         }

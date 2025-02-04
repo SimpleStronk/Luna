@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework;
 
 namespace Luna.UI.LayoutSystem
@@ -105,6 +106,11 @@ namespace Luna.UI.LayoutSystem
         public void OnChanged(Action e)
         {
             onChanged += e;
+        }
+
+        public static implicit operator LVector2 (Vector2 vector)
+        {
+            return new LVector2(vector);
         }
 
         public override string ToString()

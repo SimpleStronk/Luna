@@ -14,19 +14,21 @@ namespace Luna.UI
         protected Action onClick, onUnclick;
         protected enum ButtonState { None, Hovered, Selected };
         protected ButtonState buttonState = ButtonState.None;
+        public enum VisualResponse { None, ColourChange };
 
         public Button(UITheme.ColorType colourType)
         {
-            // UITheme tmp = theme;
-            // tmp.ColourType = colourType;
-            // tmp.Rounded = true;
-            // SetTheme(tmp);
+            AddVisualResponse();
             overrideTheme.ColourType = colourType;
             overrideTheme.Rounded = true;
-            onHover += () => { buttonState = ButtonState.Hovered; colourAnimator.SetColour(overrideTheme.GetColourPalette(cascadeTheme).HoveredColour); };
-            onClick += () => { clicked = true; buttonState = ButtonState.Selected; };
-            onUnhover += () => { if (!clicked) buttonState = ButtonState.None; };
-            onUnclick += () => { buttonState = hovered ? ButtonState.Hovered : ButtonState.None; clicked = false; };
+            Initialise();
+        }
+
+        public Button(VisualResponse visualResponse, UITheme.ColorType colourType)
+        {
+            if (visualResponse == VisualResponse.ColourChange) AddVisualResponse();
+            overrideTheme.ColourType = colourType;
+            overrideTheme.Rounded = true;
             Initialise();
         }
 
@@ -58,6 +60,14 @@ namespace Luna.UI
         protected override void Draw(SpriteBatch s)
         {
             //s.Draw
+        }
+
+        protected void AddVisualResponse()
+        {
+            onHover += () => { buttonState = ButtonState.Hovered; colourAnimator.SetColour(overrideTheme.GetColourPalette(cascadeTheme).HoveredColour); };
+            onClick += () => { clicked = true; buttonState = ButtonState.Selected; };
+            onUnhover += () => { if (!clicked) buttonState = ButtonState.None; };
+            onUnclick += () => { buttonState = hovered ? ButtonState.Hovered : ButtonState.None; clicked = false; };
         }
 
         private void SetClicked(bool clicked)

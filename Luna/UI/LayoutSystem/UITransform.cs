@@ -57,6 +57,13 @@ namespace Luna.UI.LayoutSystem
             positionAnimator.SetPosition(targetPos);
         }
 
+        public void SetGlobalPositionComponentValue(float component, int axis)
+        {
+            LVector2 targetPos = positionAnimator.GetTargetPosition();
+            targetPos.SetComponentValue(component - GetParentPosition().GetComponent(axis), axis);
+            positionAnimator.SetPosition(targetPos);
+        }
+
         public UITransform Parent
         {
             get { return parent; }

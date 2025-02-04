@@ -35,6 +35,7 @@ namespace Luna.UI
         protected bool ignoreScissorRect = false;
         protected int elementId;
         protected bool textObject = false;
+        protected bool scrollable = false;
 
         private static int currentElement = 0;
 
@@ -393,6 +394,12 @@ namespace Luna.UI
         {
             get { return ignoreScissorRect; }
             set { ignoreScissorRect = value; }
+        }
+
+        public bool Scrollable
+        {
+            get { return scrollable; }
+            set { scrollable = value; }
         }
 
         private int NewElementId()
