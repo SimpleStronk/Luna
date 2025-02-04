@@ -23,6 +23,7 @@ namespace Luna.UI.LayoutSystem
         private LVector2 scrollOffset = new LVector2();
         private Tetra padding;
         private float scrollAmount;
+        private float scrollMax;
         private float scrollSensitivity = 0.4f;
         private bool scrollable = false;
         private Action<float> onScrollChanged;
@@ -33,7 +34,6 @@ namespace Luna.UI.LayoutSystem
             {
                 CalculateOverflow();
                 MoveDisplay();
-                ClampOffset();
             }
 
             positionAnimator.Update();
@@ -156,21 +156,26 @@ namespace Luna.UI.LayoutSystem
 
         public void Scroll(int scroll)
         {
+            if (scroll == 0) return;
+
             scrollAmount += scroll;
+            ClampScroll();
+            onScrollChanged?.Invoke(-scrollAmount / scrollMax);
+        }
+
+        public void SetScrollRatio(float normalisedValue)
+        {
+            scrollAmount = -normalisedValue * scrollMax;
         }
 
         private void MoveDisplay()
         {
-            if (scrollOffset.GetComponent(overflowAxis) == scrollAmount * scrollSensitivity) return;
-            
             scrollOffset.SetComponentValue(scrollAmount * scrollSensitivity, overflowAxis);
-            onScrollChanged?.Invoke((scrollAmount * scrollSensitivity) / scrollOffset.GetComponent(overflowAxis));
         }
 
-        public void SetScrollRatio(float ratio)
+        private void ClampScroll()
         {
-            scrollOffset.SetComponentValue(ratio * -overflowAmount.GetComponent(overflowAxis), overflowAxis);
-            scrollAmount = (ratio * -overflowAmount.GetComponent(overflowAxis)) / scrollSensitivity;
+            scrollAmount = Math.Clamp(scrollAmount, -scrollMax, 0);
         }
 
         private void CalculateOverflow()
@@ -187,16 +192,15 @@ namespace Luna.UI.LayoutSystem
             if (overflowAmount.Y >= 0) OverflowAxis = LVector2.VERTICAL;
             else if (overflowAmount.X >= 0) OverflowAxis = LVector2.HORIZONTAL;
             else OverflowAxis = -1;
+
+            scrollMax = overflowAmount.GetComponent(OverflowAxis) / scrollSensitivity;
         }
 
-        private void ClampOffset()
+        public bool IsOverflowing
         {
-            foreach (int axis in LVector2.Axes)
+            get
             {
-                if (overflowAmount.GetComponent(axis) < 0) continue;
-
-                if (scrollOffset.GetComponent(axis) > 0) { scrollOffset.SetComponentValue(0, axis); scrollAmount = 0; onScrollChanged?.Invoke(0); }
-                if (scrollOffset.GetComponent(axis) < -overflowAmount.GetComponent(axis)) { scrollOffset.SetComponentValue(-overflowAmount.GetComponent(axis), axis); scrollAmount = -overflowAmount.GetComponent(axis) / scrollSensitivity; onScrollChanged?.Invoke(1); }
+                return overflowAmount.GetComponent(overflowAxis) > 0;
             }
         }
     }

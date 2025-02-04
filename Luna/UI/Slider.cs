@@ -1,12 +1,6 @@
 using System;
-using System.Numerics;
-using System.Runtime.CompilerServices;
-using System.Windows.Forms.Design;
-using Luna.HelperClasses;
 using Luna.ManagerClasses;
 using Luna.UI.LayoutSystem;
-using Microsoft.Xna.Framework.Graphics;
-using SharpDX.DXGI;
 using static Luna.UI.LayoutSystem.LUIVA;
 
 namespace Luna.UI
@@ -71,8 +65,7 @@ namespace Luna.UI
 
             if (clicked)
             {
-                NormalisedValue = CalculateNormalisedValue(MouseHandler.Position, axis);
-                SetKnobPosition(NormalisedValue);
+                HardSetValue(NormalisedToScaledValue(CalculateNormalisedValue(MouseHandler.Position, axis)));
             }
         }
 
@@ -92,6 +85,11 @@ namespace Luna.UI
             float grooveSize = sliderGroove.GetTransform().Size.GetComponent(axis);
 
             return (mousePosition.GetComponent(axis) - groovePosition) / grooveSize;
+        }
+
+        private float NormalisedToScaledValue(float normalisedValue)
+        {
+            return minimumValue + (normalisedValue * (maximumValue - minimumValue));
         }
 
         private float CalculateNormalisedIncrement()
@@ -122,19 +120,6 @@ namespace Luna.UI
             set { increment = value; }
         }
 
-        public float NormalisedValue
-        {
-            get { return normalisedValue; }
-            set
-            {
-                float tmp = 0;
-                if (increment == 0) { tmp = Math.Clamp(value, 0, 1); }
-                else tmp = Math.Clamp(((int)(value / CalculateNormalisedIncrement() + 0.5f)) * CalculateNormalisedIncrement(), 0, 1);
-
-                if (tmp != normalisedValue) { normalisedValue = tmp; onValueChanged?.Invoke(Value); }
-            }
-        }
-
         public float Value
         {
             get { return minimumValue + (normalisedValue * (maximumValue - minimumValue)); }
@@ -142,11 +127,20 @@ namespace Luna.UI
 
         public void SoftSetValue(float value)
         {
-            normalisedValue = (value - minimumValue) / (maximumValue - minimumValue);
+            float tmp = (value - minimumValue) / (maximumValue - minimumValue);
+            if (tmp == normalisedValue) return;
+
+            normalisedValue = tmp;
 
             if (increment == 0) { normalisedValue = Math.Clamp(normalisedValue, 0, 1); }
-            else normalisedValue = Math.Clamp(((int)(normalisedValue / CalculateNormalisedIncrement() + 0.5f)) * CalculateNormalisedIncrement(), 0, 1);
+            else { normalisedValue = Math.Clamp(((int)(normalisedValue / CalculateNormalisedIncrement() + 0.5f)) * CalculateNormalisedIncrement(), 0, 1); }
             SetKnobPosition(normalisedValue);
+        }
+
+        public void HardSetValue(float value)
+        {
+            SoftSetValue(value);
+            onValueChanged?.Invoke(Value);
         }
     }
 }

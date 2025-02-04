@@ -4163,11 +4163,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\Luna.csproj",
+      "projectUniqueName": "c:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\Luna.csproj",
       "projectName": "Luna",
-      "projectPath": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\Luna.csproj",
+      "projectPath": "c:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\Luna.csproj",
       "packagesPath": "C:\\Users\\bill\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\obj\\",
+      "outputPath": "c:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\bill\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -4230,13 +4230,5 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.404/PortableRuntimeIdentifierGraph.json"
       }
     }
-  },
-  "logs": [
-    {
-      "code": "NU1900",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Error occurred while getting package vulnerability data: Unable to load the service index for source https://api.nuget.org/v3/index.json."
-    }
-  ]
+  }
 }

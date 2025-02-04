@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\Luna.csproj": {}
+    "c:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\Luna.csproj": {}
   },
   "projects": {
-    "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\Luna.csproj": {
+    "c:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\Luna.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\Luna.csproj",
+        "projectUniqueName": "c:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\Luna.csproj",
         "projectName": "Luna",
-        "projectPath": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\Luna.csproj",
+        "projectPath": "c:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\Luna.csproj",
         "packagesPath": "C:\\Users\\bill\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\obj\\",
+        "outputPath": "c:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\bill\\AppData\\Roaming\\NuGet\\NuGet.Config"

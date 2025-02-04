@@ -24,8 +24,7 @@ namespace Luna.UI
             });
             container.Scrollable = true;
 
-            // NOT WORKING
-            //container.GetTransform().OnScrollChanged((float value) => slider.SoftSetValue(value));
+            container.GetTransform().OnScrollChanged((float value) => slider.SoftSetValue(value));
 
             slider = new Slider(LVector2.VERTICAL, UITheme.ColorType.Background);
             slider.SetLayout(new Layout()
@@ -38,6 +37,20 @@ namespace Luna.UI
             slider.OnValueChanged((float value) => container.GetTransform().SetScrollRatio(value));
 
             base.AddChild(container, slider);
+        }
+
+        protected override void Update()
+        {
+            base.Update();
+
+            if (container.GetTransform().IsOverflowing)
+            {
+                slider.SetLayout(new Layout() { LayoutWidth = Sizing.Fixed(40) });
+            }
+            else
+            {
+                slider.SetLayout(new Layout() { LayoutWidth = Sizing.Fixed(0) });
+            }
         }
 
         public override void AddChild(params UIComponent[] children)
