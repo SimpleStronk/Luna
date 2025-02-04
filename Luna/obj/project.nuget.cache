@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "iiMtjluIwdk=",
+  "dgSpecHash": "KtKLvhZf404=",
   "success": true,
-  "projectFilePath": "c:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\Luna.csproj",
+  "projectFilePath": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\Luna.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\bill\\.nuget\\packages\\microsoft.netcore.app\\2.1.30\\microsoft.netcore.app.2.1.30.nupkg.sha512",
     "C:\\Users\\bill\\.nuget\\packages\\microsoft.netcore.dotnetapphost\\2.1.30\\microsoft.netcore.dotnetapphost.2.1.30.nupkg.sha512",
@@ -71,5 +71,12 @@
     "C:\\Users\\bill\\.nuget\\packages\\system.threading\\4.3.0\\system.threading.4.3.0.nupkg.sha512",
     "C:\\Users\\bill\\.nuget\\packages\\system.threading.tasks\\4.3.0\\system.threading.tasks.4.3.0.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1900",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Error occurred while getting package vulnerability data: Unable to load the service index for source https://api.nuget.org/v3/index.json."
+    }
+  ]
 }

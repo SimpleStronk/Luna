@@ -1,6 +1,8 @@
 using System;
 using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework;
+using SharpDX.Direct3D9;
+using SharpDX.DXGI;
 
 namespace Luna.UI.LayoutSystem
 {
@@ -47,13 +49,27 @@ namespace Luna.UI.LayoutSystem
 
         public float GetComponent(int axis)
         {
+            if (!ValidAxis(axis)) return 0;
+
             return components[axis];
         }
 
         public void SetComponentValue(float component, int axis)
         {
+            if (!ValidAxis(axis)) return;
+
             components[axis] = component;
             onChanged?.Invoke();
+        }
+
+        public void ClampComponentValue(float minimum, float maximum, int axis)
+        {
+            if (!ValidAxis(axis) || maximum < minimum) return;
+
+            float val = GetComponent(axis);
+            SetComponentValue(Math.Clamp(val, minimum, maximum), axis);
+
+            Console.WriteLine($"Clamped {val} between {minimum} and {maximum}");
         }
 
         public static LVector2 SetComponentValue(LVector2 value, float component, int axis)
@@ -93,6 +109,11 @@ namespace Luna.UI.LayoutSystem
             return new LVector2(left.X / right, left.Y / right);
         }
 
+        public static int[] Axes
+        {
+            get { return [HORIZONTAL, VERTICAL]; }
+        }
+
         public static LVector2 Zero
         {
             get { return new LVector2(0, 0); }
@@ -100,7 +121,14 @@ namespace Luna.UI.LayoutSystem
 
         public static int AlternateAxis(int axis)
         {
+            if (!ValidAxis(axis)) return -1;
             return 1 - axis;
+        }
+
+        public static bool ValidAxis(int axis)
+        {
+            if (axis == HORIZONTAL || axis == VERTICAL) return true;
+            return false;
         }
 
         public void OnChanged(Action e)

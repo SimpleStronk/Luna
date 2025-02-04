@@ -35,8 +35,6 @@ namespace Luna.ManagerClasses
         private TopBarBlock topBarBlock;
         UIComponent currentWindow;
 
-        ExpPositionAnimator ep = new ExpPositionAnimator();
-
         public UIManager(GameWindow window, Action quitAction, GraphicsDevice graphicsDevice, SystemManager systemManager)
         {
             this.systemManager = systemManager;
@@ -164,12 +162,6 @@ namespace Luna.ManagerClasses
                 else RemoveWindowControls();
                 windowBorderless = window.IsBorderless;
             }
-
-            if (MouseHandler.IsJustClicked(MouseHandler.MouseButton.Left)) ep.SetPosition(new LVector2(100, 0));
-            if (MouseHandler.IsJustUnclicked(MouseHandler.MouseButton.Left)) ep.SetPosition(new LVector2(0, 100));
-            ep.Update();
-
-            //Console.WriteLine(ep.GetPosition());
 
             rootComponent.CascadeTheme(themeToggle ? UIFactory.PlumTheme : UIFactory.PlumTheme2);
 

@@ -7,6 +7,8 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using static Luna.UI.LayoutSystem.LUIVA;
 
 namespace Luna.UI.LayoutSystem
 {
@@ -16,9 +18,24 @@ namespace Luna.UI.LayoutSystem
         private IPositionAnimator positionAnimator = new ExpPositionAnimator();
         private LVector2 size = new LVector2();
         private Action onResize;
+        private int overflowAxis = -1;
+        private LVector2 overflowAmount = new LVector2();
+        private LVector2 scrollOffset = new LVector2();
+        private Tetra padding;
+        private float scrollAmount;
+        private float scrollSensitivity = 0.4f;
+        private bool scrollable = false;
+        private Action<float> onScrollChanged;
 
         public void Update()
         {
+            if (scrollable)
+            {
+                CalculateOverflow();
+                MoveDisplay();
+                ClampOffset();
+            }
+
             positionAnimator.Update();
         }
 
@@ -103,11 +120,84 @@ namespace Luna.UI.LayoutSystem
         {
             get { return (int)Math.Max(size.X, size.Y); }
         }
+
+        private int OverflowAxis
+        {
+            get { return overflowAxis; }
+            set { if (overflowAxis != value) { overflowAxis = value; scrollAmount = 0; } }
+        }
+
+        public bool Scrollable
+        {
+            get { return scrollable; }
+            set { scrollable = value; }
+        }
+
+        public LVector2 ScrollOffset
+        {
+            get { return scrollOffset; }
+        }
+
+        public Tetra Padding
+        {
+            set { padding = value; }
+        }
+
+        public void OnScrollChanged(Action<float> e)
+        {
+            onScrollChanged += e;
+        }
         #endregion
 
         public void OnResize(Action e)
         {
             onResize += e;
+        }
+
+        public void Scroll(int scroll)
+        {
+            scrollAmount += scroll;
+        }
+
+        private void MoveDisplay()
+        {
+            if (scrollOffset.GetComponent(overflowAxis) == scrollAmount * scrollSensitivity) return;
+            
+            scrollOffset.SetComponentValue(scrollAmount * scrollSensitivity, overflowAxis);
+            onScrollChanged?.Invoke((scrollAmount * scrollSensitivity) / scrollOffset.GetComponent(overflowAxis));
+        }
+
+        public void SetScrollRatio(float ratio)
+        {
+            scrollOffset.SetComponentValue(ratio * -overflowAmount.GetComponent(overflowAxis), overflowAxis);
+            scrollAmount = (ratio * -overflowAmount.GetComponent(overflowAxis)) / scrollSensitivity;
+        }
+
+        private void CalculateOverflow()
+        {
+            if (parent == null)
+            {
+                OverflowAxis = -1;
+                return;
+            }
+
+            overflowAmount = new LVector2(size.X - (parent.size.X - (parent.padding.Left + parent.padding.Right)), size.Y - (parent.size.Y - (parent.padding.Top + parent.padding.Bottom)));
+
+            //  If Y overflow amount is positive, regard axis as vertical regardless of horizontal state
+            if (overflowAmount.Y >= 0) OverflowAxis = LVector2.VERTICAL;
+            else if (overflowAmount.X >= 0) OverflowAxis = LVector2.HORIZONTAL;
+            else OverflowAxis = -1;
+        }
+
+        private void ClampOffset()
+        {
+            foreach (int axis in LVector2.Axes)
+            {
+                if (overflowAmount.GetComponent(axis) < 0) continue;
+
+                if (scrollOffset.GetComponent(axis) > 0) { scrollOffset.SetComponentValue(0, axis); scrollAmount = 0; onScrollChanged?.Invoke(0); }
+                if (scrollOffset.GetComponent(axis) < -overflowAmount.GetComponent(axis)) { scrollOffset.SetComponentValue(-overflowAmount.GetComponent(axis), axis); scrollAmount = -overflowAmount.GetComponent(axis) / scrollSensitivity; onScrollChanged?.Invoke(1); }
+            }
         }
     }
 }

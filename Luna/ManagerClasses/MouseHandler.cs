@@ -7,6 +7,7 @@ using System.Net.Http.Headers;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading.Tasks.Dataflow;
 
 namespace Luna.ManagerClasses
 {
@@ -14,6 +15,7 @@ namespace Luna.ManagerClasses
     {
         static MouseState mouse, oldMouse;
         public enum MouseButton { Left, Middle, Right }
+        private static bool firstFrame = true;
 
         public static Vector2 Position
         {
@@ -69,6 +71,11 @@ namespace Luna.ManagerClasses
             return ButtonState.Released;
         }
 
+        public static int DeltaScroll
+        {
+            get { return firstFrame ? 0 : mouse.ScrollWheelValue - oldMouse.ScrollWheelValue; }
+        }
+
         public static void SetMouse()
         {
             mouse = Mouse.GetState();
@@ -77,6 +84,7 @@ namespace Luna.ManagerClasses
         public static void SetOldMouse()
         {
             oldMouse = mouse;
+            firstFrame = false;
         }
     }
 }

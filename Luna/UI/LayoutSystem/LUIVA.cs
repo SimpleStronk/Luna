@@ -47,7 +47,6 @@ namespace Luna.UI.LayoutSystem
             }
             else
             {
-
                 if (isPrimaryAxis)
                 {
                     //Primary Axis Logic
@@ -109,8 +108,11 @@ namespace Luna.UI.LayoutSystem
                             continue;
                         }
 
-                        element.GetTransform().SetPositionComponentValue(currentPosition, axis);
-                        currentPosition += elementSize + parentSpacing;
+                        if (alignment != Alignment.Ignore)
+                        {
+                            element.GetTransform().SetPositionComponentValue(currentPosition + element.GetTransform().Parent.ScrollOffset.GetComponent(axis), axis);
+                            currentPosition += elementSize + parentSpacing;
+                        }
                     }
                 }
                 else
@@ -149,7 +151,10 @@ namespace Luna.UI.LayoutSystem
                             }
                         }
 
-                        element.GetTransform().SetPositionComponentValue(position, axis);
+                        if (alignment != Alignment.Ignore)
+                        {
+                            element.GetTransform().SetPositionComponentValue(position + element.GetTransform().Parent.ScrollOffset.GetComponent(axis), axis);
+                        }
                     }
                 }
 

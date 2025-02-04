@@ -316,7 +316,7 @@ namespace Luna.UI
                 Inline = false
             });
 
-            BlankUI leftPanel = new BlankUI(UITheme.ColorType.Background);
+            ScrollView leftPanel = new ScrollView(UITheme.ColorType.Background);
             leftPanel.SetLayout(new Layout()
             {
                 LayoutWidth = Sizing.Grow(1),
@@ -324,6 +324,7 @@ namespace Luna.UI
                 Padding = new Tetra(10),
                 Spacing = 10
             });
+            leftPanel.Scrollable = true;
 
             BlankUI rightPanel = new BlankUI(UITheme.ColorType.MainSoft);
             rightPanel.SetLayout(new Layout()
@@ -399,8 +400,8 @@ namespace Luna.UI
             t.SetLayout(new Layout() { LayoutWidth = Sizing.Grow(1), LayoutHeight = Sizing.Fixed(40) });
             t.SetTheme(new UITheme() { Rounded = true });
 
-            Slider s = new Slider(LVector2.HORIZONTAL, UITheme.ColorType.Background);
-            s.SetLayout(new Layout() { LayoutWidth = Sizing.Grow(1) });
+            Slider s = new Slider(LVector2.VERTICAL, UITheme.ColorType.Background);
+            s.SetLayout(new Layout() { LayoutHeight = Sizing.Fixed(300) });
             s.SetTheme(new UITheme() { Rounded = true });
             s.MinimumValue = 0;
             s.MaximumValue = 5;

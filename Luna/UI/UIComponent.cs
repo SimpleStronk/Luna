@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using Luna.UI.LayoutSystem;
 using SharpDX.MediaFoundation;
 using SharpDX.Direct2D1.Effects;
+using System.Windows.Forms.Design;
+using Microsoft.Xna.Framework.Input;
 
 namespace Luna.UI
 {
@@ -61,6 +63,8 @@ namespace Luna.UI
         public void BaseUpdate()
         {
             SyncChildren();
+            transform.Padding = layout.Padding;
+            if (focused) CheckScroll();
 
             if (!visible) { colourAnimator.SetColour(new Color(0, 0, 0, 0)); return; }
 
@@ -162,6 +166,16 @@ namespace Luna.UI
         public void Destroy()
         {
             parent.RemoveChild(this);
+        }
+
+        private void CheckScroll()
+        {
+            if (!scrollable) { parent?.CheckScroll(); return; }
+
+            if (KeyboardHandler.IsKeyJustPressed(Keys.PageUp)) transform.Scroll(240);
+            if (KeyboardHandler.IsKeyJustPressed(Keys.PageDown)) transform.Scroll(-240);
+
+            transform.Scroll(MouseHandler.DeltaScroll);
         }
 
         #region debug_system
@@ -322,7 +336,7 @@ namespace Luna.UI
             transform.Parent = null;
         }
 
-        public void AddChild(params UIComponent[] children)
+        public virtual void AddChild(params UIComponent[] children)
         {
             foreach (UIComponent c in children)
             {
@@ -399,7 +413,7 @@ namespace Luna.UI
         public bool Scrollable
         {
             get { return scrollable; }
-            set { scrollable = value; }
+            set { scrollable = value; transform.Scrollable = value; }
         }
 
         private int NewElementId()

@@ -49,7 +49,8 @@ namespace Luna.UI
                         LayoutWidth = Sizing.Fixed(2),
                         LayoutHeight = Sizing.Grow(1),
                         HorizontalAlignment = Alignment.Middle,
-                        VerticalAlignment = Alignment.Ignore
+                        VerticalAlignment = Alignment.Ignore,
+                        ClipChildren = false
                     }); break; }
             }
 
@@ -80,8 +81,9 @@ namespace Luna.UI
             float groovePosition = sliderGroove.GetTransform().GlobalPosition.GetComponent(axis);
             float grooveSize = sliderGroove.GetTransform().Size.GetComponent(axis);
             float knobSize = sliderKnob.GetTransform().Size.GetComponent(axis);
+            float position = (value * grooveSize) + groovePosition - (knobSize / 2f);
 
-            sliderKnob.GetTransform().SetGlobalPositionComponentValue((value * grooveSize) + groovePosition - (knobSize / 2f), axis);
+            sliderKnob.GetTransform().SetGlobalPositionComponentValue(position, axis);
         }
 
         private float CalculateNormalisedValue(LVector2 mousePosition, int axis)
@@ -136,6 +138,15 @@ namespace Luna.UI
         public float Value
         {
             get { return minimumValue + (normalisedValue * (maximumValue - minimumValue)); }
+        }
+
+        public void SoftSetValue(float value)
+        {
+            normalisedValue = (value - minimumValue) / (maximumValue - minimumValue);
+
+            if (increment == 0) { normalisedValue = Math.Clamp(normalisedValue, 0, 1); }
+            else normalisedValue = Math.Clamp(((int)(normalisedValue / CalculateNormalisedIncrement() + 0.5f)) * CalculateNormalisedIncrement(), 0, 1);
+            SetKnobPosition(normalisedValue);
         }
     }
 }

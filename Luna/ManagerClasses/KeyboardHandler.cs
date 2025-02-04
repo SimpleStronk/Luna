@@ -107,6 +107,11 @@ namespace Luna.ManagerClasses
             return false;
         }
 
+        public static bool IsKeyJustPressed(Keys key)
+        {
+            return keyboard.IsKeyDown(key) && oldKeyboard.IsKeyUp(key);
+        }
+
         //To be called from the program's main PreUpdate
         public static void SetKeyboard()
         {
