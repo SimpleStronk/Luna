@@ -48,7 +48,7 @@ namespace Luna.UI
         protected override void Draw(SpriteBatch s)
         {
             Rectangle globalRect = GetTransform().GetGlobalRect();
-            s.DrawString(font, displayText, new Vector2(globalRect.X, globalRect.Y), overrideTheme.GetColourPalette(cascadeTheme).TextColour);
+            s.DrawString(font, displayText, new Vector2(globalRect.X, globalRect.Y), overrideTheme.GetColourPalatte(cascadeTheme).TextColour);
         }
 
         public override string GetTag()

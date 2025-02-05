@@ -27,7 +27,7 @@ namespace Luna.UI
 
             container.GetTransform().OnScrollChanged((float value) => scrollBar.SoftSetValue(value));
 
-            scrollBar = new ScrollBar(LVector2.VERTICAL, UITheme.ColorType.Background);
+            scrollBar = new ScrollBar(LVector2.VERTICAL, UITheme.ColorType.Placeholder);
             scrollBar.SetLayout(new Layout()
             {
                 LayoutHeight = Sizing.Grow(1)
@@ -43,7 +43,7 @@ namespace Luna.UI
 
             if (container.GetTransform().IsOverflowing)
             {
-                scrollBar.SetLayout(new Layout() { LayoutWidth = Sizing.Fixed(20) });
+                scrollBar.SetLayout(new Layout() { LayoutWidth = Sizing.Fixed(15) });
                 scrollBar.SetHandleSizeRatio(1f / container.GetTransform().GetOverflowRatio());
             }
             else

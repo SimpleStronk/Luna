@@ -400,7 +400,7 @@ namespace Luna.UI
             t.SetLayout(new Layout() { LayoutWidth = Sizing.Grow(1), LayoutHeight = Sizing.Fixed(40) });
             t.SetTheme(new UITheme() { Rounded = true });
 
-            Slider s = new Slider(LVector2.VERTICAL, UITheme.ColorType.Background);
+            Slider s = new Slider(LVector2.VERTICAL, UITheme.ColorType.Placeholder);
             s.SetLayout(new Layout() { LayoutHeight = Sizing.Fixed(300) });
             s.SetTheme(new UITheme() { Rounded = true });
             s.MinimumValue = 0;
@@ -408,7 +408,7 @@ namespace Luna.UI
             s.Increment = 1;
             s.OnValueChanged((float value) => t.Label.SetText($"{value} spiders"));
 
-            Slider s2 = new Slider(LVector2.HORIZONTAL, UITheme.ColorType.Background);
+            Slider s2 = new Slider(LVector2.HORIZONTAL, UITheme.ColorType.Placeholder);
             s2.SetLayout(new Layout() { LayoutWidth = Sizing.Grow(1) });
             s2.SetTheme(new UITheme() { Rounded = true });
             s2.MinimumValue = 0;
@@ -504,6 +504,7 @@ namespace Luna.UI
                     EmergencyColour = new ColourPalatte().SetMainColour(new Color(255, 0, 0)).SetHoveredColour(new Color(235, 0, 0)).SetSelectedColour(new Color(215, 0, 0)).SetTextColour(new Color(255, 255, 255)),
                     SeparatorColour = new ColourPalatte().SetMainColour(new Color(30, 30, 30) * 0.2f),
                     ShadowColour = new ColourPalatte().SetMainColour(new Color(0, 0, 0) * 0.5f),
+                    ScrollbarColour = new ColourPalatte().SetMainColour(new Color(233, 218, 236)).SetHoveredColour(new Color(223, 201, 227)).SetSelectedColour(new Color(223, 201, 227)),
                     CornerRadius = (10, 10, 10, 10)
                 };
             }

@@ -8,65 +8,73 @@ using System.Windows.Forms;
 using System.Security.Cryptography;
 using System.Drawing.Imaging;
 using SharpDX.MediaFoundation.DirectX;
+using System.Collections;
 
 namespace Luna.UI
 {
     internal class UITheme
     {
-        private ColourPalette mainColour = new();
-        private ColourPalette mainColourSoft = new();
-        private ColourPalette highlitColour = new();
-        private ColourPalette backgroundColour = new();
-        private ColourPalette emergencyColour = new();
-        private ColourPalette separatorColour = new();
-        private ColourPalette shadowColour = new();
+        private ColourPalatte mainColour = new();
+        private ColourPalatte mainColourSoft = new();
+        private ColourPalatte highlitColour = new();
+        private ColourPalatte backgroundColour = new();
+        private ColourPalatte emergencyColour = new();
+        private ColourPalatte separatorColour = new();
+        private ColourPalatte shadowColour = new();
+        private ColourPalatte scrollbarColour = new();
         private bool rounded;
-        public enum ColorType { Main, MainSoft, Highlit, Background, Emergency, Shadow, Separator, Placeholder };
+        public enum ColorType { Main, MainSoft, Highlit, Background, Emergency, Separator, Shadow, ScrollBar, Placeholder };
         private ColorType colourType = ColorType.Background;
         private (int topLeft, int topRight, int bottomLeft, int bottomRight) cornerRadius;
         private bool mainColourChanged, mainColourSoftChanged, highlitColourChanged, backgroundColourChanged, emergencyColourChanged,
-            separatorColourChanged, shadowColourChanged, roundedChanged, colourTypeChanged, cornerRadiusChanged;
+            separatorColourChanged, shadowColourChanged, scrollbarColourChanged, roundedChanged, colourTypeChanged, cornerRadiusChanged;
 
-        public ColourPalette MainColour
+        public ColourPalatte MainColour
         {
             get { return mainColour; }
             set { mainColour = value; mainColourChanged = true; }
         }
         
-        public ColourPalette MainColourSoft
+        public ColourPalatte MainColourSoft
         {
             get { return mainColourSoft; }
             set { mainColourSoft = value; mainColourSoftChanged = true; }
         }
 
-        public ColourPalette HighlitColour
+        public ColourPalatte HighlitColour
         {
             get { return highlitColour; }
             set { highlitColour = value; }
         }
 
-        public ColourPalette BackgroundColour
+        public ColourPalatte BackgroundColour
         {
             get { return backgroundColour; }
             set { backgroundColour = value; backgroundColourChanged = true; }
         }
 
-        public ColourPalette EmergencyColour
+        public ColourPalatte EmergencyColour
         {
             get { return emergencyColour; }
             set { emergencyColour = value; emergencyColourChanged = true; }
         }
 
-        public ColourPalette SeparatorColour
+        public ColourPalatte SeparatorColour
         {
             get { return separatorColour; }
             set { separatorColour = value; separatorColourChanged = true; }
         }
 
-        public ColourPalette ShadowColour
+        public ColourPalatte ShadowColour
         {
             get { return shadowColour; }
             set { shadowColour = value; shadowColourChanged = true; }
+        }
+
+        public ColourPalatte ScrollbarColour
+        {
+            get { return scrollbarColour; }
+            set { scrollbarColour = value; }
         }
 
         public bool Rounded
@@ -81,7 +89,7 @@ namespace Luna.UI
             set { colourType = value; colourTypeChanged = true; }
         }
 
-        public ColourPalette GetColourPalette(UITheme cascadeTheme)
+        public ColourPalatte GetColourPalatte(UITheme cascadeTheme)
         {
             if (cascadeTheme == null)
             {
@@ -94,7 +102,8 @@ namespace Luna.UI
                     case ColorType.Emergency: return emergencyColour;
                     case ColorType.Shadow: return shadowColour;
                     case ColorType.Separator: return separatorColour;
-                    case ColorType.Placeholder: return ColourPalette.Transparent;
+                    case ColorType.ScrollBar: return scrollbarColour;
+                    case ColorType.Placeholder: return ColourPalatte.Transparent;
                 }
                 return new();
             }
@@ -108,7 +117,8 @@ namespace Luna.UI
                 case ColorType.Emergency: return emergencyColourChanged ? emergencyColour : cascadeTheme.emergencyColour;
                 case ColorType.Shadow: return shadowColourChanged ? shadowColour : cascadeTheme.shadowColour;
                 case ColorType.Separator: return separatorColourChanged ? separatorColour : cascadeTheme.separatorColour;
-                case ColorType.Placeholder: return ColourPalette.Transparent;
+                case ColorType.ScrollBar: return scrollbarColourChanged ? scrollbarColour : cascadeTheme.scrollbarColour;
+                case ColorType.Placeholder: return ColourPalatte.Transparent;
             }
 
             return new();
@@ -180,6 +190,11 @@ namespace Luna.UI
         public bool ShadowColourChanged
         {
             get { return shadowColourChanged; }
+        }
+
+        public bool ScrollbarColourChanged
+        {
+            get { return scrollbarColourChanged; }
         }
 
         public bool RoundedChanged

@@ -283,7 +283,7 @@ namespace Luna.UI
         public void SetTheme(UITheme theme)
         {
             overrideTheme.UpdateTheme(theme);
-            colourAnimator.SetColour(textObject ? theme.GetColourPalette(cascadeTheme).TextColour : theme.GetColourPalette(cascadeTheme).MainColour);
+            colourAnimator.SetColour(textObject ? theme.GetColourPalatte(cascadeTheme).TextColour : theme.GetColourPalatte(cascadeTheme).MainColour);
         }
 
         public UITheme GetTheme()
@@ -296,7 +296,7 @@ namespace Luna.UI
             if (cascadeTheme == null) return;
 
             this.cascadeTheme = cascadeTheme;
-            colourAnimator.SetColour(textObject ? overrideTheme.GetColourPalette(cascadeTheme).TextColour : overrideTheme.GetColourPalette(cascadeTheme).MainColour);
+            colourAnimator.SetColour(textObject ? overrideTheme.GetColourPalatte(cascadeTheme).TextColour : overrideTheme.GetColourPalatte(cascadeTheme).MainColour);
 
             foreach (UIComponent c in children)
             {

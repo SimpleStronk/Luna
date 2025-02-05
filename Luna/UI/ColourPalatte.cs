@@ -7,32 +7,32 @@ using Microsoft.Xna.Framework;
 
 namespace Luna.UI
 {
-    internal class ColourPalette
+    internal class ColourPalatte
     {
         private Color mainColour;
         private Color hoveredColour;
         private Color selectedColour;
         private Color textColour;
 
-        public ColourPalette SetMainColour(Color color)
+        public ColourPalatte SetMainColour(Color color)
         {
             mainColour = color;
             return this;
         }
 
-        public ColourPalette SetHoveredColour(Color color)
+        public ColourPalatte SetHoveredColour(Color color)
         {
             hoveredColour = color;
             return this;
         }
 
-        public ColourPalette SetSelectedColour(Color color)
+        public ColourPalatte SetSelectedColour(Color color)
         {
             selectedColour = color;
             return this;
         }
 
-        public ColourPalette SetTextColour(Color color)
+        public ColourPalatte SetTextColour(Color color)
         {
             textColour = color;
             return this;
@@ -62,11 +62,11 @@ namespace Luna.UI
             set { textColour = value; }
         }
 
-        public static ColourPalette Transparent
+        public static ColourPalatte Transparent
         {
             get
             {
-                ColourPalette cp = new ColourPalette();
+                ColourPalatte cp = new ColourPalatte();
                 cp.MainColour = cp.HoveredColour = cp.selectedColour = cp.TextColour = new Color(0, 0, 0, 0);
                 return cp;
             }

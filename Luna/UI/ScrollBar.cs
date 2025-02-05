@@ -16,7 +16,7 @@ namespace Luna.UI
         public ScrollBar(int axis, UITheme.ColorType colorType) : base(VisualResponse.ColourChange, colorType)
         {
             this.axis = axis;
-            scrollHandle = new Button(UITheme.ColorType.Background);
+            scrollHandle = new Button(UITheme.ColorType.ScrollBar);
             scrollHandle.OnClick(() => { dragging = true; });
             scrollHandle.OnUnclick(() => { dragging = false; });
             layout.Padding = new Tetra(2);
@@ -26,7 +26,6 @@ namespace Luna.UI
             {
                 case LVector2.HORIZONTAL:
                 {
-                    layout.LayoutHeight = Sizing.Fixed(20);
                     layout.HorizontalAlignment = Alignment.Ignore;
                     scrollHandle.SetLayout(new Layout()
                     {
@@ -37,7 +36,6 @@ namespace Luna.UI
                 }
                 case LVector2.VERTICAL:
                 {
-                    layout.LayoutWidth = Sizing.Fixed(20);
                     layout.VerticalAlignment = Alignment.Ignore;
                     scrollHandle.SetLayout(new Layout()
                     {
@@ -115,7 +113,6 @@ namespace Luna.UI
 
         public void SetHandleSizeRatio(float ratio)
         {
-            Console.WriteLine(ratio);
             float scrollBounds = GetTransform().Size.GetComponent(axis) - layout.Padding.GetAxis(axis);
             
             switch (axis)

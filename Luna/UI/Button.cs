@@ -41,17 +41,17 @@ namespace Luna.UI
             {
                 case ButtonState.None:
                 {
-                    colourAnimator.SetColour(overrideTheme.GetColourPalette(cascadeTheme).MainColour);
+                    colourAnimator.SetColour(overrideTheme.GetColourPalatte(cascadeTheme).MainColour);
                     break;
                 }
                 case ButtonState.Hovered:
                 {
-                    colourAnimator.SetColour(overrideTheme.GetColourPalette(cascadeTheme).HoveredColour);
+                    colourAnimator.SetColour(overrideTheme.GetColourPalatte(cascadeTheme).HoveredColour);
                     break;
                 }
                 case ButtonState.Selected:
                 {
-                    colourAnimator.SetColour(overrideTheme.GetColourPalette(cascadeTheme).SelectedColour);
+                    colourAnimator.SetColour(overrideTheme.GetColourPalatte(cascadeTheme).SelectedColour);
                     break;
                 }
             }
@@ -64,7 +64,7 @@ namespace Luna.UI
 
         protected void AddVisualResponse()
         {
-            onHover += () => { if (clicked) return; buttonState = ButtonState.Hovered; colourAnimator.SetColour(overrideTheme.GetColourPalette(cascadeTheme).HoveredColour); };
+            onHover += () => { if (clicked) return; buttonState = ButtonState.Hovered; colourAnimator.SetColour(overrideTheme.GetColourPalatte(cascadeTheme).HoveredColour); };
             onClick += () => { clicked = true; buttonState = ButtonState.Selected; };
             onUnhover += () => { if (!clicked) buttonState = ButtonState.None; };
             onUnclick += () => { buttonState = hovered ? ButtonState.Hovered : ButtonState.None; clicked = false; };
