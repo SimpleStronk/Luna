@@ -203,5 +203,10 @@ namespace Luna.UI.LayoutSystem
                 return overflowAmount.GetComponent(overflowAxis) > 0;
             }
         }
+
+        public float GetOverflowRatio()
+        {
+            return Size.GetComponent(overflowAxis) / (parent.Size.GetComponent(overflowAxis) - parent.padding.GetAxis(overflowAxis));
+        }
     }
 }

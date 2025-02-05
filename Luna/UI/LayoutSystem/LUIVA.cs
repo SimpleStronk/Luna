@@ -611,6 +611,27 @@ namespace Luna.UI.LayoutSystem
                 set { right = value; }
             }
 
+            public int GetAxis(int axis)
+            {
+                if (axis == LVector2.HORIZONTAL) return Left + Right;
+                if (axis == LVector2.VERTICAL) return Top + Bottom;
+                return 0;
+            }
+
+            public int AxisStart(int axis)
+            {
+                if (axis == LVector2.HORIZONTAL) return Left;
+                if (axis == LVector2.VERTICAL) return Top;
+                return 0;
+            }
+
+            public int AxisEnd(int axis)
+            {
+                if (axis == LVector2.HORIZONTAL) return Right;
+                if (axis == LVector2.VERTICAL) return Bottom;
+                return 0;
+            }
+
             public static Tetra Zero
             {
                 get { return new Tetra(0); }

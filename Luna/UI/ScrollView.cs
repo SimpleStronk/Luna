@@ -7,12 +7,13 @@ namespace Luna.UI
     internal class ScrollView : BlankUI
     {
         BlankUI container;
-        Slider slider;
+        ScrollBar scrollBar;
 
         public ScrollView(UITheme.ColorType colorType) : base(colorType)
         {
             overrideTheme.ColourType = colorType;
             layout.LayoutAxis = LVector2.HORIZONTAL;
+            layout.Spacing = 0;
 
             Initialise();
 
@@ -24,19 +25,16 @@ namespace Luna.UI
             });
             container.Scrollable = true;
 
-            container.GetTransform().OnScrollChanged((float value) => slider.SoftSetValue(value));
+            container.GetTransform().OnScrollChanged((float value) => scrollBar.SoftSetValue(value));
 
-            slider = new Slider(LVector2.VERTICAL, UITheme.ColorType.Background);
-            slider.SetLayout(new Layout()
+            scrollBar = new ScrollBar(LVector2.VERTICAL, UITheme.ColorType.Background);
+            scrollBar.SetLayout(new Layout()
             {
                 LayoutHeight = Sizing.Grow(1)
             });
-            slider.MinimumValue = 0;
-            slider.MaximumValue = 1;
-            slider.Increment = 0;
-            slider.OnValueChanged((float value) => container.GetTransform().SetScrollRatio(value));
+            scrollBar.OnValueChanged((float value) => container.GetTransform().SetScrollRatio(value));
 
-            base.AddChild(container, slider);
+            base.AddChild(container, scrollBar);
         }
 
         protected override void Update()
@@ -45,11 +43,12 @@ namespace Luna.UI
 
             if (container.GetTransform().IsOverflowing)
             {
-                slider.SetLayout(new Layout() { LayoutWidth = Sizing.Fixed(40) });
+                scrollBar.SetLayout(new Layout() { LayoutWidth = Sizing.Fixed(20) });
+                scrollBar.SetHandleSizeRatio(1f / container.GetTransform().GetOverflowRatio());
             }
             else
             {
-                slider.SetLayout(new Layout() { LayoutWidth = Sizing.Fixed(0) });
+                scrollBar.SetLayout(new Layout() { LayoutWidth = Sizing.Fixed(0) });
             }
         }
 

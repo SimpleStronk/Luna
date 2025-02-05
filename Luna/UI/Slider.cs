@@ -5,7 +5,7 @@ using static Luna.UI.LayoutSystem.LUIVA;
 
 namespace Luna.UI
 {
-    internal class Slider : Button
+    internal class Slider : Button, ISlidable
     {
         private BlankUI sliderGroove;
         private BlankUI sliderKnob;
@@ -120,9 +120,9 @@ namespace Luna.UI
             set { increment = value; }
         }
 
-        public float Value
+        public float GetValue()
         {
-            get { return minimumValue + (normalisedValue * (maximumValue - minimumValue)); }
+            return minimumValue + (normalisedValue * (maximumValue - minimumValue));
         }
 
         public void SoftSetValue(float value)
@@ -140,7 +140,7 @@ namespace Luna.UI
         public void HardSetValue(float value)
         {
             SoftSetValue(value);
-            onValueChanged?.Invoke(Value);
+            onValueChanged?.Invoke(GetValue());
         }
     }
 }

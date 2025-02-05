@@ -497,13 +497,13 @@ namespace Luna.UI
             {
                 return new UITheme()
                 {
-                    MainColour = new ColourPalette().SetMainColour(new Color(96, 30, 112)).SetHoveredColour(new Color(79, 25, 93)).SetSelectedColour(new Color(62, 19, 73)).SetTextColour(new Color(255, 255, 255)),
-                    MainColourSoft = new ColourPalette().SetMainColour(new Color(240, 230, 242)),
-                    HighlitColour = new ColourPalette().SetMainColour(new Color(131, 41, 153)).SetHoveredColour(new Color(131, 41, 153)).SetSelectedColour(new Color(131, 41, 153)).SetTextColour(new Color(255, 255, 255)),
-                    BackgroundColour = new ColourPalette().SetMainColour(new Color(255, 255, 255)).SetHoveredColour(new Color(233, 218, 236)).SetSelectedColour(new Color(223, 201, 227)).SetTextColour(new Color(30, 30, 30)),
-                    EmergencyColour = new ColourPalette().SetMainColour(new Color(255, 0, 0)).SetHoveredColour(new Color(235, 0, 0)).SetSelectedColour(new Color(215, 0, 0)).SetTextColour(new Color(255, 255, 255)),
-                    SeparatorColour = new ColourPalette().SetMainColour(new Color(30, 30, 30) * 0.2f),
-                    ShadowColour = new ColourPalette().SetMainColour(new Color(0, 0, 0) * 0.5f),
+                    MainColour = new ColourPalatte().SetMainColour(new Color(96, 30, 112)).SetHoveredColour(new Color(79, 25, 93)).SetSelectedColour(new Color(62, 19, 73)).SetTextColour(new Color(255, 255, 255)),
+                    MainColourSoft = new ColourPalatte().SetMainColour(new Color(240, 230, 242)),
+                    HighlitColour = new ColourPalatte().SetMainColour(new Color(131, 41, 153)).SetHoveredColour(new Color(131, 41, 153)).SetSelectedColour(new Color(131, 41, 153)).SetTextColour(new Color(255, 255, 255)),
+                    BackgroundColour = new ColourPalatte().SetMainColour(new Color(255, 255, 255)).SetHoveredColour(new Color(233, 218, 236)).SetSelectedColour(new Color(223, 201, 227)).SetTextColour(new Color(30, 30, 30)),
+                    EmergencyColour = new ColourPalatte().SetMainColour(new Color(255, 0, 0)).SetHoveredColour(new Color(235, 0, 0)).SetSelectedColour(new Color(215, 0, 0)).SetTextColour(new Color(255, 255, 255)),
+                    SeparatorColour = new ColourPalatte().SetMainColour(new Color(30, 30, 30) * 0.2f),
+                    ShadowColour = new ColourPalatte().SetMainColour(new Color(0, 0, 0) * 0.5f),
                     CornerRadius = (10, 10, 10, 10)
                 };
             }
@@ -515,13 +515,13 @@ namespace Luna.UI
             {
                 return new UITheme()
                 {
-                    MainColour = new ColourPalette().SetMainColour(new Color(0, 92, 255)).SetHoveredColour(new Color(0, 84, 230)).SetSelectedColour(new Color(0, 75, 204)).SetTextColour(new Color(255, 255, 255)),
-                    MainColourSoft = new ColourPalette().SetMainColour(new Color(217, 226, 242)),
-                    HighlitColour = new ColourPalette().SetMainColour(new Color(51, 126, 255)).SetHoveredColour(new Color(51, 126, 255)).SetSelectedColour(new Color(51, 126, 255)).SetTextColour(new Color(255, 255, 255)),
-                    BackgroundColour = new ColourPalette().SetMainColour(new Color(255, 255, 255)).SetHoveredColour(new Color(198, 212, 236)).SetSelectedColour(new Color(179, 197, 230)).SetTextColour(new Color(30, 30, 30)),
-                    EmergencyColour = new ColourPalette().SetMainColour(new Color(255, 0, 0)).SetHoveredColour(new Color(235, 0, 0)).SetSelectedColour(new Color(215, 0, 0)).SetTextColour(new Color(255, 255, 255)),
-                    SeparatorColour = new ColourPalette().SetMainColour(new Color(30, 30, 30) * 0.2f),
-                    ShadowColour = new ColourPalette().SetMainColour(new Color(0, 0, 0) * 0.5f),
+                    MainColour = new ColourPalatte().SetMainColour(new Color(0, 92, 255)).SetHoveredColour(new Color(0, 84, 230)).SetSelectedColour(new Color(0, 75, 204)).SetTextColour(new Color(255, 255, 255)),
+                    MainColourSoft = new ColourPalatte().SetMainColour(new Color(217, 226, 242)),
+                    HighlitColour = new ColourPalatte().SetMainColour(new Color(51, 126, 255)).SetHoveredColour(new Color(51, 126, 255)).SetSelectedColour(new Color(51, 126, 255)).SetTextColour(new Color(255, 255, 255)),
+                    BackgroundColour = new ColourPalatte().SetMainColour(new Color(255, 255, 255)).SetHoveredColour(new Color(198, 212, 236)).SetSelectedColour(new Color(179, 197, 230)).SetTextColour(new Color(30, 30, 30)),
+                    EmergencyColour = new ColourPalatte().SetMainColour(new Color(255, 0, 0)).SetHoveredColour(new Color(235, 0, 0)).SetSelectedColour(new Color(215, 0, 0)).SetTextColour(new Color(255, 255, 255)),
+                    SeparatorColour = new ColourPalatte().SetMainColour(new Color(30, 30, 30) * 0.2f),
+                    ShadowColour = new ColourPalatte().SetMainColour(new Color(0, 0, 0) * 0.5f),
                     CornerRadius = (10, 10, 10, 10)
                };
             }
