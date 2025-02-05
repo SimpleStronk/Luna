@@ -1,9 +1,6 @@
-﻿using Microsoft.Xna.Framework.Input;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Xna.Framework.Input;
 
 namespace Luna.ManagerClasses
 {
@@ -11,91 +8,121 @@ namespace Luna.ManagerClasses
     internal class KeyboardHandler
     {
         static KeyboardState keyboard, oldKeyboard;
+        private static float keyTimer = -1;
+        private static float keypressInitialDelay = 0.7f, keypressPersistentDelay = 0.04f;
+        private static Keys? currentKey;
 
         public static bool TryConvertKeyboardInput(out char key)
         {
             Keys[] keys = keyboard.GetPressedKeys();
-            bool shift = keyboard.IsKeyDown(Keys.LeftShift) || keyboard.IsKeyDown(Keys.RightShift);
+
+            if (Array.IndexOf(keys, currentKey) > -1)
+            {
+                if (keyTimer < 0)
+                {
+                    keyTimer = keypressPersistentDelay;
+                    (char output, bool result) = TestKey(currentKey.GetValueOrDefault(), false);
+
+                    if (result) { key = output; return true; }
+                }
+            }
+            else
+            {
+                keyTimer = -1;
+                currentKey = null;
+            }
 
             foreach (Keys k in keys)
             {
-                if (!oldKeyboard.IsKeyDown(k))
-                {
-                    switch (k)
-                    {
-                        //Alphabet keys
-                        case Keys.A: if (shift) { key = 'A'; } else { key = 'a'; } return true;
-                        case Keys.B: if (shift) { key = 'B'; } else { key = 'b'; } return true;
-                        case Keys.C: if (shift) { key = 'C'; } else { key = 'c'; } return true;
-                        case Keys.D: if (shift) { key = 'D'; } else { key = 'd'; } return true;
-                        case Keys.E: if (shift) { key = 'E'; } else { key = 'e'; } return true;
-                        case Keys.F: if (shift) { key = 'F'; } else { key = 'f'; } return true;
-                        case Keys.G: if (shift) { key = 'G'; } else { key = 'g'; } return true;
-                        case Keys.H: if (shift) { key = 'H'; } else { key = 'h'; } return true;
-                        case Keys.I: if (shift) { key = 'I'; } else { key = 'i'; } return true;
-                        case Keys.J: if (shift) { key = 'J'; } else { key = 'j'; } return true;
-                        case Keys.K: if (shift) { key = 'K'; } else { key = 'k'; } return true;
-                        case Keys.L: if (shift) { key = 'L'; } else { key = 'l'; } return true;
-                        case Keys.M: if (shift) { key = 'M'; } else { key = 'm'; } return true;
-                        case Keys.N: if (shift) { key = 'N'; } else { key = 'n'; } return true;
-                        case Keys.O: if (shift) { key = 'O'; } else { key = 'o'; } return true;
-                        case Keys.P: if (shift) { key = 'P'; } else { key = 'p'; } return true;
-                        case Keys.Q: if (shift) { key = 'Q'; } else { key = 'q'; } return true;
-                        case Keys.R: if (shift) { key = 'R'; } else { key = 'r'; } return true;
-                        case Keys.S: if (shift) { key = 'S'; } else { key = 's'; } return true;
-                        case Keys.T: if (shift) { key = 'T'; } else { key = 't'; } return true;
-                        case Keys.U: if (shift) { key = 'U'; } else { key = 'u'; } return true;
-                        case Keys.V: if (shift) { key = 'V'; } else { key = 'v'; } return true;
-                        case Keys.W: if (shift) { key = 'W'; } else { key = 'w'; } return true;
-                        case Keys.X: if (shift) { key = 'X'; } else { key = 'x'; } return true;
-                        case Keys.Y: if (shift) { key = 'Y'; } else { key = 'y'; } return true;
-                        case Keys.Z: if (shift) { key = 'Z'; } else { key = 'z'; } return true;
+                (char output, bool result) = TestKey(k, true);
 
-                        //Decimal keys
-                        case Keys.D0: if (shift) { key = ')'; } else { key = '0'; } return true;
-                        case Keys.D1: if (shift) { key = '!'; } else { key = '1'; } return true;
-                        case Keys.D2: if (shift) { key = '@'; } else { key = '2'; } return true;
-                        case Keys.D3: if (shift) { key = '#'; } else { key = '3'; } return true;
-                        case Keys.D4: if (shift) { key = '$'; } else { key = '4'; } return true;
-                        case Keys.D5: if (shift) { key = '%'; } else { key = '5'; } return true;
-                        case Keys.D6: if (shift) { key = '^'; } else { key = '6'; } return true;
-                        case Keys.D7: if (shift) { key = '&'; } else { key = '7'; } return true;
-                        case Keys.D8: if (shift) { key = '*'; } else { key = '8'; } return true;
-                        case Keys.D9: if (shift) { key = '('; } else { key = '9'; } return true;
-
-                        //Decimal numpad keys
-                        case Keys.NumPad0: key = '0'; return true;
-                        case Keys.NumPad1: key = '1'; return true;
-                        case Keys.NumPad2: key = '2'; return true;
-                        case Keys.NumPad3: key = '3'; return true;
-                        case Keys.NumPad4: key = '4'; return true;
-                        case Keys.NumPad5: key = '5'; return true;
-                        case Keys.NumPad6: key = '6'; return true;
-                        case Keys.NumPad7: key = '7'; return true;
-                        case Keys.NumPad8: key = '8'; return true;
-                        case Keys.NumPad9: key = '9'; return true;
-
-                        //Special keys
-                        case Keys.OemTilde: if (shift) { key = '~'; } else { key = '`'; } return true;
-                        case Keys.OemSemicolon: if (shift) { key = ':'; } else { key = ';'; } return true;
-                        case Keys.OemQuotes: if (shift) { key = '"'; } else { key = '\''; } return true;
-                        case Keys.OemQuestion: if (shift) { key = '?'; } else { key = '/'; } return true;
-                        case Keys.OemPlus: if (shift) { key = '+'; } else { key = '='; } return true;
-                        case Keys.OemPipe: if (shift) { key = '|'; } else { key = '\\'; } return true;
-                        case Keys.OemPeriod: if (shift) { key = '>'; } else { key = '.'; } return true;
-                        case Keys.OemOpenBrackets: if (shift) { key = '{'; } else { key = '['; } return true;
-                        case Keys.OemCloseBrackets: if (shift) { key = '}'; } else { key = ']'; } return true;
-                        case Keys.OemMinus: if (shift) { key = '_'; } else { key = '-'; } return true;
-                        case Keys.OemComma: if (shift) { key = '<'; } else { key = ','; } return true;
-                        case Keys.Space: key = ' '; return true;
-                        case Keys.Enter: key = '\n'; return true;
-                        case Keys.Back: key = '\b'; return true;
-                    }
-                }
+                if (result) { key = output; currentKey = k; keyTimer = keypressInitialDelay; return true; }
             }
 
             key = (char)0;
+            if (keys.Length == 0) currentKey = null;
             return false;
+        }
+
+        private static (char key, bool result) TestKey(Keys k, bool firstFrameTest)
+        {
+            bool shift = keyboard.IsKeyDown(Keys.LeftShift) || keyboard.IsKeyDown(Keys.RightShift);
+
+            if (!oldKeyboard.IsKeyDown(k) || !firstFrameTest)
+            {
+                switch (k)
+                {
+                    //Alphabet keys
+                    case Keys.A: return (shift ? 'A' : 'a', true);
+                    case Keys.B: return (shift ? 'B' : 'b', true);
+                    case Keys.C: return (shift ? 'C' : 'c', true);
+                    case Keys.D: return (shift ? 'D' : 'd', true);
+                    case Keys.E: return (shift ? 'E' : 'e', true);
+                    case Keys.F: return (shift ? 'F' : 'f', true);
+                    case Keys.G: return (shift ? 'G' : 'g', true);
+                    case Keys.H: return (shift ? 'H' : 'h', true);
+                    case Keys.I: return (shift ? 'I' : 'i', true);
+                    case Keys.J: return (shift ? 'J' : 'j', true);
+                    case Keys.K: return (shift ? 'K' : 'k', true);
+                    case Keys.L: return (shift ? 'L' : 'l', true);
+                    case Keys.M: return (shift ? 'M' : 'm', true);
+                    case Keys.N: return (shift ? 'N' : 'n', true);
+                    case Keys.O: return (shift ? 'O' : 'o', true);
+                    case Keys.P: return (shift ? 'P' : 'p', true);
+                    case Keys.Q: return (shift ? 'Q' : 'q', true);
+                    case Keys.R: return (shift ? 'R' : 'r', true);
+                    case Keys.S: return (shift ? 'S' : 's', true);
+                    case Keys.T: return (shift ? 'T' : 't', true);
+                    case Keys.U: return (shift ? 'U' : 'u', true);
+                    case Keys.V: return (shift ? 'V' : 'v', true);
+                    case Keys.W: return (shift ? 'W' : 'w', true);
+                    case Keys.X: return (shift ? 'X' : 'x', true);
+                    case Keys.Y: return (shift ? 'Y' : 'y', true);
+                    case Keys.Z: return (shift ? 'Z' : 'z', true);
+
+                    //Decimal keys
+                    case Keys.D0: return (shift ? ')' : '0', true);
+                    case Keys.D1: return (shift ? '!' : '1', true);
+                    case Keys.D2: return (shift ? '\"' : '2', true);
+                    case Keys.D3: return (shift ? '£' : '3', true);
+                    case Keys.D4: return (shift ? '$' : '4', true);
+                    case Keys.D5: return (shift ? '%' : '5', true);
+                    case Keys.D6: return (shift ? '^' : '6', true);
+                    case Keys.D7: return (shift ? '&' : '7', true);
+                    case Keys.D8: return (shift ? '*' : '8', true);
+                    case Keys.D9: return (shift ? '(' : '9', true);
+
+                    //Decimal numpad keys
+                    case Keys.NumPad0: return ('0', true);
+                    case Keys.NumPad1: return ('1', true);
+                    case Keys.NumPad2: return ('2', true);
+                    case Keys.NumPad3: return ('3', true);
+                    case Keys.NumPad4: return ('4', true);
+                    case Keys.NumPad5: return ('5', true);
+                    case Keys.NumPad6: return ('6', true);
+                    case Keys.NumPad7: return ('7', true);
+                    case Keys.NumPad8: return ('8', true);
+                    case Keys.NumPad9: return ('9', true);
+
+                    //Special keys
+                    case Keys.OemTilde: return (shift ? '@' : '\'', true);
+                    case Keys.OemSemicolon: return (shift ? ':' : ';', true);
+                    case Keys.OemQuotes: return (shift ? '~' : '#', true);
+                    case Keys.OemQuestion: return (shift ? '?' : '/', true);
+                    case Keys.OemPlus: return (shift ? '+' : '=', true);
+                    case Keys.OemPipe: return (shift ? '|' : '\\', true);
+                    case Keys.OemPeriod: return (shift ? '>' : '.', true);
+                    case Keys.OemOpenBrackets: return (shift ? '{' : '[', true);
+                    case Keys.OemCloseBrackets: return (shift ? '}' : ']', true);
+                    case Keys.OemMinus: return (shift ? '_' : '-', true);
+                    case Keys.OemComma: return (shift ? '<' : ',', true);
+                    case Keys.Space: return (' ', true);
+                    case Keys.Enter: return ('\n', true);
+                    case Keys.Back: return ('\b', true);
+                }
+            }
+
+            return ((char)0, false);
         }
 
         public static bool IsNumber(char x)
@@ -125,6 +152,16 @@ namespace Luna.ManagerClasses
         public static void SetOldKeyboard()
         {
             oldKeyboard = Keyboard.GetState();
+        }
+
+        public static void IncrementTime(float deltaTime)
+        {
+            keyTimer -= deltaTime;
+
+            if (keyTimer < 0)
+            {
+                keyTimer = -1;
+            }
         }
     }
 }

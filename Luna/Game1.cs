@@ -57,6 +57,7 @@ public class Game1 : Game
 
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
            Exit();
+        KeyboardHandler.IncrementTime((float)gameTime.ElapsedGameTime.TotalSeconds);
         
         uiManager.Update(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
 
