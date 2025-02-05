@@ -64,7 +64,7 @@ namespace Luna.UI
 
         protected void AddVisualResponse()
         {
-            onHover += () => { buttonState = ButtonState.Hovered; colourAnimator.SetColour(overrideTheme.GetColourPalette(cascadeTheme).HoveredColour); };
+            onHover += () => { if (clicked) return; buttonState = ButtonState.Hovered; colourAnimator.SetColour(overrideTheme.GetColourPalette(cascadeTheme).HoveredColour); };
             onClick += () => { clicked = true; buttonState = ButtonState.Selected; };
             onUnhover += () => { if (!clicked) buttonState = ButtonState.None; };
             onUnclick += () => { buttonState = hovered ? ButtonState.Hovered : ButtonState.None; clicked = false; };
