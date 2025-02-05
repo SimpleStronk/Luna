@@ -1,6 +1,7 @@
 using System;
 using Luna.ManagerClasses;
 using Luna.UI.LayoutSystem;
+using SharpDX.XAudio2;
 using static Luna.UI.LayoutSystem.LUIVA;
 
 namespace Luna.UI
@@ -15,10 +16,15 @@ namespace Luna.UI
         float maximumValue = 1;
         float increment = 0;
         float normalisedValue = 0;
+        float value = 0;
+        int knobSize = 30;
 
-        public Slider(int axis, UITheme.ColorType colorType) : base(VisualResponse.ColourChange, colorType)
+        public Slider(int axis, float minimumValue, float maximumValue, float increment, UITheme.ColorType colorType) : base(VisualResponse.ColourChange, colorType)
         {
             this.axis = axis;
+            this.minimumValue = minimumValue;
+            this.maximumValue = maximumValue;
+            this.increment = increment;
             overrideTheme.ColourType = colorType;
             layout.HorizontalAlignment = layout.VerticalAlignment = Alignment.Middle;
             layout.Padding = new Tetra(15);
@@ -49,13 +55,13 @@ namespace Luna.UI
             }
 
             sliderKnob = new BlankUI(UITheme.ColorType.Main);
-            sliderKnob.SetLayout(new Layout() { LayoutWidth = Sizing.Fixed(30), LayoutHeight = Sizing.Fixed(30), Inline = false });
+            sliderKnob.SetLayout(new Layout() { LayoutWidth = Sizing.Fixed(knobSize), LayoutHeight = Sizing.Fixed(knobSize), Inline = false });
             sliderKnob.SetTheme(new UITheme() { Rounded = true });
             sliderKnob.FocusIgnore = true;
 
             sliderGroove.AddChild(sliderKnob);
             AddChild(sliderGroove);
-
+            
             Initialise();
         }
 
@@ -65,15 +71,17 @@ namespace Luna.UI
 
             if (clicked)
             {
-                HardSetValue(NormalisedToScaledValue(CalculateNormalisedValue(MouseHandler.Position, axis)));
+                HardSetValue(NormalisedToScaledValue(Math.Clamp(CalculateNormalisedValue(MouseHandler.Position, axis), 0, 1)));
             }
+
+            value = NormalisedToScaledValue(normalisedValue);
+            SetKnobPosition(normalisedValue);
         }
 
         private void SetKnobPosition(float value)
         {
             float groovePosition = sliderGroove.GetTransform().GlobalPosition.GetComponent(axis);
             float grooveSize = sliderGroove.GetTransform().Size.GetComponent(axis);
-            float knobSize = sliderKnob.GetTransform().Size.GetComponent(axis);
             float position = (value * grooveSize) + groovePosition - (knobSize / 2f);
 
             sliderKnob.GetTransform().SetGlobalPositionComponentValue(position, axis);
@@ -134,7 +142,6 @@ namespace Luna.UI
 
             if (increment == 0) { normalisedValue = Math.Clamp(normalisedValue, 0, 1); }
             else { normalisedValue = Math.Clamp(((int)(normalisedValue / CalculateNormalisedIncrement() + 0.5f)) * CalculateNormalisedIncrement(), 0, 1); }
-            SetKnobPosition(normalisedValue);
         }
 
         public void HardSetValue(float value)

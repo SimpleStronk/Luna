@@ -42,6 +42,7 @@ public class Game1 : Game
         IOManager.SetGraphicsDevice(GraphicsDevice);
         GraphicsHelper.SetGraphicsDevice(GraphicsDevice);
         GraphicsHelper.SetDefaultFont(Content.Load<SpriteFont>(@"MontserratLight"));
+        GraphicsHelper.SetBoldFont(Content.Load<SpriteFont>(@"MontserratRegular"));
         uiManager = new UIManager(Window, Exit, GraphicsDevice, systemManager);
         uiManager.SetPixelTexture(GraphicsHelper.GeneratePixelTexture());
 

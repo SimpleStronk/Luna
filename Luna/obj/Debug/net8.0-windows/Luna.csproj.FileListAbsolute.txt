@@ -53,3 +53,4 @@ c:\Users\bill\Documents\GitHub\Luna\Luna\obj\Debug\net8.0-windows\Luna.pdb
 c:\Users\bill\Documents\GitHub\Luna\Luna\obj\Debug\net8.0-windows\Luna.genruntimeconfig.cache
 c:\Users\bill\Documents\GitHub\Luna\Luna\obj\Debug\net8.0-windows\ref\Luna.dll
 c:\Users\bill\Documents\GitHub\Luna\Luna\obj\Debug\net8.0-windows\Luna.sourcelink.json
+c:\Users\bill\Documents\GitHub\Luna\Luna\bin\Debug\net8.0-windows\Content\MontserratRegular.xnb

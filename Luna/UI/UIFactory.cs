@@ -68,7 +68,7 @@ namespace Luna.UI
         public struct TopBarBlock
         {
             UIComponent root;
-            TextButton dashboard, orders;
+            TextButton dashboard, orders, products;
 
             public UIComponent Root
             {
@@ -86,6 +86,12 @@ namespace Luna.UI
             {
                 get { return orders; }
                 set { orders = value; }
+            }
+
+            public TextButton Products
+            {
+                get { return products; }
+                set { products = value; }
             }
         }
 
@@ -114,6 +120,17 @@ namespace Luna.UI
         }
 
         public struct OrdersBlock
+        {
+            private UIComponent root;
+
+            public UIComponent Root
+            {
+                get { return root; }
+                set { root = value; }
+            }
+        }
+
+        public struct ProductsBlock
         {
             private UIComponent root;
 
@@ -288,6 +305,11 @@ namespace Luna.UI
 
             Label ordersLabel = new Label("Orders", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Main);
 
+            Button productsContainer = new Button(UITheme.ColorType.Main);
+            productsContainer.SetLayout(TopBarButtonLayout);
+
+            Label productsLabel = new Label("Products", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Main);
+
             BlankUI topBarSeparator = new BlankUI(UITheme.ColorType.Background);
             topBarSeparator.SetLayout(SeparatorHorizontalLayout);
             
@@ -297,12 +319,17 @@ namespace Luna.UI
 
             ordersContainer.AddChild(ordersLabel);
 
-            root.AddChild(logoContainer);
-            root.AddChild(separator);
-            root.AddChild(dashboardContainer);
-            root.AddChild(ordersContainer);
+            productsContainer.AddChild(productsLabel);
 
-            return new TopBarBlock() { Root = root, Dashboard = new TextButton() { Root = dashboardContainer, Label = dashboardLabel }, Orders = new TextButton() { Root = ordersContainer, Label = ordersLabel } };
+            root.AddChild(logoContainer, separator, dashboardContainer, ordersContainer, productsContainer);
+
+            return new TopBarBlock()
+            {
+                Root = root,
+                Dashboard = new TextButton() { Root = dashboardContainer, Label = dashboardLabel },
+                Orders = new TextButton() { Root = ordersContainer, Label = ordersLabel },
+                Products = new TextButton() { Root = productsContainer, Label = productsLabel }
+            };
         }
 
         public DashboardBlock CreateDashboard()
@@ -400,20 +427,14 @@ namespace Luna.UI
             t.SetLayout(new Layout() { LayoutWidth = Sizing.Grow(1), LayoutHeight = Sizing.Fixed(40) });
             t.SetTheme(new UITheme() { Rounded = true });
 
-            Slider s = new Slider(LVector2.VERTICAL, UITheme.ColorType.Placeholder);
+            Slider s = new Slider(LVector2.VERTICAL, 0, 5, 1, UITheme.ColorType.Placeholder);
             s.SetLayout(new Layout() { LayoutHeight = Sizing.Fixed(300) });
             s.SetTheme(new UITheme() { Rounded = true });
-            s.MinimumValue = 0;
-            s.MaximumValue = 5;
-            s.Increment = 1;
             s.OnValueChanged((float value) => t.Label.SetText($"{value} spiders"));
 
-            Slider s2 = new Slider(LVector2.HORIZONTAL, UITheme.ColorType.Placeholder);
+            Slider s2 = new Slider(LVector2.HORIZONTAL, 0, 1, 0, UITheme.ColorType.Placeholder);
             s2.SetLayout(new Layout() { LayoutWidth = Sizing.Grow(1) });
             s2.SetTheme(new UITheme() { Rounded = true });
-            s2.MinimumValue = 0;
-            s2.MaximumValue = 1;
-            s2.Increment = 0;
 
             Label label = new Label("1 Slider", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Background);
             contentContainer.AddChild(s2);
@@ -450,6 +471,29 @@ namespace Luna.UI
             blank.AddChild(b);
 
             return new OrdersBlock() { Root = blank };
+        }
+
+        public ProductsBlock CreateProducts()
+        {
+            BlankUI blank = new BlankUI(UITheme.ColorType.Background);
+            blank.SetLayout(new Layout()
+            {
+                LayoutWidth = Sizing.Grow(1),
+                LayoutHeight = Sizing.Grow(1),
+                Padding = new Tetra(20),
+                Inline = false
+            });
+
+            Button b = new Button(UITheme.ColorType.Main);
+            b.SetLayout(new Layout()
+            {
+                LayoutWidth = Sizing.Fixed(200),
+                LayoutHeight = Sizing.Fixed(500)
+            });
+
+            blank.AddChild(b);
+
+            return new ProductsBlock() { Root = blank };
         }
 
         private Layout TopBarButtonLayout
@@ -523,6 +567,7 @@ namespace Luna.UI
                     EmergencyColour = new ColourPalatte().SetMainColour(new Color(255, 0, 0)).SetHoveredColour(new Color(235, 0, 0)).SetSelectedColour(new Color(215, 0, 0)).SetTextColour(new Color(255, 255, 255)),
                     SeparatorColour = new ColourPalatte().SetMainColour(new Color(30, 30, 30) * 0.2f),
                     ShadowColour = new ColourPalatte().SetMainColour(new Color(0, 0, 0) * 0.5f),
+                    ScrollbarColour = new ColourPalatte().SetMainColour(new Color(198, 212, 236)).SetHoveredColour(new Color(179, 197, 230)).SetSelectedColour(new Color(179, 197, 230)),
                     CornerRadius = (10, 10, 10, 10)
                };
             }

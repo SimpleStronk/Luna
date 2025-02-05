@@ -28,9 +28,9 @@ namespace Luna.ManagerClasses
         private GameWindow window;
         private UIFactory uiFactory = new UIFactory();
         private bool windowBorderless;
-        bool themeToggle = true;
+        bool themeToggle = false;
 
-        enum MainWindowState { Dashboard, Orders };
+        enum MainWindowState { Dashboard, Orders, Products };
         MainWindowState mainWindowState = MainWindowState.Dashboard;
         private TopBarBlock topBarBlock;
         UIComponent currentWindow;
@@ -90,6 +90,7 @@ namespace Luna.ManagerClasses
             UIComponent topBar = topBarBlock.Root;
             topBarBlock.Orders.Root.OnClick(() => { SetMainWindowState(MainWindowState.Orders); } );
             topBarBlock.Dashboard.Root.OnClick(() => { SetMainWindowState(MainWindowState.Dashboard); });
+            topBarBlock.Products.Root.OnClick(() => SetMainWindowState(MainWindowState.Products));
 
             mainWindowContainer = new BlankUI(UITheme.ColorType.Background);
             mainWindowContainer.SetLayout(new Layout()
@@ -274,6 +275,12 @@ namespace Luna.ManagerClasses
                     HighlightTopBar(MainWindowState.Orders);
                     break;
                 }
+                case MainWindowState.Products:
+                {
+                    InitiateFadeTransition(SetupProducts(uiFactory.CreateProducts()));
+                    HighlightTopBar(MainWindowState.Products);
+                    break;
+                }
             }
         }
 
@@ -310,6 +317,11 @@ namespace Luna.ManagerClasses
             return ordersBlock.Root;
         }
 
+        private UIComponent SetupProducts(ProductsBlock productsBlock)
+        {
+            return productsBlock.Root;
+        }
+
         private void InitiateFadeTransition(UIComponent newWindow)
         {
             mainWindowContainer.AddChild(newWindow); newWindow.ColourAnimator.OnTransitionAction(() => { mainWindowContainer.RemoveChild(currentWindow); currentWindow = newWindow; });
@@ -321,21 +333,32 @@ namespace Luna.ManagerClasses
             {
                 case MainWindowState.Dashboard:
                 {
-                    topBarBlock.Dashboard.Root.SetTheme(new UITheme() { ColourType = UITheme.ColorType.Highlit });
-                    topBarBlock.Dashboard.Label.SetTheme(new UITheme() { ColourType = UITheme.ColorType.Highlit });
-                    topBarBlock.Orders.Root.SetTheme(new UITheme() { ColourType = UITheme.ColorType.Main });
-                    topBarBlock.Orders.Label.SetTheme(new UITheme() { ColourType = UITheme.ColorType.Main });
+                    SetButtonColourType(topBarBlock.Dashboard, UITheme.ColorType.Highlit);
+                    SetButtonColourType(topBarBlock.Orders, UITheme.ColorType.Main);
+                    SetButtonColourType(topBarBlock.Products, UITheme.ColorType.Main);
                     break;
                 }
                 case MainWindowState.Orders:
                 {
-                    topBarBlock.Dashboard.Root.SetTheme(new UITheme() { ColourType = UITheme.ColorType.Main });
-                    topBarBlock.Dashboard.Label.SetTheme(new UITheme() { ColourType = UITheme.ColorType.Main });
-                    topBarBlock.Orders.Root.SetTheme(new UITheme() { ColourType = UITheme.ColorType.Highlit });
-                    topBarBlock.Orders.Label.SetTheme(new UITheme() { ColourType = UITheme.ColorType.Highlit });
+                    SetButtonColourType(topBarBlock.Dashboard, UITheme.ColorType.Main);
+                    SetButtonColourType(topBarBlock.Orders, UITheme.ColorType.Highlit);
+                    SetButtonColourType(topBarBlock.Products, UITheme.ColorType.Main);
+                    break;
+                }
+                case MainWindowState.Products:
+                {
+                    SetButtonColourType(topBarBlock.Dashboard, UITheme.ColorType.Main);
+                    SetButtonColourType(topBarBlock.Orders, UITheme.ColorType.Main);
+                    SetButtonColourType(topBarBlock.Products, UITheme.ColorType.Highlit);
                     break;
                 }
             }
+        }
+
+        private void SetButtonColourType(TextButton button, UITheme.ColorType colorType)
+        {
+            button.Root.SetTheme(new UITheme() { ColourType = colorType });
+            button.Label.SetTheme(new UITheme() { ColourType = colorType });
         }
 
         public void SetUpdateScissorRectangleAction(GraphicsDevice graphicsDevice)

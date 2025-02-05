@@ -21,6 +21,7 @@ namespace Luna.UI
             scrollHandle.OnUnclick(() => { dragging = false; });
             layout.Padding = new Tetra(2);
             Initialise();
+            SetHandlePosition(value);
             
             switch (axis)
             {

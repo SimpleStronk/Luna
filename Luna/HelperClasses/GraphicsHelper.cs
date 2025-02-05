@@ -12,7 +12,7 @@ namespace Luna.HelperClasses
     internal class GraphicsHelper
     {
         private static GraphicsDevice graphicsDevice;
-        private static SpriteFont defaultFont;
+        private static SpriteFont defaultFont, boldFont;
         private static int msaaRes = 3;
         private static Dictionary<int, Texture2D> circleCache = new Dictionary<int, Texture2D>();
 
@@ -74,9 +74,19 @@ namespace Luna.HelperClasses
             GraphicsHelper.defaultFont = defaultFont;
         }
 
+        public static void SetBoldFont(SpriteFont boldFont)
+        {
+            GraphicsHelper.boldFont = boldFont;
+        }
+
         public static SpriteFont GetDefaultFont()
         {
             return defaultFont;
+        }
+
+        public static SpriteFont GetBoldFont()
+        {
+            return boldFont;
         }
 
         public static Color[] GetImageData(Color[] colorData, int width, Rectangle rectangle)
