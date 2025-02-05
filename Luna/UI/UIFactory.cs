@@ -427,8 +427,8 @@ namespace Luna.UI
             t.SetLayout(new Layout() { LayoutWidth = Sizing.Grow(1), LayoutHeight = Sizing.Fixed(40) });
             t.SetTheme(new UITheme() { Rounded = true });
 
-            Slider s = new Slider(LVector2.VERTICAL, 0, 5, 1, UITheme.ColorType.Placeholder);
-            s.SetLayout(new Layout() { LayoutHeight = Sizing.Fixed(300) });
+            Slider s = new Slider(LVector2.HORIZONTAL, 0, 5, 1, UITheme.ColorType.Placeholder);
+            s.SetLayout(new Layout() { LayoutWidth = Sizing.Grow(1) });
             s.SetTheme(new UITheme() { Rounded = true });
             s.OnValueChanged((float value) => t.Label.SetText($"{value} spiders"));
 
@@ -437,10 +437,16 @@ namespace Luna.UI
             s2.SetTheme(new UITheme() { Rounded = true });
 
             Label label = new Label("1 Slider", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Background);
+
+            TextInput textInput = new TextInput();
+            textInput.SetLayout(new Layout() { LayoutWidth = Sizing.Grow(1), LayoutHeight = Sizing.Fixed(40) });
+
             contentContainer.AddChild(s2);
             contentContainer.AddChild(label);
             contentContainer.AddChild(s);
             contentContainer.AddChild(t);
+
+            contentContainer.AddChild(textInput);
 
             leftPanel.AddChild(contentContainer);
 

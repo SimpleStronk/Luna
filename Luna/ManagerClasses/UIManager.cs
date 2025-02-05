@@ -324,7 +324,8 @@ namespace Luna.ManagerClasses
 
         private void InitiateFadeTransition(UIComponent newWindow)
         {
-            mainWindowContainer.AddChild(newWindow); newWindow.ColourAnimator.OnTransitionAction(() => { mainWindowContainer.RemoveChild(currentWindow); currentWindow = newWindow; });
+            mainWindowContainer.AddChild(newWindow);
+            newWindow.ColourAnimator.OnTransitionAction(() => { mainWindowContainer.RemoveChild(currentWindow); currentWindow = newWindow; });
         }
 
         private void HighlightTopBar(MainWindowState mainWindowState)
