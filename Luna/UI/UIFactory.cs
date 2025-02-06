@@ -439,7 +439,9 @@ namespace Luna.UI
             Label label = new Label("1 Slider", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Background);
 
             TextInput textInput = new TextInput();
-            textInput.SetLayout(new Layout() { LayoutWidth = Sizing.Grow(1), LayoutHeight = Sizing.Fixed(40) });
+            textInput.SetLayout(new Layout() { LayoutWidth = Sizing.Grow(1), LayoutHeight = Sizing.Fixed(250) });
+            textInput.Multiline = true;
+            textInput.MaxCharacters = 200;
 
             contentContainer.AddChild(s2);
             contentContainer.AddChild(label);

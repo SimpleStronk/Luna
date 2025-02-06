@@ -126,6 +126,7 @@ namespace Luna.UI
 
         public (int TopLeft, int TopRight, int BottomLeft, int BottomRight) CornerRadius
         {
+            get { return cornerRadius; }
             set
             {
                 cornerRadius = value;

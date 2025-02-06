@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Linq;
 using Microsoft.Xna.Framework.Input;
+using SharpDX.MediaFoundation;
 
 namespace Luna.ManagerClasses
 {
@@ -46,39 +46,41 @@ namespace Luna.ManagerClasses
 
         private static (char key, bool result) TestKey(Keys k, bool firstFrameTest)
         {
+            
             bool shift = keyboard.IsKeyDown(Keys.LeftShift) || keyboard.IsKeyDown(Keys.RightShift);
+            bool caps = shift != System.Windows.Forms.Control.IsKeyLocked(System.Windows.Forms.Keys.CapsLock);
 
             if (!oldKeyboard.IsKeyDown(k) || !firstFrameTest)
             {
                 switch (k)
                 {
                     //Alphabet keys
-                    case Keys.A: return (shift ? 'A' : 'a', true);
-                    case Keys.B: return (shift ? 'B' : 'b', true);
-                    case Keys.C: return (shift ? 'C' : 'c', true);
-                    case Keys.D: return (shift ? 'D' : 'd', true);
-                    case Keys.E: return (shift ? 'E' : 'e', true);
-                    case Keys.F: return (shift ? 'F' : 'f', true);
-                    case Keys.G: return (shift ? 'G' : 'g', true);
-                    case Keys.H: return (shift ? 'H' : 'h', true);
-                    case Keys.I: return (shift ? 'I' : 'i', true);
-                    case Keys.J: return (shift ? 'J' : 'j', true);
-                    case Keys.K: return (shift ? 'K' : 'k', true);
-                    case Keys.L: return (shift ? 'L' : 'l', true);
-                    case Keys.M: return (shift ? 'M' : 'm', true);
-                    case Keys.N: return (shift ? 'N' : 'n', true);
-                    case Keys.O: return (shift ? 'O' : 'o', true);
-                    case Keys.P: return (shift ? 'P' : 'p', true);
-                    case Keys.Q: return (shift ? 'Q' : 'q', true);
-                    case Keys.R: return (shift ? 'R' : 'r', true);
-                    case Keys.S: return (shift ? 'S' : 's', true);
-                    case Keys.T: return (shift ? 'T' : 't', true);
-                    case Keys.U: return (shift ? 'U' : 'u', true);
-                    case Keys.V: return (shift ? 'V' : 'v', true);
-                    case Keys.W: return (shift ? 'W' : 'w', true);
-                    case Keys.X: return (shift ? 'X' : 'x', true);
-                    case Keys.Y: return (shift ? 'Y' : 'y', true);
-                    case Keys.Z: return (shift ? 'Z' : 'z', true);
+                    case Keys.A: return (caps ? 'A' : 'a', true);
+                    case Keys.B: return (caps ? 'B' : 'b', true);
+                    case Keys.C: return (caps ? 'C' : 'c', true);
+                    case Keys.D: return (caps ? 'D' : 'd', true);
+                    case Keys.E: return (caps ? 'E' : 'e', true);
+                    case Keys.F: return (caps ? 'F' : 'f', true);
+                    case Keys.G: return (caps ? 'G' : 'g', true);
+                    case Keys.H: return (caps ? 'H' : 'h', true);
+                    case Keys.I: return (caps ? 'I' : 'i', true);
+                    case Keys.J: return (caps ? 'J' : 'j', true);
+                    case Keys.K: return (caps ? 'K' : 'k', true);
+                    case Keys.L: return (caps ? 'L' : 'l', true);
+                    case Keys.M: return (caps ? 'M' : 'm', true);
+                    case Keys.N: return (caps ? 'N' : 'n', true);
+                    case Keys.O: return (caps ? 'O' : 'o', true);
+                    case Keys.P: return (caps ? 'P' : 'p', true);
+                    case Keys.Q: return (caps ? 'Q' : 'q', true);
+                    case Keys.R: return (caps ? 'R' : 'r', true);
+                    case Keys.S: return (caps ? 'S' : 's', true);
+                    case Keys.T: return (caps ? 'T' : 't', true);
+                    case Keys.U: return (caps ? 'U' : 'u', true);
+                    case Keys.V: return (caps ? 'V' : 'v', true);
+                    case Keys.W: return (caps ? 'W' : 'w', true);
+                    case Keys.X: return (caps ? 'X' : 'x', true);
+                    case Keys.Y: return (caps ? 'Y' : 'y', true);
+                    case Keys.Z: return (caps ? 'Z' : 'z', true);
 
                     //Decimal keys
                     case Keys.D0: return (shift ? ')' : '0', true);
@@ -119,6 +121,10 @@ namespace Luna.ManagerClasses
                     case Keys.Space: return (' ', true);
                     case Keys.Enter: return ('\n', true);
                     case Keys.Back: return ('\b', true);
+                    case Keys.Left: return ((char)0, true);
+                    case Keys.Right: return ((char)1, true);
+                    case Keys.Up: return ((char)2, true);
+                    case Keys.Down: return ((char)3, true);
                 }
             }
 
