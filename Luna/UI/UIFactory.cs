@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Luna.UI.LayoutSystem;
 using static Luna.UI.LayoutSystem.LUIVA;
 using System;
+using System.Windows.Forms;
 
 namespace Luna.UI
 {
@@ -439,16 +440,19 @@ namespace Luna.UI
             Label label = new Label("1 Slider", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Background);
 
             TextInput textInput = new TextInput();
-            textInput.SetLayout(new Layout() { LayoutWidth = Sizing.Grow(1), LayoutHeight = Sizing.Fixed(250) });
+            textInput.SetLayout(new Layout() { LayoutWidth = Sizing.Grow(1), LayoutHeight = Sizing.Wrap() });
             textInput.Multiline = true;
-            textInput.MaxCharacters = 200;
+            textInput.MaxCharacters = 500;
 
+            Label caretInfo = new Label("", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Background);
+            textInput.OnCaretChanged(((int character, int line) caret) => caretInfo.SetText($"Caret index is {caret.character}, {caret.line}"));
             contentContainer.AddChild(s2);
             contentContainer.AddChild(label);
             contentContainer.AddChild(s);
             contentContainer.AddChild(t);
 
             contentContainer.AddChild(textInput);
+            contentContainer.AddChild(caretInfo);
 
             leftPanel.AddChild(contentContainer);
 

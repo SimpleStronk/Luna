@@ -28,7 +28,7 @@ namespace Luna.ManagerClasses
         private GameWindow window;
         private UIFactory uiFactory = new UIFactory();
         private bool windowBorderless;
-        bool themeToggle = false;
+        bool themeToggle = true;
 
         enum MainWindowState { Dashboard, Orders, Products };
         MainWindowState mainWindowState = MainWindowState.Dashboard;

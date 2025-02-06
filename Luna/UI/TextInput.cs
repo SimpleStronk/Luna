@@ -4,6 +4,7 @@ using System.Reflection.Metadata.Ecma335;
 using System.Windows.Forms.Design;
 using Luna.HelperClasses;
 using Luna.ManagerClasses;
+using Luna.UI.LayoutSystem;
 using static Luna.UI.LayoutSystem.LUIVA;
 
 namespace Luna.UI
@@ -11,6 +12,7 @@ namespace Luna.UI
     internal class TextInput : Button
     {
         private BlankUI internalPanel;
+        private BlankUI caret;
         private Label label;
         private bool editing = false;
         private string text = "";
@@ -18,18 +20,25 @@ namespace Luna.UI
         private int maxCharacters = 30;
         private (int character, int line) caretIndex;
 
+        private Action<(int, int)> onCaretChanged;
+
         public TextInput() : base(UITheme.ColorType.Background)
         {
             overrideTheme.ColourType = UITheme.ColorType.Background;
             layout.Padding = new Tetra(2);
 
             internalPanel = new BlankUI(UITheme.ColorType.Background);
-            internalPanel.SetLayout(new Layout() { LayoutWidth = Sizing.Grow(1), LayoutHeight = Sizing.Grow(1), HorizontalAlignment = Alignment.Middle, VerticalAlignment = Alignment.Middle });
+            internalPanel.SetLayout(new Layout() { LayoutWidth = Sizing.Grow(1), LayoutHeight = Sizing.Wrap(), HorizontalAlignment = Alignment.Middle, VerticalAlignment = Alignment.Middle, Padding = new Tetra(10) });
             internalPanel.SetTheme(new UITheme() { CornerRadius = (8, 8, 8, 8), Rounded = true });
             internalPanel.FocusIgnore = true;
             AddChild(internalPanel);
 
             label = new Label("", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Background);
+            label.SetLayout(new Layout() { HorizontalAlignment = Alignment.Ignore, VerticalAlignment = Alignment.Ignore, ClipChildren = false });
+
+            caret = new BlankUI(UITheme.ColorType.Main);
+            caret.SetLayout(new Layout() { LayoutWidth = Sizing.Fixed(2), LayoutHeight = Sizing.Fixed(30) });
+            label.AddChild(caret);
 
             internalPanel.AddChild(label);
 
@@ -75,14 +84,12 @@ namespace Luna.UI
                     case (char)0:
                     {
                         MoveCaretLeft();
-                        Console.WriteLine(caretIndex);
                         break;
                     }
                     // RIGHT KEY
                     case (char)1:
                     {
                         MoveCaretRight(false, false);
-                        Console.WriteLine(caretIndex);
                         break;
                     }
                     case (char)2:
@@ -109,32 +116,30 @@ namespace Luna.UI
         {
             if (text.Length >= maxCharacters) return;
 
-            text += c;
+            text = UpToCaret + c + PostCaret;
             MoveCaretRight(true, c == '\n');
-
-            Console.WriteLine(caretIndex);
         }
 
         private void RemoveCharacter()
         {
-            text = text.Substring(0, Math.Max(text.Length - 1, 0));
+            Console.WriteLine(text.Substring(0, Math.Max(UpToCaret.Length - 1, 0)));
+            Console.WriteLine(PostCaret);
+            string placeholderText = text.Substring(0, Math.Max(UpToCaret.Length - 1, 0)) + PostCaret;
             MoveCaretLeft();
-
-            Console.WriteLine(caretIndex);
+            text = placeholderText;
         }
 
         private void MoveCaretLeft()
         {
-            if (caretIndex.character > 0)
+            if (CaretIndex.Character > 0)
             {
-                caretIndex.character--;
+                CaretIndex = (caretIndex.character - 1, caretIndex.line);
                 return;
             }
 
-            if (caretIndex.line > 0)
+            if (CaretIndex.Line > 0)
             {
-                caretIndex.line--;
-                caretIndex.character = GetLine(caretIndex.line).Length;
+                CaretIndex = (GetLine(caretIndex.line - 1).Length, caretIndex.line - 1);
             }
         }
 
@@ -142,32 +147,32 @@ namespace Luna.UI
         {
             if (newline)
             {
-                caretIndex.character = 0;
-                caretIndex.line++;
+                CaretIndex = (0, caretIndex.line + 1);
                 return;
             }
 
             if (adding)
             {
-                caretIndex.character++;
+                CaretIndex = (caretIndex.character + 1, caretIndex.line);
                 return;
             }
 
-            if (caretIndex.character == GetLine(caretIndex.line).Length)
+            if (CaretIndex.Character == GetLine(CaretIndex.Line).Length)
             {
-                if (caretIndex.line + 1 < text.Split('\n').Count())
+                if (CaretIndex.Line + 1 < text.Split('\n').Count())
                 {
-                    caretIndex = (caretIndex.line + 1, 0);
+                    CaretIndex = (0, caretIndex.line + 1);
                 }
 
                 return;
             }
 
-            caretIndex = (caretIndex.character + 1, caretIndex.line);
+            CaretIndex = (CaretIndex.Character + 1, CaretIndex.Line);
         }
 
         private string GetLine(int index)
         {
+            
             return text.Split('\n')[index];
         }
 
@@ -201,12 +206,42 @@ namespace Luna.UI
             }
         }
 
+        private string PostCaret
+        {
+            get { return text.Substring(UpToCaret.Length); }
+        }
+
         private string CaretLine
         {
             get
             {
                 return text.Split('\n')[caretIndex.line].Substring(0, caretIndex.character);
             }
+        }
+
+        private string UpToCaret
+        {
+            get { return caretIndex.line == 0 ? CaretLine : PreCaret + "\n" + CaretLine; }
+        }
+        
+        public (int Character, int Line) CaretIndex
+        {
+            get { return caretIndex; }
+            private set { caretIndex = value; onCaretChanged?.Invoke(caretIndex); SetCaretPosition(); }
+        }
+
+        public void OnCaretChanged(Action<(int, int)> e)
+        {
+            onCaretChanged += e;
+        }
+
+        private void SetCaretPosition()
+        {
+            float height = GraphicsHelper.GetDefaultFont().MeasureString(UpToCaret == "" ? "|" : UpToCaret).Y - GraphicsHelper.GetDefaultFont().MeasureString(CaretLine == "" ? "|" : CaretLine).Y;
+            float width = GraphicsHelper.GetDefaultFont().MeasureString(CaretLine).X;
+
+            caret.GetTransform().SetPositionComponentValue(width, LVector2.HORIZONTAL);
+            caret.GetTransform().SetPositionComponentValue(height, LVector2.VERTICAL);
         }
     }
 }
