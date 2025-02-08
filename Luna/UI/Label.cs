@@ -41,7 +41,7 @@ namespace Luna.UI
 
             if (layout.LayoutHeight.ScalingMode == Sizing.Mode.Ignore)
             {
-                transform.Size = new LVector2(transform.Size.X, font.MeasureString(displayText).Y);
+                transform.Size = new LVector2(transform.Size.X, MeasureText(displayText).Y);
             }
         }
 
@@ -59,7 +59,19 @@ namespace Luna.UI
         public void SetText(string text)
         {
             this.text = text;
-            transform.Size = new LVector2(font.MeasureString(text));
+            transform.Size = MeasureText(text);
+        }
+
+        private LVector2 MeasureText(string text)
+        {
+            string tmp = text;
+
+            if (tmp == "") tmp = "|";
+            else if (tmp.Split('\n')[0] == "") tmp = "|" + text;
+            else if (tmp.Split('\n').Last() == "") tmp = text + "|";
+            else tmp = text;
+
+            return font.MeasureString(tmp);
         }
 
         private string DisplayText

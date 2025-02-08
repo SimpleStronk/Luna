@@ -8,7 +8,7 @@ namespace Luna.HelperClasses
     {
         public static string CutStringToBounds(string text, int width, bool atWhitespace, SpriteFont font)
         {
-            string sampleText = text.Trim();
+            string sampleText = text;
             if (width <= 0) return sampleText;
 
             string workingText = "";

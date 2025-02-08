@@ -19,6 +19,8 @@ namespace Luna.UI
         private bool multiline = false;
         private int maxCharacters = 30;
         private (int character, int line) caretIndex;
+        public enum InputFormat { Numeric, Alphanumeric, All };
+        private InputFormat inputType = InputFormat.All;
 
         private Action<(int, int)> onCaretChanged;
 
@@ -116,6 +118,20 @@ namespace Luna.UI
         {
             if (text.Length >= maxCharacters) return;
 
+            switch (inputType)
+            {
+                case InputFormat.Alphanumeric:
+                {
+                    if (!KeyboardHandler.IsAlphabet(c) && !KeyboardHandler.IsNumber(c) && c != '\n') return;
+                    break;
+                }
+                case InputFormat.Numeric:
+                {
+                    if (!KeyboardHandler.IsNumber(c)) return;
+                    break;
+                }
+            }
+
             text = UpToCaret + c + PostCaret;
             MoveCaretRight(true, c == '\n');
         }
@@ -186,6 +202,12 @@ namespace Luna.UI
         {
             get { return maxCharacters; }
             set { maxCharacters = value; }
+        }
+
+        public InputFormat InputType
+        {
+            get { return inputType; }
+            set { inputType = value; }
         }
 
         private string PreCaret

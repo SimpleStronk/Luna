@@ -425,7 +425,7 @@ namespace Luna.UI
             contentContainer.AddChild(b3);
 
             Toggle t = new Toggle(UITheme.ColorType.Background);
-            t.SetLayout(new Layout() { LayoutWidth = Sizing.Grow(1), LayoutHeight = Sizing.Fixed(40) });
+            t.SetLayout(new Layout() { LayoutWidth = Sizing.Grow(1), LayoutHeight = Sizing.Wrap() });
             t.SetTheme(new UITheme() { Rounded = true });
 
             Slider s = new Slider(LVector2.HORIZONTAL, 0, 5, 1, UITheme.ColorType.Placeholder);
@@ -443,16 +443,14 @@ namespace Luna.UI
             textInput.SetLayout(new Layout() { LayoutWidth = Sizing.Grow(1), LayoutHeight = Sizing.Wrap() });
             textInput.Multiline = true;
             textInput.MaxCharacters = 500;
+            textInput.InputType = TextInput.InputFormat.Alphanumeric;
 
-            Label caretInfo = new Label("", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Background);
-            textInput.OnCaretChanged(((int character, int line) caret) => caretInfo.SetText($"Caret index is {caret.character}, {caret.line}"));
             contentContainer.AddChild(s2);
             contentContainer.AddChild(label);
             contentContainer.AddChild(s);
             contentContainer.AddChild(t);
 
             contentContainer.AddChild(textInput);
-            contentContainer.AddChild(caretInfo);
 
             leftPanel.AddChild(contentContainer);
 

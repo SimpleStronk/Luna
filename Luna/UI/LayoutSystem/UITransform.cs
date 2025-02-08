@@ -189,8 +189,8 @@ namespace Luna.UI.LayoutSystem
             overflowAmount = new LVector2(size.X - (parent.size.X - (parent.padding.Left + parent.padding.Right)), size.Y - (parent.size.Y - (parent.padding.Top + parent.padding.Bottom)));
 
             //  If Y overflow amount is positive, regard axis as vertical regardless of horizontal state
-            if (overflowAmount.Y >= 0) OverflowAxis = LVector2.VERTICAL;
-            else if (overflowAmount.X >= 0) OverflowAxis = LVector2.HORIZONTAL;
+            if (overflowAmount.Y > 0) OverflowAxis = LVector2.VERTICAL;
+            else if (overflowAmount.X > 0) OverflowAxis = LVector2.HORIZONTAL;
             else OverflowAxis = -1;
 
             scrollMax = overflowAmount.GetComponent(OverflowAxis) / scrollSensitivity;
