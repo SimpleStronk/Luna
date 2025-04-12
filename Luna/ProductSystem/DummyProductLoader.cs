@@ -15,7 +15,7 @@ namespace Luna.ProductSystem
             Console.WriteLine("Product Loader doing its thing...");
 
             Dictionary<ProductID, Product> products = new Dictionary<ProductID, Product>();
-            Product product = new Product().SetProductID(ProductID.CreateSequential()).SetName("Jordan's Lemma");
+            Product product = new Product().SetProductID(ProductID.CreateSequential()).SetName("Example Product");
             products.Add(product.GetProductID(), product);
             return products;
         }

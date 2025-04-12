@@ -22,12 +22,14 @@ namespace Luna.UI
         private ColourPalatte separatorColour = new();
         private ColourPalatte shadowColour = new();
         private ColourPalatte scrollbarColour = new();
+        private ColourPalatte placeholderTextColour = new();
         private bool rounded;
-        public enum ColorType { Main, MainSoft, Highlit, Background, Emergency, Separator, Shadow, ScrollBar, Placeholder };
+        public enum ColorType { Main, MainSoft, Highlit, Background, Emergency, Separator, Shadow, ScrollBar, PlaceholderText, Placeholder };
         private ColorType colourType = ColorType.Background;
         private (int topLeft, int topRight, int bottomLeft, int bottomRight) cornerRadius;
         private bool mainColourChanged, mainColourSoftChanged, highlitColourChanged, backgroundColourChanged, emergencyColourChanged,
-            separatorColourChanged, shadowColourChanged, scrollbarColourChanged, roundedChanged, colourTypeChanged, cornerRadiusChanged;
+            separatorColourChanged, shadowColourChanged, scrollbarColourChanged, placeholderTextColourChanged, roundedChanged, colourTypeChanged,
+            cornerRadiusChanged;
 
         public ColourPalatte MainColour
         {
@@ -74,7 +76,13 @@ namespace Luna.UI
         public ColourPalatte ScrollbarColour
         {
             get { return scrollbarColour; }
-            set { scrollbarColour = value; }
+            set { scrollbarColour = value; scrollbarColourChanged = true; }
+        }
+
+        public ColourPalatte PlaceholderTextColour
+        {
+            get { return placeholderTextColour; }
+            set { placeholderTextColour = value; placeholderTextColourChanged = true; }
         }
 
         public bool Rounded
@@ -103,6 +111,7 @@ namespace Luna.UI
                     case ColorType.Shadow: return shadowColour;
                     case ColorType.Separator: return separatorColour;
                     case ColorType.ScrollBar: return scrollbarColour;
+                    case ColorType.PlaceholderText: return placeholderTextColour;
                     case ColorType.Placeholder: return ColourPalatte.Transparent;
                 }
                 return new();
@@ -118,6 +127,7 @@ namespace Luna.UI
                 case ColorType.Shadow: return shadowColourChanged ? shadowColour : cascadeTheme.shadowColour;
                 case ColorType.Separator: return separatorColourChanged ? separatorColour : cascadeTheme.separatorColour;
                 case ColorType.ScrollBar: return scrollbarColourChanged ? scrollbarColour : cascadeTheme.scrollbarColour;
+                case ColorType.PlaceholderText: return placeholderTextColourChanged ? placeholderTextColour: cascadeTheme.placeholderTextColour;
                 case ColorType.Placeholder: return ColourPalatte.Transparent;
             }
 
@@ -196,6 +206,11 @@ namespace Luna.UI
         public bool ScrollbarColourChanged
         {
             get { return scrollbarColourChanged; }
+        }
+
+        public bool PlaceholderTextColourChanged
+        {
+            get { return placeholderTextColourChanged; }
         }
 
         public bool RoundedChanged

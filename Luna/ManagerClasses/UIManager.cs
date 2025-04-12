@@ -10,6 +10,7 @@ using Luna.UI;
 using System.IO;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.VisualBasic.Devices;
+using System.Collections.Generic;
 
 namespace Luna.ManagerClasses
 {
@@ -19,7 +20,7 @@ namespace Luna.ManagerClasses
         private SystemManager systemManager;
 
         private UIComponent rootComponent;
-        private UIComponent overlayComponent;
+        //private List<UIComponent> overlayComponents;
         private UIComponent mainWindowContainer;
         private UIComponent windowControlsPanel, windowControlsParentTop;
         private (Action alertFocus, Action alertUnfocus, int priority) focusedComponent;
@@ -42,7 +43,7 @@ namespace Luna.ManagerClasses
             this.quitAction = quitAction;
             pixelTexture = GraphicsHelper.GeneratePixelTexture();
 
-            rootComponent = new BlankUI(UITheme.ColorType.Background);
+            rootComponent = new BlankUI(UITheme.ColorType.MainSoft);
             rootComponent.CascadeTheme(PlumTheme);
             rootComponent.SetLayout(new Layout()
             {
@@ -50,17 +51,6 @@ namespace Luna.ManagerClasses
                 LayoutHeight = Sizing.Grow(1),
                 LayoutAxis = LVector2.VERTICAL
             });
-
-            overlayComponent = new BlankUI(UITheme.ColorType.Shadow);
-            overlayComponent.SetLayout(new Layout()
-            {
-                HorizontalAlignment = Alignment.Middle,
-                VerticalAlignment = Alignment.Middle,
-                LayoutWidth = Sizing.Grow(1),
-                LayoutHeight = Sizing.Grow(1),
-                Inline = false
-            });
-            overlayComponent.Visible = false;
 
             windowControlsPanel = new BlankUI(UITheme.ColorType.Placeholder);
             windowControlsPanel.SetLayout(new Layout()
@@ -92,7 +82,7 @@ namespace Luna.ManagerClasses
             topBarBlock.Dashboard.Root.OnClick(() => { SetMainWindowState(MainWindowState.Dashboard); });
             topBarBlock.Products.Root.OnClick(() => SetMainWindowState(MainWindowState.Products));
 
-            mainWindowContainer = new BlankUI(UITheme.ColorType.Background);
+            mainWindowContainer = new BlankUI(UITheme.ColorType.Placeholder);
             mainWindowContainer.SetLayout(new Layout()
             {
                 LayoutWidth = Sizing.Grow(1),
@@ -109,7 +99,6 @@ namespace Luna.ManagerClasses
             rootComponent.AddChild(topBar);
             rootComponent.AddChild(mainWindowContainer);
 
-            rootComponent.AddChild(overlayComponent);
             rootComponent.AddChild(windowControlsPanel);
 
             RecalculatePriority();
@@ -181,21 +170,22 @@ namespace Luna.ManagerClasses
             MouseHandler.SetOldMouse();
         }
 
-        private void ImportTextureAction(Texture2D texture)
+        private string ImportTextureAction(Texture2D texture)
         {
             Console.WriteLine("Importing Texture!");
-            overlayComponent.Visible = false;
+            //overlayComponent.Visible = false;
 
             string filePath = $"C:\\Users\\bill\\Documents\\C#\\{LunaDateTime.Now.ShortDisplayAlt}.png";
             Console.WriteLine(filePath);
             FileStream s = new FileStream(filePath, FileMode.Create);
             texture.SaveAsPng(s, texture.Width, texture.Height);
             s.Close();
+            return filePath;
         }
 
         private void CancelImportAction()
         {
-            overlayComponent.Visible = false;
+            //overlayComponent.Visible = false;
         }
 
         private void AddWindowControls()
@@ -301,12 +291,6 @@ namespace Luna.ManagerClasses
                 }
                 OrderBlock orderBlock = uiFactory.CreateOrder(o);
                 dashboardBlock.MainPanel.AddChild(orderBlock.Root);
-                orderBlock.Root.OnClick(() => { Texture2D tex = IOManager.LoadImageFromDialog();
-                    if (tex == null) return;
-                    overlayComponent.Visible = true;
-                    YesNoBlock imageImporter = uiFactory.CreateImageImporter(new LTexture2D(tex), ImportTextureAction, CancelImportAction);
-                    imageImporter.Root.ForceTransparent();
-                    overlayComponent.AddChild(imageImporter.Root); });
             }
 
             return dashboardBlock.Root;
@@ -319,7 +303,46 @@ namespace Luna.ManagerClasses
 
         private UIComponent SetupProducts(ProductsBlock productsBlock)
         {
+            productsBlock.AddProducts.OnClick(() => {
+                AddOverlay(SetupProductCreator(uiFactory.CreateProductCreator()));
+            });
             return productsBlock.Root;
+        }
+
+        private UIComponent SetupProductCreator(ProductCreator productCreator)
+        {
+            productCreator.SelectIcon.OnClick(() => {
+                Texture2D tex = IOManager.LoadImageFromDialog();
+                if (tex == null) return;
+
+                YesNoBlock imageImporter = uiFactory.CreateImageImporter(new LTexture2D(tex), (Texture2D t) => { productCreator.Icon.Texture = new LTexture2D(IOManager.LoadImageFromFile(ImportTextureAction(t))); }, CancelImportAction);
+                imageImporter.Root.ForceTransparent();
+                AddOverlay(imageImporter.Root);
+            });
+            productCreator.OKButton.OnClick(() => {
+                    productCreator.Root.Destroy();
+                    Console.WriteLine("Attempted to create a product with name: " + productCreator.Name.Text + ", cost " + productCreator.Cost.Text);
+                });
+            return productCreator.Root;
+        }
+
+        private void AddOverlay(UIComponent overlayUI)
+        {
+            BlankUI overlayShadow = new BlankUI(UITheme.ColorType.Shadow);
+            overlayShadow.SetLayout(new Layout()
+            {
+                HorizontalAlignment = Alignment.Middle,
+                VerticalAlignment = Alignment.Middle,
+                LayoutWidth = Sizing.Grow(1),
+                LayoutHeight = Sizing.Grow(1),
+                Inline = false
+            });
+
+            overlayShadow.AddChild(overlayUI);
+            overlayShadow.ForceTransparent();
+            overlayUI.OnDestroy(() => { overlayShadow.Visible = false; overlayShadow.ColourAnimator.SetColour(new Color(0, 0, 0, 0)); overlayShadow.ColourAnimator.OnTransitionAction(() => { rootComponent.RemoveChild(overlayShadow); }); });
+
+            rootComponent.AddChild(overlayShadow);
         }
 
         private void InitiateFadeTransition(UIComponent newWindow)

@@ -389,6 +389,8 @@ namespace Luna.UI.LayoutSystem
                 {
                     case Sizing.Mode.Grow: totalStretchRatio += axisSizing.GrowRatio; break;
                     case Sizing.Mode.Fixed: totalFixedWidth += axisSizing.FixedSize; break;
+                    case Sizing.Mode.Ignore: totalFixedWidth += (int)elements.ElementAt(i).GetTransform().Size.GetComponent(layoutAxis); break;
+                    case Sizing.Mode.Wrap: totalFixedWidth += (int)elements.ElementAt(i).GetTransform().Size.GetComponent(layoutAxis); break;
                 }
             }
 

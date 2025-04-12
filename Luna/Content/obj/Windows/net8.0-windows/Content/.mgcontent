@@ -4,8 +4,8 @@
   <Platform>Windows</Platform>
   <Config />
   <SourceFiles>
-    <File>c:/Users/bill/Documents/GitHub/Luna/Luna/Content/MontserratLight.spritefont</File>
-    <File>c:/Users/bill/Documents/GitHub/Luna/Luna/Content/MontserratRegular.spritefont</File>
+    <File>C:/Users/bill/Documents/GitHub/Luna/Luna/Content/MontserratLight.spritefont</File>
+    <File>C:/Users/bill/Documents/GitHub/Luna/Luna/Content/MontserratRegular.spritefont</File>
   </SourceFiles>
   <DestFiles>
     <File xsi:nil="true" />

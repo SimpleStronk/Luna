@@ -23,7 +23,7 @@ namespace Luna.ManagerClasses
             ProductManager.LoadProducts(productLoader);
             ProductManager.AddProduct(new Product().SetProductID(ProductID.CreateSequential()));
             CustomerManager.AddCustomer(new Customer().SetCustomerID(CustomerID.CreateSequential())
-                .SetFirstName("Mike").SetlastName("Simon"));
+                .SetFirstName("Mike").SetlastName("Customer"));
 
             orderManager = new DummyOrderManager();
             orderLoader = new DummyOrderLoader();

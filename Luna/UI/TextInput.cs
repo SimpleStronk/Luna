@@ -15,12 +15,13 @@ namespace Luna.UI
         private BlankUI caret;
         private Label label;
         private bool editing = false;
-        private string text = "";
+        private string editingText = "";
         private bool multiline = false;
         private int maxCharacters = 30;
         private (int character, int line) caretIndex;
-        public enum InputFormat { Numeric, Alphanumeric, All };
+        public enum InputFormat { Numeric, Decimal, CentiDecimal, Alphanumeric, All };
         private InputFormat inputType = InputFormat.All;
+        private string prefix, suffix, placeholder;
 
         private Action<(int, int)> onCaretChanged;
 
@@ -35,7 +36,7 @@ namespace Luna.UI
             internalPanel.FocusIgnore = true;
             AddChild(internalPanel);
 
-            label = new Label("", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Background);
+            label = new Label("", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.PlaceholderText);
             label.SetLayout(new Layout() { HorizontalAlignment = Alignment.Ignore, VerticalAlignment = Alignment.Ignore, ClipChildren = false });
 
             caret = new BlankUI(UITheme.ColorType.Main);
@@ -44,7 +45,7 @@ namespace Luna.UI
 
             internalPanel.AddChild(label);
 
-            OnClick(() => editing = true );
+            OnClick(() => { editing = true; label.SetText(editingText); label.SetTheme(new UITheme() { ColourType = UITheme.ColorType.Background }); } );
 
             Initialise();
         }
@@ -53,14 +54,21 @@ namespace Luna.UI
         {
             base.Update();
 
-            if (MouseHandler.IsJustClicked(MouseHandler.MouseButton.Left) && !clicked)
+            if ((MouseHandler.IsJustClicked(MouseHandler.MouseButton.Left) && !clicked) || KeyboardHandler.IsKeyJustPressed(Microsoft.Xna.Framework.Input.Keys.Enter))
             {
                 editing = false;
             }
 
             if (editing)
             {
+                caret.Visible = true;
                 EditText();   
+            }
+            else
+            {
+                caret.Visible = false;
+                if (editingText == "") label.SetTheme(new UITheme() { ColourType = UITheme.ColorType.PlaceholderText });
+                label.SetText(DisplayText);
             }
         }
 
@@ -110,19 +118,35 @@ namespace Luna.UI
                         break;
                     }
                 }
-                label.SetText(text);
+                label.SetText(editingText);
             }
         }
 
         private void AddCharacter(char c)
         {
-            if (text.Length >= maxCharacters) return;
+            if (editingText.Length >= maxCharacters) return;
 
             switch (inputType)
             {
                 case InputFormat.Alphanumeric:
                 {
                     if (!KeyboardHandler.IsAlphabet(c) && !KeyboardHandler.IsNumber(c) && c != '\n') return;
+                    break;
+                }
+                case InputFormat.Decimal:
+                {
+                    if (!KeyboardHandler.IsNumberOrPoint(c)) return;
+                    break;
+                }
+                case InputFormat.CentiDecimal:
+                {
+                    if (!KeyboardHandler.IsNumberOrPoint(c)) return;
+
+                    if (editingText.Split('.').Length > 1)
+                    {
+                        if (c == '.') return;
+                        if (editingText.Split('.')[1].Length > 1) return;
+                    }
                     break;
                 }
                 case InputFormat.Numeric:
@@ -132,17 +156,15 @@ namespace Luna.UI
                 }
             }
 
-            text = UpToCaret + c + PostCaret;
+            editingText = UpToCaret + c + PostCaret;
             MoveCaretRight(true, c == '\n');
         }
 
         private void RemoveCharacter()
         {
-            Console.WriteLine(text.Substring(0, Math.Max(UpToCaret.Length - 1, 0)));
-            Console.WriteLine(PostCaret);
-            string placeholderText = text.Substring(0, Math.Max(UpToCaret.Length - 1, 0)) + PostCaret;
+            string placeholderText = editingText.Substring(0, Math.Max(UpToCaret.Length - 1, 0)) + PostCaret;
             MoveCaretLeft();
-            text = placeholderText;
+            editingText = placeholderText;
         }
 
         private void MoveCaretLeft()
@@ -175,7 +197,7 @@ namespace Luna.UI
 
             if (CaretIndex.Character == GetLine(CaretIndex.Line).Length)
             {
-                if (CaretIndex.Line + 1 < text.Split('\n').Count())
+                if (CaretIndex.Line + 1 < editingText.Split('\n').Count())
                 {
                     CaretIndex = (0, caretIndex.line + 1);
                 }
@@ -189,7 +211,7 @@ namespace Luna.UI
         private string GetLine(int index)
         {
             
-            return text.Split('\n')[index];
+            return editingText.Split('\n')[index];
         }
 
         public bool Multiline
@@ -216,7 +238,7 @@ namespace Luna.UI
             {
                 if (caretIndex.line == 0) return "";
 
-                string[] lines = text.Split('\n');
+                string[] lines = editingText.Split('\n');
                 string output = "";
                 for (int i = 0; i < caretIndex.line; i++)
                 {
@@ -230,14 +252,14 @@ namespace Luna.UI
 
         private string PostCaret
         {
-            get { return text.Substring(UpToCaret.Length); }
+            get { return editingText.Substring(UpToCaret.Length); }
         }
 
         private string CaretLine
         {
             get
             {
-                return text.Split('\n')[caretIndex.line].Substring(0, caretIndex.character);
+                return editingText.Split('\n')[caretIndex.line].Substring(0, caretIndex.character);
             }
         }
 
@@ -250,6 +272,35 @@ namespace Luna.UI
         {
             get { return caretIndex; }
             private set { caretIndex = value; onCaretChanged?.Invoke(caretIndex); SetCaretPosition(); }
+        }
+
+        public string Text
+        {
+            get { return editingText; }
+            set { editingText = value; }
+        }
+
+        public string DisplayText
+        {
+            get { return prefix + (editingText != "" ? editingText : placeholder) + suffix; }
+        }
+
+        public string Prefix
+        {
+            get { return prefix; }
+            set { prefix = value; }
+        }
+
+        public string Suffix
+        {
+            get { return suffix; }
+            set { suffix = value; }
+        }
+
+        public string Placeholder
+        {
+            get { return placeholder; }
+            set { placeholder = value; }
         }
 
         public void OnCaretChanged(Action<(int, int)> e)

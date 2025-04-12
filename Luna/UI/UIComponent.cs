@@ -27,7 +27,7 @@ namespace Luna.UI
         protected Action onHover, onUnhover;
         protected Action<Action, Action, int> checkFocusCallback;
         private static Action<Rectangle> updateScissorRectangle;
-        //REPLACE WITH COLOUR ANIMATOR
+        private Action onDestroy;
         protected IColourAnimator colourAnimator = new ExpColourAnimator();
         protected bool debugMode = false;
         private bool renderDefaultRect = true;
@@ -165,7 +165,13 @@ namespace Luna.UI
 
         public void Destroy()
         {
-            parent.RemoveChild(this);
+            parent?.RemoveChild(this);
+            onDestroy();
+        }
+
+        public void OnDestroy(Action onDestroy)
+        {
+            this.onDestroy += onDestroy;
         }
 
         private void CheckScroll()
@@ -357,6 +363,7 @@ namespace Luna.UI
             foreach (UIComponent c in removeChildQueue)
             {
                 c.RemoveParent();
+                c.onDestroy?.Invoke();
                 children.Remove(c);
             }
             

@@ -137,6 +137,12 @@ namespace Luna.ManagerClasses
             return false;
         }
 
+        public static bool IsNumberOrPoint(char x)
+        {
+            if ((x >= 48 && x <= 57) || x == '.') return true;
+            return false;
+        }
+
         public static bool IsAlphabet(char x)
         {
             if (((int)x >= 65 && (int)x <= 122) || (x == ' ')) return true;
