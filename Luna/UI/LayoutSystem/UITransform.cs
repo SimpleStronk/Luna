@@ -108,7 +108,7 @@ namespace Luna.UI.LayoutSystem
         public LVector2 Size
         {
             get { return size; }
-            set { size = value; onResize?.Invoke(); }
+            set { size = value; onResize?.Invoke(); size.OnChanged(onResize); }
         }
 
         public int MinDimension

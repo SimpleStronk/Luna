@@ -1,3 +1,4 @@
 Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
+"C:/Users/bill/Documents/GitHub/Luna/Luna/Content/LUIVA.png","C:/Users/bill/Documents/GitHub/Luna/Luna/Content/bin/Windows/Content/LUIVA.xnb","TextureProcessor","Texture2DContent",12083,443677,0.1421933
 "C:/Users/bill/Documents/GitHub/Luna/Luna/Content/MontserratLight.spritefont","C:/Users/bill/Documents/GitHub/Luna/Luna/Content/bin/Windows/Content/MontserratLight.xnb","FontDescriptionProcessor","SpriteFontContent",2091,303959,0.2535262
 "C:/Users/bill/Documents/GitHub/Luna/Luna/Content/MontserratRegular.spritefont","C:/Users/bill/Documents/GitHub/Luna/Luna/Content/bin/Windows/Content/MontserratRegular.xnb","FontDescriptionProcessor","SpriteFontContent",2080,303959,0.1022256

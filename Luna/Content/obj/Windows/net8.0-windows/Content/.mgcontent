@@ -4,10 +4,12 @@
   <Platform>Windows</Platform>
   <Config />
   <SourceFiles>
+    <File>C:/Users/bill/Documents/GitHub/Luna/Luna/Content/LUIVA.png</File>
     <File>C:/Users/bill/Documents/GitHub/Luna/Luna/Content/MontserratLight.spritefont</File>
     <File>C:/Users/bill/Documents/GitHub/Luna/Luna/Content/MontserratRegular.spritefont</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
   </DestFiles>

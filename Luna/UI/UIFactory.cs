@@ -68,10 +68,28 @@ namespace Luna.UI
             }
         }
 
+        public struct YesBlock
+        {
+            private UIComponent root;
+            private Button yes;
+
+            public UIComponent Root
+            {
+                get { return root; }
+                set { root = value; }
+            }
+
+            public Button Yes
+            {
+                get { return yes; }
+                set { yes = value; }
+            }
+        }
+
         public struct TopBarBlock
         {
             UIComponent root;
-            TextButton dashboard, orders, products;
+            TextButton dashboard, orders, products, about;
 
             public UIComponent Root
             {
@@ -95,6 +113,12 @@ namespace Luna.UI
             {
                 get { return products; }
                 set { products = value; }
+            }
+
+            public TextButton About
+            {
+                get { return about; }
+                set { about = value; }
             }
         }
 
@@ -355,40 +379,55 @@ namespace Luna.UI
             BlankUI separator = new BlankUI(UITheme.ColorType.Separator);
             separator.SetLayout(SeparatorVerticalLayout);
 
-            Button dashboardContainer = new Button(UITheme.ColorType.Main);
-            dashboardContainer.SetLayout(TopBarButtonLayout);
+            Button dashboardButton = new Button(UITheme.ColorType.Main);
+            dashboardButton.SetLayout(TopBarButtonLayout);
 
             Label dashboardLabel = new Label("Dashboard", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Main);
 
-            Button ordersContainer = new Button(UITheme.ColorType.Main);
-            ordersContainer.SetLayout(TopBarButtonLayout);
+            Button ordersButton = new Button(UITheme.ColorType.Main);
+            ordersButton.SetLayout(TopBarButtonLayout);
 
             Label ordersLabel = new Label("Orders", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Main);
 
-            Button productsContainer = new Button(UITheme.ColorType.Main);
-            productsContainer.SetLayout(TopBarButtonLayout);
+            Button productsButton = new Button(UITheme.ColorType.Main);
+            productsButton.SetLayout(TopBarButtonLayout);
 
             Label productsLabel = new Label("Products", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Main);
 
+            Button aboutButton = new Button(UITheme.ColorType.Main);
+            aboutButton.SetLayout(TopBarButtonLayout);
+
+            Label aboutLabel = new Label("About", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Main);
+
             BlankUI topBarSeparator = new BlankUI(UITheme.ColorType.Background);
             topBarSeparator.SetLayout(SeparatorHorizontalLayout);
+
+            BlankUI topBarSpacer = new BlankUI(UITheme.ColorType.Placeholder);
+            topBarSpacer.SetLayout(new Layout()
+            {
+                LayoutWidth = Sizing.Grow(1),
+                LayoutHeight = Sizing.Grow(1)
+            });
             
             logoContainer.AddChild(logo);
 
-            dashboardContainer.AddChild(dashboardLabel);
+            dashboardButton.AddChild(dashboardLabel);
 
-            ordersContainer.AddChild(ordersLabel);
+            ordersButton.AddChild(ordersLabel);
 
-            productsContainer.AddChild(productsLabel);
+            productsButton.AddChild(productsLabel);
 
-            root.AddChild(logoContainer, separator, dashboardContainer, ordersContainer, productsContainer);
+            aboutButton.AddChild(aboutLabel);
+
+            root.AddChild(logoContainer, separator, dashboardButton, ordersButton, productsButton, topBarSpacer, aboutButton);
 
             return new TopBarBlock()
             {
                 Root = root,
-                Dashboard = new TextButton() { Root = dashboardContainer, Label = dashboardLabel },
-                Orders = new TextButton() { Root = ordersContainer, Label = ordersLabel },
-                Products = new TextButton() { Root = productsContainer, Label = productsLabel }
+                Dashboard = new TextButton() { Root = dashboardButton, Label = dashboardLabel },
+                Orders = new TextButton() { Root = ordersButton, Label = ordersLabel },
+                Products = new TextButton() { Root = productsButton, Label = productsLabel },
+                About = new TextButton() { Root = aboutButton, Label = aboutLabel }
             };
         }
 
@@ -694,6 +733,103 @@ namespace Luna.UI
             root.AddChild(iconContainer, nameContainer, costContainer, confirmationContainer);
 
             return new ProductCreator { Root = root, SelectIcon = selectIcon, OKButton = ok, CloseButton = cancel, Name = nameInput, Cost = costInput, Icon = icon };
+        }
+
+        public YesBlock CreateAboutPage()
+        {
+            BlankUI root = new BlankUI(UITheme.ColorType.Background);
+            root.SetLayout(new Layout()
+            {
+                LayoutWidth = Sizing.Fixed(700),
+                LayoutHeight = Sizing.Wrap(),
+                LayoutAxis = LVector2.VERTICAL
+            });
+
+            ScrollView scrollView = new ScrollView(UITheme.ColorType.Placeholder);
+            scrollView.SetLayout(new Layout()
+            {
+                LayoutWidth = Sizing.Grow(1),
+                LayoutHeight = Sizing.Fixed(400),
+                Padding = new Tetra(20)
+            });
+            scrollView.SetTheme(new UITheme()
+            {
+                Rounded = true,
+                CornerRadius = (20, 20, 20, 20)
+            });
+
+            BlankUI contentContainer = new BlankUI(UITheme.ColorType.Placeholder);
+            contentContainer.SetLayout(new Layout()
+            {
+                LayoutWidth = Sizing.Grow(1),
+                LayoutHeight = Sizing.Wrap(),
+                LayoutAxis = LVector2.VERTICAL
+            });
+
+            BlankUI logoContainer = new BlankUI(UITheme.ColorType.Placeholder);
+            logoContainer.SetLayout(new Layout()
+            {
+                LayoutWidth = Sizing.Grow(1),
+                LayoutHeight = Sizing.Wrap(),
+                Padding = new Tetra(20)
+            });
+
+            UITexture logo = new UITexture(new LTexture2D(GraphicsHelper.LuivaLogo));
+            logo.SetLayout(new Layout()
+            {
+                LayoutWidth = Sizing.Grow(1),
+                LayoutHeight = Sizing.Fixed(50),
+                ImageFitMode = Layout.FitMode.MinFit
+            });
+            //LTexture2D tex = new LTexture2D(GraphicsHelper.LuivaLogo);
+            //tex.LockAspectRatio = true;
+            //logo.Texture = tex;
+            logoContainer.AddChild(logo);
+
+            BlankUI textContainer = new BlankUI(UITheme.ColorType.Background);
+            textContainer.SetLayout(new Layout()
+            {
+                LayoutWidth = Sizing.Grow(1),
+                LayoutHeight = Sizing.Wrap(),
+                LayoutAxis = LVector2.VERTICAL,
+                Padding = new Tetra(20)
+            });
+            Label header = new Label("About", GraphicsHelper.GetBoldFont(), UITheme.ColorType.Background);
+            Label content = new Label("Luna is a product/order management system deigned from the ground up by Bill Shepherd. " +
+                "It runs on LUIVA, a custom UI layout system created in C# with the Monogame framework. ", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Background);
+            content.SetLayout(new Layout()
+            {
+                LayoutWidth = Sizing.Grow(1)
+            });
+            textContainer.AddChild(header, content);
+
+            BlankUI okButtonContainer = new BlankUI(UITheme.ColorType.Placeholder);
+            okButtonContainer.SetLayout(new Layout()
+            {
+                LayoutWidth = Sizing.Grow(1),
+                LayoutHeight = Sizing.Wrap(),
+                Padding = new Tetra(20),
+                HorizontalAlignment = Alignment.Middle
+            });
+
+            Button okButton = new Button(UITheme.ColorType.Main);
+            okButton.SetLayout(new Layout()
+            {
+                LayoutWidth = Sizing.Wrap(),
+                LayoutHeight = Sizing.Wrap(),
+                Padding = new Tetra(10)
+            });
+
+            Label okLabel = new Label("OK", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Main);
+            okButton.AddChild(okLabel);
+
+            okButtonContainer.AddChild(okButton);
+
+            contentContainer.AddChild(logoContainer, textContainer);
+            scrollView.AddChild(contentContainer);
+            root.AddChild(scrollView, okButtonContainer);
+
+            return new YesBlock() { Root = root, Yes = okButton };
         }
 
         private Layout TopBarButtonLayout

@@ -4158,24 +4158,31 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\bill\\.nuget\\packages\\": {}
+    "C:\\Users\\bill\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\Luna.csproj",
+      "projectUniqueName": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\Luna.csproj",
       "projectName": "Luna",
-      "projectPath": "c:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\Luna.csproj",
+      "projectPath": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\Luna.csproj",
       "packagesPath": "C:\\Users\\bill\\.nuget\\packages\\",
-      "outputPath": "c:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\obj\\",
+      "outputPath": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\bill\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\bill\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net8.0-windows"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -4193,7 +4200,8 @@
         "enableAudit": "true",
         "auditLevel": "low",
         "auditMode": "direct"
-      }
+      },
+      "SdkAnalysisLevel": "9.0.300"
     },
     "frameworks": {
       "net8.0-windows7.0": {
@@ -4227,7 +4235,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.404/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.301/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

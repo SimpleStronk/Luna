@@ -49,17 +49,17 @@ namespace Luna.UI.LayoutSystem
         public float DisplayWidth
         {
             get { return displayDimensions.X; }
-            set { displayDimensions.X = value;
-                if (lockAspectRatio) { displayDimensions.Y = displayDimensions.X / aspectRatio;
-                scale = [displayDimensions.X / Width, displayDimensions.Y / Height]; } }
+            set { displayDimensions.X = value; if (lockAspectRatio) {
+                    displayDimensions.Y = displayDimensions.X / aspectRatio;
+                    scale = [displayDimensions.X / Width, displayDimensions.Y / Height]; } }
         }
 
         public float DisplayHeight
         {
             get { return displayDimensions.Y; }
-            set { displayDimensions.Y = value;
-                if (lockAspectRatio) { displayDimensions.X = displayDimensions.Y * aspectRatio;
-                scale = [displayDimensions.X / Width, displayDimensions.Y / Height]; } }
+            set { displayDimensions.Y = value; if (lockAspectRatio) {
+                    displayDimensions.X = displayDimensions.Y * aspectRatio;
+                    scale = [displayDimensions.X / Width, displayDimensions.Y / Height]; } }
         }
 
         public LVector2 DisplayDimensions

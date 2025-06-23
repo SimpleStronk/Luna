@@ -333,7 +333,7 @@ namespace Luna.UI.LayoutSystem
 
                         foreach (ILayoutable e in elements)
                         {
-                            if (e.GetLayout().GetSizingFromAxis(axis).ScalingMode == Sizing.Mode.Grow) throw new Exception("Attempted to use an ILayoutable with sizing mode Grow as a child of one with sizig mode Match");
+                            if (e.GetLayout().GetSizingFromAxis(axis).ScalingMode == Sizing.Mode.Grow) throw new Exception("Attempted to use an ILayoutable with sizing mode Grow as a child of one with sizig mode Wrap");
                             
                             maxDimension = Math.Max(maxDimension, CalculateLayoutScale(e, e.GetChildren(), 0, axis, e.GetLayout().LayoutAxis == axis));
                         }

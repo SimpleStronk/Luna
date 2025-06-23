@@ -81,6 +81,7 @@ namespace Luna.ManagerClasses
             topBarBlock.Orders.Root.OnClick(() => { SetMainWindowState(MainWindowState.Orders); } );
             topBarBlock.Dashboard.Root.OnClick(() => { SetMainWindowState(MainWindowState.Dashboard); });
             topBarBlock.Products.Root.OnClick(() => SetMainWindowState(MainWindowState.Products));
+            topBarBlock.About.Root.OnClick(() => { YesBlock about = uiFactory.CreateAboutPage(); about.Root.ForceTransparent(); AddOverlay(about.Root); about.Yes.OnClick(about.Root.Destroy); });
 
             mainWindowContainer = new BlankUI(UITheme.ColorType.Placeholder);
             mainWindowContainer.SetLayout(new Layout()

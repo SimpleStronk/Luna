@@ -43,6 +43,7 @@ public class Game1 : Game
         GraphicsHelper.SetGraphicsDevice(GraphicsDevice);
         GraphicsHelper.SetDefaultFont(Content.Load<SpriteFont>(@"MontserratLight"));
         GraphicsHelper.SetBoldFont(Content.Load<SpriteFont>(@"MontserratRegular"));
+        GraphicsHelper.LuivaLogo = Content.Load<Texture2D>(@"LUIVA");
         uiManager = new UIManager(Window, Exit, GraphicsDevice, systemManager);
         uiManager.SetPixelTexture(GraphicsHelper.GeneratePixelTexture());
 

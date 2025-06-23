@@ -46,6 +46,7 @@ namespace Luna.UI
             elementId = NewElementId();
             SetDebugActions();
             transform.Size.OnChanged(OnResize);
+            transform.OnResize(OnResize);
         }
 
         public void PreUpdate()

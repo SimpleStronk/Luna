@@ -15,6 +15,7 @@ namespace Luna.HelperClasses
         private static SpriteFont defaultFont, boldFont;
         private static int msaaRes = 3;
         private static Dictionary<int, Texture2D> circleCache = new Dictionary<int, Texture2D>();
+        private static Texture2D luivaLogo;
 
         public static Texture2D GeneratePixelTexture()
         {
@@ -96,6 +97,12 @@ namespace Luna.HelperClasses
                 for (int y = 0; y < rectangle.Height; y++)
                     color[x + y * rectangle.Width] = colorData[x + rectangle.X + (y + rectangle.Y) * width];
             return color;
+        }
+
+        public static Texture2D LuivaLogo
+        {
+            get { return luivaLogo; }
+            set { luivaLogo = value; }
         }
     }
 }
