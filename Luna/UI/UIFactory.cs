@@ -269,6 +269,7 @@ namespace Luna.UI
             private UIComponent root;
             private Label name;
             private Label cost;
+            private Button removeButton;
 
             public UIComponent Root
             {
@@ -286,6 +287,12 @@ namespace Luna.UI
             {
                 get { return cost; }
                 set { cost = value; }
+            }
+
+            public Button RemoveButton
+            {
+                get { return removeButton; }
+                set {  removeButton = value; }
             }
         }
         #endregion
@@ -895,13 +902,29 @@ namespace Luna.UI
             {
                 LayoutWidth = Sizing.Grow(1),
                 LayoutHeight = Sizing.Wrap(),
-                LayoutAxis = LVector2.VERTICAL,
-                Padding = new Tetra(20),
-                Spacing = 20
+                LayoutAxis = LVector2.HORIZONTAL,
+                Padding = new Tetra(20)
             });
             root.SetTheme(new UITheme()
             {
                 Rounded = true
+            });
+
+            BlankUI contentContainer = new BlankUI(UITheme.ColorType.Placeholder);
+            contentContainer.SetLayout(new Layout()
+            {
+                LayoutWidth = Sizing.Grow(1),
+                LayoutHeight = Sizing.Wrap(),
+                LayoutAxis = LVector2.VERTICAL,
+                Spacing = 20
+            });
+
+            BlankUI rightControlsContainer = new BlankUI(UITheme.ColorType.Placeholder);
+            rightControlsContainer.SetLayout(new Layout()
+            {
+                LayoutWidth = Sizing.Wrap(),
+                LayoutHeight = Sizing.Wrap(),
+                Spacing = 20
             });
 
             Label nameLabel = new Label("name", GraphicsHelper.GetBoldFont(), UITheme.ColorType.Background);
@@ -909,9 +932,26 @@ namespace Luna.UI
             Label costLabel = new Label("cost", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Background);
             costLabel.Name = "Product Cost Label";
 
-            root.AddChild(nameLabel, costLabel);
+            contentContainer.AddChild(nameLabel, costLabel);
 
-            return new ProductBlock { Root = root, Name = nameLabel, Cost = costLabel };
+            Button removeButton = new Button(UITheme.ColorType.Emergency);
+            removeButton.SetLayout(new Layout()
+            {
+                LayoutWidth = Sizing.Wrap(),
+                LayoutHeight = Sizing.Wrap(),
+                HorizontalAlignment = Alignment.Middle,
+                VerticalAlignment = Alignment.Middle,
+                Padding = new Tetra(10)
+            });
+
+            Label removeButtonLabel = new Label("Remove", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Emergency);
+            removeButton.AddChild(removeButtonLabel);
+
+            rightControlsContainer.AddChild(removeButton);
+
+            root.AddChild(contentContainer, rightControlsContainer);
+
+            return new ProductBlock { Root = root, Name = nameLabel, Cost = costLabel, RemoveButton = removeButton };
         }
 
         public YesBlock CreateAboutPage()

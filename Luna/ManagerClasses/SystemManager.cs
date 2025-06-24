@@ -3,15 +3,13 @@ using Luna.DataClasses.IDClasses;
 using Luna.ProductSystem;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Luna.ManagerClasses
 {
     internal class SystemManager
     {
         DummyProductLoader productLoader;
+        DummyProductSaver productSaver;
         DummyOrderManager orderManager;
         DummyOrderLoader orderLoader;
         DummyOrderSaver orderSaver;
@@ -20,7 +18,9 @@ namespace Luna.ManagerClasses
         public SystemManager()
         {
             productLoader = new DummyProductLoader();
+            productSaver = new DummyProductSaver();
             ProductManager.LoadProducts(productLoader);
+            ProductManager.SetProductSaver(productSaver);
             CustomerManager.AddCustomer(new Customer().SetCustomerID(CustomerID.CreateSequential())
                 .SetFirstName("Mike").SetlastName("Customer"));
 

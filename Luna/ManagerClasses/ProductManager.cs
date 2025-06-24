@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using Luna.DataClasses;
 using Luna.DataClasses.IDClasses;
@@ -11,18 +12,28 @@ namespace Luna.ManagerClasses
     {
         private static Dictionary<ProductID, Product> products;
         static Action<Dictionary<ProductID, Product>> updateProductsCallback;
+        static IProductSaver productSaver;
 
         public static Dictionary<ProductID, Product> GetProducts() {  return products; }
 
         public static void AddProduct(Product product)
         {
             products.Add(product.GetProductID(), product);
+            saveProducts();
             updateProducts();
         }
-        public static void RemoveProduct(Product product)
+
+        public static void RemoveProduct(Product product, bool updateCallback = true)
         {
-            products.Remove(product.GetProductID());
-            updateProducts();
+            RemoveProduct(product.GetProductID(), updateCallback);
+        }
+
+        public static void RemoveProduct(ProductID productId, bool updateCallback = true)
+        {
+            products.Remove(productId);
+            saveProducts();
+
+            if (updateCallback) updateProducts();
         }
 
         public static Product GetProductByID(ProductID productId)
@@ -41,12 +52,22 @@ namespace Luna.ManagerClasses
             ProductManager.updateProductsCallback = updateProductsCallback;
         }
 
+        public static void SetProductSaver(IProductSaver productSaver)
+        {
+            ProductManager.productSaver = productSaver;
+        }
+
+        static void saveProducts()
+        {
+            productSaver?.OutputProducts(products.Values.ToList());
+        }
+
         static void updateProducts()
         {
             if (updateProductsCallback == null) return;
 
             Console.WriteLine("Updating Products");
-            updateProductsCallback(products);
+            updateProductsCallback?.Invoke(products);
         }
     }
 }

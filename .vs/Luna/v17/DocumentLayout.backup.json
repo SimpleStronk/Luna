@@ -3,8 +3,32 @@
   "WorkspaceRootPath": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{B1D89FCA-884C-4EC1-9530-99CBA6D87E68}|Luna\\Luna.csproj|c:\\users\\bill\\documents\\github\\luna\\luna\\ui\\uicomponent.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B1D89FCA-884C-4EC1-9530-99CBA6D87E68}|Luna\\Luna.csproj|solutionrelative:luna\\ui\\uicomponent.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{B1D89FCA-884C-4EC1-9530-99CBA6D87E68}|Luna\\Luna.csproj|c:\\users\\bill\\documents\\github\\luna\\luna\\managerclasses\\productmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B1D89FCA-884C-4EC1-9530-99CBA6D87E68}|Luna\\Luna.csproj|solutionrelative:luna\\managerclasses\\productmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B1D89FCA-884C-4EC1-9530-99CBA6D87E68}|Luna\\Luna.csproj|c:\\users\\bill\\documents\\github\\luna\\luna\\productsystem\\dummyproductsaver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B1D89FCA-884C-4EC1-9530-99CBA6D87E68}|Luna\\Luna.csproj|solutionrelative:luna\\productsystem\\dummyproductsaver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B1D89FCA-884C-4EC1-9530-99CBA6D87E68}|Luna\\Luna.csproj|c:\\users\\bill\\documents\\github\\luna\\luna\\managerclasses\\systemmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B1D89FCA-884C-4EC1-9530-99CBA6D87E68}|Luna\\Luna.csproj|solutionrelative:luna\\managerclasses\\systemmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B1D89FCA-884C-4EC1-9530-99CBA6D87E68}|Luna\\Luna.csproj|c:\\users\\bill\\documents\\github\\luna\\luna\\productsystem\\dummyproductloader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B1D89FCA-884C-4EC1-9530-99CBA6D87E68}|Luna\\Luna.csproj|solutionrelative:luna\\productsystem\\dummyproductloader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B1D89FCA-884C-4EC1-9530-99CBA6D87E68}|Luna\\Luna.csproj|c:\\users\\bill\\documents\\github\\luna\\luna\\dataclasses\\product.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B1D89FCA-884C-4EC1-9530-99CBA6D87E68}|Luna\\Luna.csproj|solutionrelative:luna\\dataclasses\\product.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B1D89FCA-884C-4EC1-9530-99CBA6D87E68}|Luna\\Luna.csproj|c:\\users\\bill\\documents\\github\\luna\\luna\\productsystem\\iproductsaver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B1D89FCA-884C-4EC1-9530-99CBA6D87E68}|Luna\\Luna.csproj|solutionrelative:luna\\productsystem\\iproductsaver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B1D89FCA-884C-4EC1-9530-99CBA6D87E68}|Luna\\Luna.csproj|c:\\users\\bill\\documents\\github\\luna\\luna\\productsystem\\dummyordersaver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B1D89FCA-884C-4EC1-9530-99CBA6D87E68}|Luna\\Luna.csproj|solutionrelative:luna\\productsystem\\dummyordersaver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{B1D89FCA-884C-4EC1-9530-99CBA6D87E68}|Luna\\Luna.csproj|c:\\users\\bill\\documents\\github\\luna\\luna\\managerclasses\\uimanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -13,18 +37,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{B1D89FCA-884C-4EC1-9530-99CBA6D87E68}|Luna\\Luna.csproj|c:\\users\\bill\\documents\\github\\luna\\luna\\ui\\uifactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B1D89FCA-884C-4EC1-9530-99CBA6D87E68}|Luna\\Luna.csproj|solutionrelative:luna\\ui\\uifactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B1D89FCA-884C-4EC1-9530-99CBA6D87E68}|Luna\\Luna.csproj|c:\\users\\bill\\documents\\github\\luna\\luna\\ui\\scrollview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B1D89FCA-884C-4EC1-9530-99CBA6D87E68}|Luna\\Luna.csproj|solutionrelative:luna\\ui\\scrollview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B1D89FCA-884C-4EC1-9530-99CBA6D87E68}|Luna\\Luna.csproj|c:\\users\\bill\\documents\\github\\luna\\luna\\managerclasses\\productmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B1D89FCA-884C-4EC1-9530-99CBA6D87E68}|Luna\\Luna.csproj|solutionrelative:luna\\managerclasses\\productmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B1D89FCA-884C-4EC1-9530-99CBA6D87E68}|Luna\\Luna.csproj|c:\\users\\bill\\documents\\github\\luna\\luna\\ui\\layoutsystem\\luiva.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B1D89FCA-884C-4EC1-9530-99CBA6D87E68}|Luna\\Luna.csproj|solutionrelative:luna\\ui\\layoutsystem\\luiva.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -34,81 +46,124 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "UIComponent.cs",
-              "DocumentMoniker": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\UI\\UIComponent.cs",
-              "RelativeDocumentMoniker": "Luna\\UI\\UIComponent.cs",
-              "ToolTip": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\UI\\UIComponent.cs*",
-              "RelativeToolTip": "Luna\\UI\\UIComponent.cs*",
-              "ViewState": "AgIAAI8AAAAAAAAAAAAYwKsAAAAdAAAAAAAAAA==",
+              "DocumentIndex": 2,
+              "Title": "SystemManager.cs",
+              "DocumentMoniker": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\ManagerClasses\\SystemManager.cs",
+              "RelativeDocumentMoniker": "Luna\\ManagerClasses\\SystemManager.cs",
+              "ToolTip": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\ManagerClasses\\SystemManager.cs",
+              "RelativeToolTip": "Luna\\ManagerClasses\\SystemManager.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAA/AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-24T10:19:17.692Z",
+              "WhenOpened": "2025-06-24T11:23:16.045Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "DummyProductSaver.cs",
+              "DocumentMoniker": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\ProductSystem\\DummyProductSaver.cs",
+              "RelativeDocumentMoniker": "Luna\\ProductSystem\\DummyProductSaver.cs",
+              "ToolTip": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\ProductSystem\\DummyProductSaver.cs",
+              "RelativeToolTip": "Luna\\ProductSystem\\DummyProductSaver.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAA4AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-24T11:20:11.464Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "DummyProductLoader.cs",
+              "DocumentMoniker": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\ProductSystem\\DummyProductLoader.cs",
+              "RelativeDocumentMoniker": "Luna\\ProductSystem\\DummyProductLoader.cs",
+              "ToolTip": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\ProductSystem\\DummyProductLoader.cs",
+              "RelativeToolTip": "Luna\\ProductSystem\\DummyProductLoader.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAA6AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-24T11:19:24.398Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 5,
-              "Title": "LUIVA.cs",
-              "DocumentMoniker": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\UI\\LayoutSystem\\LUIVA.cs",
-              "RelativeDocumentMoniker": "Luna\\UI\\LayoutSystem\\LUIVA.cs",
-              "ToolTip": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\UI\\LayoutSystem\\LUIVA.cs",
-              "RelativeToolTip": "Luna\\UI\\LayoutSystem\\LUIVA.cs",
-              "ViewState": "AgIAAPUBAAAAAAAAAAAYwAwCAAAZAAAAAAAAAA==",
+              "Title": "IProductSaver.cs",
+              "DocumentMoniker": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\ProductSystem\\IProductSaver.cs",
+              "RelativeDocumentMoniker": "Luna\\ProductSystem\\IProductSaver.cs",
+              "ToolTip": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\ProductSystem\\IProductSaver.cs",
+              "RelativeToolTip": "Luna\\ProductSystem\\IProductSaver.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAA7AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-24T07:59:22.933Z"
+              "WhenOpened": "2025-06-24T11:18:20.337Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "ScrollView.cs",
-              "DocumentMoniker": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\UI\\ScrollView.cs",
-              "RelativeDocumentMoniker": "Luna\\UI\\ScrollView.cs",
-              "ToolTip": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\UI\\ScrollView.cs",
-              "RelativeToolTip": "Luna\\UI\\ScrollView.cs",
-              "ViewState": "AgIAAAsAAAAAAAAAAAAQwC8AAABVAAAAAAAAAA==",
+              "DocumentIndex": 6,
+              "Title": "DummyOrderSaver.cs",
+              "DocumentMoniker": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\ProductSystem\\DummyOrderSaver.cs",
+              "RelativeDocumentMoniker": "Luna\\ProductSystem\\DummyOrderSaver.cs",
+              "ToolTip": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\ProductSystem\\DummyOrderSaver.cs",
+              "RelativeToolTip": "Luna\\ProductSystem\\DummyOrderSaver.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAA0AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-23T19:39:46.192Z"
+              "WhenOpened": "2025-06-24T11:17:50.79Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "ProductManager.cs",
-              "DocumentMoniker": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\ManagerClasses\\ProductManager.cs",
-              "RelativeDocumentMoniker": "Luna\\ManagerClasses\\ProductManager.cs",
-              "ToolTip": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\ManagerClasses\\ProductManager.cs",
-              "RelativeToolTip": "Luna\\ManagerClasses\\ProductManager.cs",
-              "ViewState": "AgIAAAcAAAAAAAAAAAAAABIAAAA6AAAAAAAAAA==",
+              "Title": "Product.cs",
+              "DocumentMoniker": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\DataClasses\\Product.cs",
+              "RelativeDocumentMoniker": "Luna\\DataClasses\\Product.cs",
+              "ToolTip": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\DataClasses\\Product.cs",
+              "RelativeToolTip": "Luna\\DataClasses\\Product.cs",
+              "ViewState": "AgIAABQAAAAAAAAAAAAAACUAAAAuAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-23T18:44:52.848Z"
+              "WhenOpened": "2025-06-24T11:08:08.068Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
+              "Title": "ProductManager.cs",
+              "DocumentMoniker": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\ManagerClasses\\ProductManager.cs",
+              "RelativeDocumentMoniker": "Luna\\ManagerClasses\\ProductManager.cs",
+              "ToolTip": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\ManagerClasses\\ProductManager.cs*",
+              "RelativeToolTip": "Luna\\ManagerClasses\\ProductManager.cs*",
+              "ViewState": "AgIAACcAAAAAAAAAAAAcwD0AAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-24T10:27:49.305Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
               "Title": "UIManager.cs",
               "DocumentMoniker": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\ManagerClasses\\UIManager.cs",
               "RelativeDocumentMoniker": "Luna\\ManagerClasses\\UIManager.cs",
               "ToolTip": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\ManagerClasses\\UIManager.cs",
               "RelativeToolTip": "Luna\\ManagerClasses\\UIManager.cs",
-              "ViewState": "AgIAAOoAAAAAAAAAAAAmwBABAAAxAAAAAAAAAA==",
+              "ViewState": "AgIAAOoAAAAAAAAAAAAmwAIBAABPAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-06-22T13:20:24.944Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 8,
               "Title": "UIFactory.cs",
               "DocumentMoniker": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\UI\\UIFactory.cs",
               "RelativeDocumentMoniker": "Luna\\UI\\UIFactory.cs",
               "ToolTip": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\UI\\UIFactory.cs",
               "RelativeToolTip": "Luna\\UI\\UIFactory.cs",
-              "ViewState": "AgIAAFcDAAAAAAAAAAAAACQBAAA0AAAAAAAAAA==",
+              "ViewState": "AgIAAI8DAAAAAAAAAAAkwKkDAAAvAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-19T11:52:24.182Z"
+              "WhenOpened": "2025-06-19T11:52:24.182Z",
+              "EditorCaption": ""
             }
           ]
         }

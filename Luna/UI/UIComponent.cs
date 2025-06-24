@@ -4,11 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using Luna.UI.LayoutSystem;
-using SharpDX.MediaFoundation;
-using SharpDX.Direct2D1.Effects;
-using System.Windows.Forms.Design;
 using Microsoft.Xna.Framework.Input;
-using System.Security.Policy;
 
 namespace Luna.UI
 {

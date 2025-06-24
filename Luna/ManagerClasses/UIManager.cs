@@ -270,6 +270,7 @@ namespace Luna.ManagerClasses
                 ProductBlock productBlock = uiFactory.CreateProduct();
                 productBlock.Name.SetText(productData[id].GetName());
                 productBlock.Cost.SetText("£" + productData[id].GetCost().ToString());
+                productBlock.RemoveButton.OnClick(() => { ProductManager.RemoveProduct(id, false); products[id].Destroy(); products.Remove(id); });
                 products[id] = productBlock.Root;
 
                 productsContainer.AddChild(productBlock.Root);

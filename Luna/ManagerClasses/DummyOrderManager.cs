@@ -48,7 +48,7 @@ namespace Luna.ManagerClasses
             if (updateOrdersCallback == null) return;
 
             Console.WriteLine("Updating Orders...");
-            updateOrdersCallback(orders);
+            updateOrdersCallback?.Invoke(orders);
         }
     }
 }

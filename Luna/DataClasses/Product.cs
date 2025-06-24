@@ -1,4 +1,7 @@
 ﻿using Luna.DataClasses.IDClasses;
+using Luna.UI.LayoutSystem;
+using Microsoft.Xna.Framework.Graphics;
+using System.Drawing;
 
 namespace Luna.DataClasses
 {
@@ -6,6 +9,7 @@ namespace Luna.DataClasses
     {
         string productName;
         float productCost;
+        Texture2D productIcon;
         ProductID productID;
 
         #region getters_setters
@@ -29,6 +33,17 @@ namespace Luna.DataClasses
         {
             this.productCost = productCost;
             return this;
+        }
+
+        public Product SetIcon(Texture2D icon)
+        {
+            productIcon = icon;
+            return this;
+        }
+
+        public Texture2D GetIcon()
+        {
+            return productIcon;
         }
 
         public ProductID GetProductID()
