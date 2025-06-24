@@ -5,6 +5,7 @@ namespace Luna.DataClasses
     internal class Product
     {
         string productName;
+        float productCost;
         ProductID productID;
 
         #region getters_setters
@@ -16,6 +17,17 @@ namespace Luna.DataClasses
         public Product SetName(string productName)
         {
             this.productName = productName;
+            return this;
+        }
+
+        public float GetCost()
+        {
+            return productCost;
+        }
+
+        public Product SetCost(float productCost)
+        {
+            this.productCost = productCost;
             return this;
         }
 

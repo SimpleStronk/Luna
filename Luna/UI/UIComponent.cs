@@ -8,6 +8,7 @@ using SharpDX.MediaFoundation;
 using SharpDX.Direct2D1.Effects;
 using System.Windows.Forms.Design;
 using Microsoft.Xna.Framework.Input;
+using System.Security.Policy;
 
 namespace Luna.UI
 {
@@ -38,6 +39,7 @@ namespace Luna.UI
         protected int elementId;
         protected bool textObject = false;
         protected bool scrollable = false;
+        protected string name = "";
 
         private static int currentElement = 0;
 
@@ -167,7 +169,7 @@ namespace Luna.UI
         public void Destroy()
         {
             parent?.RemoveChild(this);
-            onDestroy();
+            onDestroy?.Invoke();
         }
 
         public void OnDestroy(Action onDestroy)
@@ -437,6 +439,17 @@ namespace Luna.UI
         public virtual string GetTag()
         {
             return $"{elementId}:{GetComponentType()}";
+        }
+
+        public string Name
+        {
+            get { return name; }
+            set { name = value; }
+        }
+
+        public string GetName()
+        {
+            return name;
         }
 
         public bool RenderDefaultRect

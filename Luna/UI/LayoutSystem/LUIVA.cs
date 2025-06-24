@@ -273,7 +273,7 @@ namespace Luna.UI.LayoutSystem
 
                         foreach (ILayoutable e in elements)
                         {
-                            if (e.GetLayout().GetSizingFromAxis(axis).ScalingMode == Sizing.Mode.Grow) throw new Exception("Attempted to use an ILayoutable with sizing mode Grow as a child of one with sizig mode Match");
+                            if (e.GetLayout().GetSizingFromAxis(axis).ScalingMode == Sizing.Mode.Grow) throw new Exception(string.Format("Attempted to use an ILayoutable with sizing mode Grow ({0}) as a child of one with sizing mode Match ({1})", e.GetName(), parent.GetName()));
                             
                             totalDimension += CalculateLayoutScale(e, e.GetChildren(), 0, axis, e.GetLayout().LayoutAxis == axis);
                         }

@@ -8,9 +8,8 @@ using Luna.DataClasses;
 using static Luna.UI.UIFactory;
 using Luna.UI;
 using System.IO;
-using System.Windows.Forms.VisualStyles;
-using Microsoft.VisualBasic.Devices;
 using System.Collections.Generic;
+using Luna.DataClasses.IDClasses;
 
 namespace Luna.ManagerClasses
 {
@@ -31,6 +30,9 @@ namespace Luna.ManagerClasses
         private bool windowBorderless;
         bool themeToggle = true;
 
+        private UIComponent productsContainer;
+        private Dictionary<ProductID, UIComponent> products = new Dictionary<ProductID, UIComponent>();
+
         enum MainWindowState { Dashboard, Orders, Products };
         MainWindowState mainWindowState = MainWindowState.Dashboard;
         private TopBarBlock topBarBlock;
@@ -43,35 +45,9 @@ namespace Luna.ManagerClasses
             this.quitAction = quitAction;
             pixelTexture = GraphicsHelper.GeneratePixelTexture();
 
-            rootComponent = new BlankUI(UITheme.ColorType.MainSoft);
-            rootComponent.CascadeTheme(PlumTheme);
-            rootComponent.SetLayout(new Layout()
-            {
-                LayoutWidth = Sizing.Grow(1),
-                LayoutHeight = Sizing.Grow(1),
-                LayoutAxis = LVector2.VERTICAL
-            });
+            rootComponent = SetupRootComponent();
 
-            windowControlsPanel = new BlankUI(UITheme.ColorType.Placeholder);
-            windowControlsPanel.SetLayout(new Layout()
-            {
-                LayoutWidth = Sizing.Grow(1),
-                LayoutHeight = Sizing.Grow(1),
-                Inline = false,
-            });
-            windowControlsPanel.FocusIgnore = true;
-
-            windowControlsParentTop = new BlankUI(UITheme.ColorType.Placeholder);
-            windowControlsParentTop.SetLayout(new Layout()
-            {
-                LayoutWidth = Sizing.Grow(1),
-                LayoutHeight = Sizing.Fixed(30),
-                LayoutAxis = LVector2.HORIZONTAL,
-                HorizontalAlignment = Alignment.End
-            });
-            windowControlsParentTop.FocusIgnore = true;
-
-            windowControlsPanel.AddChild(windowControlsParentTop);
+            windowControlsPanel = SetupWindowControlsPanel();
 
             if (window.IsBorderless) AddWindowControls();
             windowBorderless = window.IsBorderless;
@@ -191,87 +167,112 @@ namespace Luna.ManagerClasses
 
         private void AddWindowControls()
         {
-            Button minimise = new Button(UITheme.ColorType.Background);
-            minimise.SetLayout(new Layout()
-            {
-                LayoutWidth = Sizing.Fixed(50),
-                LayoutHeight = Sizing.Grow(1),
-                HorizontalAlignment = Alignment.Middle,
-                VerticalAlignment = Alignment.Middle
-            });
-            minimise.SetTheme(new UITheme(){ CornerRadius = (0, 0, 10, 0) });
-            minimise.OnClick(() => NativeWindowHelper.ShowWindow(window.Handle, NativeWindowHelper.SW_MINIMISE));
+            WindowControls windowControls = uiFactory.CreateWindowControls();
+            windowControls.Minimise.OnClick(() => NativeWindowHelper.ShowWindow(window.Handle, NativeWindowHelper.SW_MINIMISE));
+            windowControls.Maximise.OnClick(() => NativeWindowHelper.ShowWindow(window.Handle, NativeWindowHelper.IsZoomed(window.Handle) ? NativeWindowHelper.SW_RESTORE : NativeWindowHelper.SW_MAXIMISE));
+            windowControls.Quit.OnClick(quitAction);
 
-            Label minimiseLabel = new Label("_", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Background);
-            minimise.AddChild(minimiseLabel);
-
-            Button maximise = new Button(UITheme.ColorType.Background);
-            maximise.SetLayout(new Layout()
-            {
-                LayoutWidth = Sizing.Fixed(50),
-                LayoutHeight = Sizing.Grow(1),
-                HorizontalAlignment = Alignment.Middle,
-                VerticalAlignment = Alignment.Middle
-            });
-            maximise.SetTheme(new UITheme(){ Rounded = false });
-            maximise.OnClick(() => NativeWindowHelper.ShowWindow(window.Handle, NativeWindowHelper.IsZoomed(window.Handle) ? NativeWindowHelper.SW_RESTORE : NativeWindowHelper.SW_MAXIMISE));
-
-            Label maximiseLabel = new Label("O", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Background);
-            maximise.AddChild(maximiseLabel);
-            
-            Button quit = new Button(UITheme.ColorType.Background);
-            quit.SetLayout(new Layout()
-            {
-                LayoutWidth = Sizing.Fixed(50),
-                LayoutHeight = Sizing.Grow(1),
-                HorizontalAlignment = Alignment.Middle,
-                VerticalAlignment = Alignment.Middle
-            });
-            quit.SetTheme(new UITheme(){ ColourType = UITheme.ColorType.Emergency, Rounded = false });
-            quit.OnClick(quitAction);
-
-            Label quitButton = new Label("X", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Emergency);
-            quit.AddChild(quitButton);
-
-            windowControlsParentTop.AddChild(minimise);
-            windowControlsParentTop.AddChild(maximise);
-            windowControlsParentTop.AddChild(quit);
+            windowControlsParentTop = windowControls.Root;
+            windowControlsPanel.AddChild(windowControls.Root);
         }
 
         private void RemoveWindowControls()
         {
-            foreach (UIComponent c in windowControlsParentTop.GetChildren())
-            {
-                c.Destroy();
-            }
+            windowControlsPanel.RemoveChild(windowControlsParentTop);
         }
 
-        private void SetMainWindowState(MainWindowState mainWindowState)
+		private void SetMainWindowState(MainWindowState mainWindowState)
+		{
+			if (this.mainWindowState == mainWindowState) return;
+
+			this.mainWindowState = mainWindowState;
+
+			switch (mainWindowState)
+			{
+				case MainWindowState.Dashboard:
+				{
+					InitiateFadeTransition(SetupDashboard(uiFactory.CreateDashboard()));
+					HighlightTopBar(MainWindowState.Dashboard);
+					break;
+				}
+				case MainWindowState.Orders:
+				{
+					InitiateFadeTransition(SetupOrders(uiFactory.CreateOrders()));
+					HighlightTopBar(MainWindowState.Orders);
+					break;
+				}
+				case MainWindowState.Products:
+				{
+					InitiateFadeTransition(SetupProducts(uiFactory.CreateProducts()));
+					HighlightTopBar(MainWindowState.Products);
+					ProductManager.SetUpdateProductCallback(UpdateProducts);
+					break;
+				}
+			}
+		}
+
+        private BlankUI SetupRootComponent()
         {
-            if (this.mainWindowState == mainWindowState) return;
-
-            this.mainWindowState = mainWindowState;
-
-            switch (mainWindowState)
+            BlankUI rootComponent = new BlankUI(UITheme.ColorType.MainSoft);
+            rootComponent.CascadeTheme(PlumTheme);
+            rootComponent.SetLayout(new Layout()
             {
-                case MainWindowState.Dashboard:
-                {
-                    InitiateFadeTransition(SetupDashboard(uiFactory.CreateDashboard()));
-                    HighlightTopBar(MainWindowState.Dashboard);
-                    break;
-                }
-                case MainWindowState.Orders:
-                {
-                    InitiateFadeTransition(SetupOrders(uiFactory.CreateOrders()));
-                    HighlightTopBar(MainWindowState.Orders);
-                    break;
-                }
-                case MainWindowState.Products:
-                {
-                    InitiateFadeTransition(SetupProducts(uiFactory.CreateProducts()));
-                    HighlightTopBar(MainWindowState.Products);
-                    break;
-                }
+                LayoutWidth = Sizing.Grow(1),
+                LayoutHeight = Sizing.Grow(1),
+                LayoutAxis = LVector2.VERTICAL
+            });
+
+            return rootComponent;
+        }
+
+        private BlankUI SetupWindowControlsPanel()
+        {
+            BlankUI windowControlsPanel = new BlankUI(UITheme.ColorType.Placeholder);
+            windowControlsPanel.SetLayout(new Layout()
+            {
+                LayoutWidth = Sizing.Grow(1),
+                LayoutHeight = Sizing.Grow(1),
+                Inline = false,
+            });
+            windowControlsPanel.FocusIgnore = true;
+
+            return windowControlsPanel;
+        }
+
+        private UIComponent SetupOrders(OrdersBlock ordersBlock)
+        {
+            return ordersBlock.Root;
+        }
+
+        private UIComponent SetupProducts(ProductsBlock productsBlock)
+        {
+            productsContainer = productsBlock.ProductsContainer;
+
+            productsBlock.AddProducts.OnClick(() => {
+                AddOverlay(SetupProductCreator(uiFactory.CreateProductCreator()));
+            });
+            Dictionary<ProductID, Product> products = ProductManager.GetProducts();
+            UpdateProducts(products);
+            return productsBlock.Root;
+        }
+
+        private void UpdateProducts(Dictionary<ProductID, Product> productData)
+        {
+            foreach (ProductID id in products.Keys)
+            {
+                products[id].Destroy();
+            }
+
+            products.Clear();
+
+            foreach (ProductID id in productData.Keys)
+            {
+                ProductBlock productBlock = uiFactory.CreateProduct();
+                productBlock.Name.SetText(productData[id].GetName());
+                productBlock.Cost.SetText("£" + productData[id].GetCost().ToString());
+                products[id] = productBlock.Root;
+
+                productsContainer.AddChild(productBlock.Root);
             }
         }
 
@@ -297,19 +298,6 @@ namespace Luna.ManagerClasses
             return dashboardBlock.Root;
         }
 
-        private UIComponent SetupOrders(OrdersBlock ordersBlock)
-        {
-            return ordersBlock.Root;
-        }
-
-        private UIComponent SetupProducts(ProductsBlock productsBlock)
-        {
-            productsBlock.AddProducts.OnClick(() => {
-                AddOverlay(SetupProductCreator(uiFactory.CreateProductCreator()));
-            });
-            return productsBlock.Root;
-        }
-
         private UIComponent SetupProductCreator(ProductCreator productCreator)
         {
             productCreator.SelectIcon.OnClick(() => {
@@ -321,8 +309,10 @@ namespace Luna.ManagerClasses
                 AddOverlay(imageImporter.Root);
             });
             productCreator.OKButton.OnClick(() => {
-                    productCreator.Root.Destroy();
-                    Console.WriteLine("Attempted to create a product with name: " + productCreator.Name.Text + ", cost " + productCreator.Cost.Text);
+                productCreator.Root.Destroy();
+                Product product = new Product().SetProductID(ProductID.CreateSequential()).SetName(productCreator.Name.Text).SetCost(float.Parse(productCreator.Cost.Text));
+                ProductManager.AddProduct(product);
+                Console.WriteLine("Attempted to create a product with name: " + productCreator.Name.Text + ", cost " + productCreator.Cost.Text);
                 });
             return productCreator.Root;
         }

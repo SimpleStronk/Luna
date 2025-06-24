@@ -19,5 +19,7 @@ namespace Luna.UI.LayoutSystem
         public int GetChildCount();
 
         public string GetTag();
+
+        public string GetName();
     }
 }

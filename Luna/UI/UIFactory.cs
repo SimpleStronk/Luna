@@ -1,19 +1,21 @@
 using Luna.DataClasses;
 using Luna.HelperClasses;
 using Luna.ManagerClasses;
+using Luna.UI.LayoutSystem;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Luna.UI.LayoutSystem;
-using static Luna.UI.LayoutSystem.LUIVA;
 using System;
-using System.Windows.Forms;
 using System.Configuration;
 using System.Security.Permissions;
+using System.Windows.Forms;
+using static Luna.UI.LayoutSystem.LUIVA;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Luna.UI
 {
     internal class UIFactory
     {
+        #region block_definitions
         public struct TextButton
         {
             private Button root;
@@ -65,6 +67,36 @@ namespace Luna.UI
             {
                 get { return no; }
                 set { no = value; }
+            }
+        }
+
+        public struct WindowControls
+        {
+            private UIComponent root;
+            private Button minimise, maximise, quit;
+
+            public UIComponent Root
+            {
+                get { return root; }
+                set { root = value; }
+            }
+
+            public Button Minimise
+            {
+                get { return minimise; }
+                set { minimise = value; }
+            }
+
+            public Button Maximise
+            {
+                get { return  maximise; }
+                set { maximise = value; }
+            }
+
+            public Button Quit
+            {
+                get { return quit; }
+                set { quit = value; }
             }
         }
 
@@ -161,6 +193,7 @@ namespace Luna.UI
         {
             private UIComponent root;
             private Button addProducts;
+            private UIComponent productsContainer;
 
             public UIComponent Root
             {
@@ -172,6 +205,12 @@ namespace Luna.UI
             {
                 get { return addProducts; }
                 set { addProducts = value; }
+            }
+
+            public UIComponent ProductsContainer
+            {
+                get { return productsContainer; }
+                set { productsContainer = value; }
             }
         }
 
@@ -223,6 +262,90 @@ namespace Luna.UI
                 get { return icon; }
                 set { icon = value; }
             }
+        }
+
+        public struct ProductBlock
+        {
+            private UIComponent root;
+            private Label name;
+            private Label cost;
+
+            public UIComponent Root
+            {
+                get { return root; }
+                set { root = value; }
+            }
+
+            public Label Name
+            {
+                get { return name; }
+                set { name = value; }
+            }
+
+            public Label Cost
+            {
+                get { return cost; }
+                set { cost = value; }
+            }
+        }
+        #endregion
+
+        public WindowControls CreateWindowControls()
+        {
+            BlankUI windowControlsParentTop = new BlankUI(UITheme.ColorType.Placeholder);
+            windowControlsParentTop.SetLayout(new Layout()
+            {
+                LayoutWidth = Sizing.Grow(1),
+                LayoutHeight = Sizing.Fixed(30),
+                LayoutAxis = LVector2.HORIZONTAL,
+                HorizontalAlignment = Alignment.End
+            });
+            windowControlsParentTop.FocusIgnore = true;
+
+            Button minimise = new Button(UITheme.ColorType.Background);
+            minimise.SetLayout(new Layout()
+            {
+                LayoutWidth = Sizing.Fixed(50),
+                LayoutHeight = Sizing.Grow(1),
+                HorizontalAlignment = Alignment.Middle,
+                VerticalAlignment = Alignment.Middle
+            });
+            minimise.SetTheme(new UITheme() { CornerRadius = (0, 0, 10, 0) });
+
+            Label minimiseLabel = new Label("_", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Background);
+            minimise.AddChild(minimiseLabel);
+
+            Button maximise = new Button(UITheme.ColorType.Background);
+            maximise.SetLayout(new Layout()
+            {
+                LayoutWidth = Sizing.Fixed(50),
+                LayoutHeight = Sizing.Grow(1),
+                HorizontalAlignment = Alignment.Middle,
+                VerticalAlignment = Alignment.Middle
+            });
+            maximise.SetTheme(new UITheme() { Rounded = false });
+
+            Label maximiseLabel = new Label("O", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Background);
+            maximise.AddChild(maximiseLabel);
+
+            Button quit = new Button(UITheme.ColorType.Background);
+            quit.SetLayout(new Layout()
+            {
+                LayoutWidth = Sizing.Fixed(50),
+                LayoutHeight = Sizing.Grow(1),
+                HorizontalAlignment = Alignment.Middle,
+                VerticalAlignment = Alignment.Middle
+            });
+            quit.SetTheme(new UITheme() { ColourType = UITheme.ColorType.Emergency, Rounded = false });
+
+            Label quitButton = new Label("X", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Emergency);
+            quit.AddChild(quitButton);
+
+            windowControlsParentTop.AddChild(minimise);
+            windowControlsParentTop.AddChild(maximise);
+            windowControlsParentTop.AddChild(quit);
+
+            return new WindowControls { Root = windowControlsParentTop, Minimise = minimise, Maximise = maximise, Quit = quit };
         }
 
         public OrderBlock CreateOrder(Order order)
@@ -593,25 +716,53 @@ namespace Luna.UI
             });
 
             BlankUI leftPanel = new BlankUI(UITheme.ColorType.Background);
+            leftPanel.Name = "Products Left Panel";
             leftPanel.SetLayout(new Layout() { LayoutWidth = Sizing.Grow(1), LayoutHeight = Sizing.Grow(1), Padding = new Tetra(15) });
 
             BlankUI separator = new BlankUI(UITheme.ColorType.Separator);
+            separator.Name = "Products LR Panels Separator";
             separator.SetLayout(SeparatorVerticalLayout);
 
             BlankUI rightPanel = new BlankUI(UITheme.ColorType.MainSoft);
+            rightPanel.Name = "Products Right Panel";
             rightPanel.SetLayout(new Layout() { LayoutWidth = Sizing.Grow(3), LayoutHeight = Sizing.Grow(1) });
+
+            ScrollView productsScrollView = new ScrollView(UITheme.ColorType.MainSoft);
+            productsScrollView.Name = "Products ScrollView";
+            productsScrollView.Scrollable = true;
+            productsScrollView.SetLayout(new Layout()
+            {
+                LayoutWidth = Sizing.Grow(1),
+                LayoutHeight = Sizing.Grow(1)
+            });
+
+            BlankUI productsContainer = new BlankUI(UITheme.ColorType.Placeholder);
+            productsContainer.SetLayout(new Layout()
+            {
+                LayoutWidth = Sizing.Grow(1),
+                LayoutHeight = Sizing.Wrap(),
+                Padding = new Tetra(20),
+                Spacing = 20,
+                LayoutAxis = LVector2.VERTICAL
+            });
+
+            productsScrollView.AddChild(productsContainer);
+
+            rightPanel.AddChild(productsScrollView);
 
             blank.AddChild(leftPanel, separator, rightPanel);
 
             Button addProduct = new Button(UITheme.ColorType.Main);
+            addProduct.Name = "Add Product Button";
             addProduct.SetLayout(new Layout() { LayoutWidth = Sizing.Grow(1), LayoutHeight = Sizing.Fixed(40), VerticalAlignment = Alignment.Middle, HorizontalAlignment = Alignment.Middle });
 
             Label addProductLabel = new Label("Add product", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Main);
+            addProductLabel.Name = "Add Product Label";
             addProduct.AddChild(addProductLabel);
 
             leftPanel.AddChild(addProduct);
 
-            return new ProductsBlock() { Root = blank, AddProducts = addProduct };
+            return new ProductsBlock() { Root = blank, AddProducts = addProduct, ProductsContainer = productsContainer };
         }
 
         public ProductCreator CreateProductCreator()
@@ -645,7 +796,7 @@ namespace Luna.UI
             {
                 LayoutWidth = Sizing.Grow(1),
                 LayoutHeight = Sizing.Grow(1),
-                ImageFitMode = Layout.FitMode.MaxFit
+                ImageFitMode = Layout.FitMode.MinFit
             });
             LTexture2D iconTexture = new LTexture2D(GraphicsHelper.GeneratePixelTexture());
             iconTexture.LockAspectRatio = true;
@@ -693,6 +844,7 @@ namespace Luna.UI
             Label costIndicator = new Label("Cost", GraphicsHelper.GetBoldFont(), UITheme.ColorType.Background);
             TextInput costInput = new TextInput();
             costInput.InputType = TextInput.InputFormat.CentiDecimal;
+            costInput.Prefix = "£";
             costInput.SetLayout(new Layout()
             {
                 LayoutWidth = Sizing.Grow(1),
@@ -735,6 +887,33 @@ namespace Luna.UI
             return new ProductCreator { Root = root, SelectIcon = selectIcon, OKButton = ok, CloseButton = cancel, Name = nameInput, Cost = costInput, Icon = icon };
         }
 
+        public ProductBlock CreateProduct()
+        {
+            BlankUI root = new BlankUI(UITheme.ColorType.Background);
+            root.Name = "Product Root";
+            root.SetLayout(new Layout()
+            {
+                LayoutWidth = Sizing.Grow(1),
+                LayoutHeight = Sizing.Wrap(),
+                LayoutAxis = LVector2.VERTICAL,
+                Padding = new Tetra(20),
+                Spacing = 20
+            });
+            root.SetTheme(new UITheme()
+            {
+                Rounded = true
+            });
+
+            Label nameLabel = new Label("name", GraphicsHelper.GetBoldFont(), UITheme.ColorType.Background);
+            nameLabel.Name = "Product Name Label";
+            Label costLabel = new Label("cost", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Background);
+            costLabel.Name = "Product Cost Label";
+
+            root.AddChild(nameLabel, costLabel);
+
+            return new ProductBlock { Root = root, Name = nameLabel, Cost = costLabel };
+        }
+
         public YesBlock CreateAboutPage()
         {
             BlankUI root = new BlankUI(UITheme.ColorType.Background);
@@ -744,6 +923,11 @@ namespace Luna.UI
                 LayoutHeight = Sizing.Wrap(),
                 LayoutAxis = LVector2.VERTICAL
             });
+            root.SetTheme(new UITheme()
+            {
+                Rounded = true,
+                CornerRadius = (20, 20, 20, 20)
+            });
 
             ScrollView scrollView = new ScrollView(UITheme.ColorType.Placeholder);
             scrollView.SetLayout(new Layout()
@@ -751,11 +935,6 @@ namespace Luna.UI
                 LayoutWidth = Sizing.Grow(1),
                 LayoutHeight = Sizing.Fixed(400),
                 Padding = new Tetra(20)
-            });
-            scrollView.SetTheme(new UITheme()
-            {
-                Rounded = true,
-                CornerRadius = (20, 20, 20, 20)
             });
 
             BlankUI contentContainer = new BlankUI(UITheme.ColorType.Placeholder);
@@ -812,7 +991,7 @@ namespace Luna.UI
                 HorizontalAlignment = Alignment.Middle
             });
 
-            Button okButton = new Button(UITheme.ColorType.Main);
+            Button okButton = new Button(Button.VisualResponse.ColourChange, UITheme.ColorType.Main);
             okButton.SetLayout(new Layout()
             {
                 LayoutWidth = Sizing.Wrap(),

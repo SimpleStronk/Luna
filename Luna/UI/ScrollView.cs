@@ -17,7 +17,8 @@ namespace Luna.UI
 
             Initialise();
 
-            container = new BlankUI(UITheme.ColorType.Background);
+            container = new BlankUI(UITheme.ColorType.Placeholder);
+            container.Name = "ScrollView Container";
             container.SetLayout(new Layout()
             {
                 LayoutWidth = Sizing.Grow(1),
@@ -28,6 +29,7 @@ namespace Luna.UI
             container.GetTransform().OnScrollChanged((float value) => scrollBar.SoftSetValue(value));
 
             scrollBar = new ScrollBar(LVector2.VERTICAL, UITheme.ColorType.Placeholder);
+            scrollBar.Name = "ScrollView Scroll Bar";
             scrollBar.SetLayout(new Layout()
             {
                 LayoutHeight = Sizing.Grow(1)
@@ -55,6 +57,11 @@ namespace Luna.UI
         public override void AddChild(params UIComponent[] children)
         {
             container.AddChild(children);
+        }
+
+        public BlankUI Container
+        {
+            get { return container; }
         }
     }
 }

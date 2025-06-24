@@ -59,6 +59,8 @@ namespace Luna.UI
         public void SetText(string text)
         {
             this.text = text;
+            if (text == null) return;
+
             transform.Size = MeasureText(text);
         }
 
@@ -78,6 +80,7 @@ namespace Luna.UI
         {
             get
             {
+                if (text == null) return "";
                 return StringHelper.CutStringToBounds(text, (int)transform.Size.X, true, font);
             }
         }
