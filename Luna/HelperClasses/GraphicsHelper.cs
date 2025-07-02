@@ -17,6 +17,10 @@ namespace Luna.HelperClasses
         private static Dictionary<int, Texture2D> circleCache = new Dictionary<int, Texture2D>();
         private static Texture2D luivaLogo;
 
+        /// <summary>
+        /// Generates a Texture2D object representing a single white pixel
+        /// </summary>
+        /// <exception cref="Exception">Thrown when this object's GraphicsDevice is null</exception>
         public static Texture2D GeneratePixelTexture()
         {
             if (graphicsDevice == null) throw new Exception("graphicsDevice not initialised in class GraphicsHelper");
@@ -26,6 +30,12 @@ namespace Luna.HelperClasses
             return texture;
         }
 
+        /// <summary>
+        /// Generates a Texture2D object representing a circle with the given diameter
+        /// </summary>
+        /// <param name="diameter">Diameter of the generated circle</param>
+        /// <returns></returns>
+        /// <exception cref="Exception">Thrown when this object's GraphicsDevice is null</exception>
         public static Texture2D GenerateCircleTexture(int diameter)
         {
             if (diameter <= 0) return null;
@@ -90,13 +100,26 @@ namespace Luna.HelperClasses
             return boldFont;
         }
 
-        public static Color[] GetImageData(Color[] colorData, int width, Rectangle rectangle)
+        /// <summary>
+        /// Gets the colour data of a smaller region within a larger image
+        /// </summary>
+        /// <param name="colourData">Colour information of the source image</param>
+        /// <param name="width">Width of the original image we are sampling from</param>
+        /// <param name="sampleRectangle">The region within the original image we are sampling</param>
+        /// <returns></returns>
+        public static Color[] GetImageData(Color[] colourData, int width, Rectangle sampleRectangle)
         {
-            Color[] color = new Color[rectangle.Width * rectangle.Height];
-            for (int x = 0; x < rectangle.Width; x++)
-                for (int y = 0; y < rectangle.Height; y++)
-                    color[x + y * rectangle.Width] = colorData[x + rectangle.X + (y + rectangle.Y) * width];
-            return color;
+            Color[] sample = new Color[sampleRectangle.Width * sampleRectangle.Height];
+
+            for (int x = 0; x < sampleRectangle.Width; x++)
+            {
+                for (int y = 0; y < sampleRectangle.Height; y++)
+                {
+                    sample[x + y * sampleRectangle.Width] = colourData[x + sampleRectangle.X + ((y + sampleRectangle.Y) * width)];
+                }
+            }
+
+            return sample;
         }
 
         public static Texture2D LuivaLogo

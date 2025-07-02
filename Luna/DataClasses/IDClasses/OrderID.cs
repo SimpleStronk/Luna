@@ -12,6 +12,9 @@ namespace Luna.DataClasses.IDClasses
 
         static int idCount = 0;
 
+        /// <summary>
+        /// Internal ID value of this object
+        /// </summary>
         public int ID { get { return id; } }
 
         public static OrderID MakeSequential()

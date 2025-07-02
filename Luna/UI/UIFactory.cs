@@ -875,6 +875,7 @@ namespace Luna.UI
                 HorizontalAlignment = Alignment.Middle,
                 VerticalAlignment = Alignment.Middle
             });
+            ok.OnClick(() => root.Destroy());
             Label okLabel = new Label("OK", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Main);
             ok.AddChild(okLabel);
             Button cancel = new Button(Button.VisualResponse.ColourChange, UITheme.ColorType.Emergency);
@@ -885,6 +886,7 @@ namespace Luna.UI
                 HorizontalAlignment = Alignment.Middle,
                 VerticalAlignment = Alignment.Middle
             });
+            cancel.OnClick(() => root.Destroy());
             Label cancelLabel = new Label("Cancel", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Emergency);
             cancel.AddChild(cancelLabel);
             confirmationContainer.AddChild(ok, cancel);

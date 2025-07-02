@@ -15,6 +15,9 @@ namespace Luna.DataClasses
 
         private CustomerID customerId;
 
+        /// <summary>
+        /// Creates a new Order object, with a unique OrderID value
+        /// </summary>
         public Order()
         {
             orderID = OrderID.MakeSequential();

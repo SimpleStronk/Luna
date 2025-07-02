@@ -8,6 +8,9 @@ namespace Luna.ManagerClasses
     {
         static GraphicsDevice graphicsDevice;
 
+        /// <summary>
+        /// Creates a FileDialog popup and loads the resultant file as a Texture2D object
+        /// </summary>
         public static Texture2D LoadImageFromDialog()
         {
             FileDialog fileDialog = new OpenFileDialog();
@@ -19,6 +22,10 @@ namespace Luna.ManagerClasses
             return LoadImageFromFile(fileDialog.FileName);
         }
 
+        /// <summary>
+        /// Loads the specified image as a Texture2D object
+        /// </summary>
+        /// <param name="filePath">File path of the image to load</param>
         public static Texture2D LoadImageFromFile(string filePath)
         {
             Console.WriteLine(filePath);

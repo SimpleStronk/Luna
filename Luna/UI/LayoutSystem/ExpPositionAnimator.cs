@@ -12,16 +12,25 @@ namespace Luna.UI.LayoutSystem
             currentPosition += (targetPosition - currentPosition) / dampingFactor;
         }
 
+        /// <summary>
+        /// Sets the target position for this PositionAnimator
+        /// </summary>
         public void SetPosition(LVector2 position)
         {
             targetPosition = position;
         }
 
+        /// <summary>
+        /// Moves this PositionAnimator immediately to the given position
+        /// </summary>
         public void ForcePosition(LVector2 position)
         {
             currentPosition = targetPosition = position;
         }
 
+        /// <summary>
+        /// Skip animation
+        /// </summary>
         public void MoveToTarget()
         {
             currentPosition = targetPosition;

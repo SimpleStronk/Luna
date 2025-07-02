@@ -6,6 +6,14 @@ namespace Luna.HelperClasses
 {
     internal class StringHelper
     {
+        /// <summary>
+        /// Cuts the given text into lines
+        /// </summary>
+        /// <param name="text">Text to be cut</param>
+        /// <param name="width">Maximum line width in pixels</param>
+        /// <param name="atWhitespace">Determines whether to cut the text only at white space or at any character</param>
+        /// <param name="font">The font the text is drawn with</param>
+        /// <returns>The original string, with line delimiters to fit the text within the given space</returns>
         public static string CutStringToBounds(string text, int width, bool atWhitespace, SpriteFont font)
         {
             string sampleText = text;

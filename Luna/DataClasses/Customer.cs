@@ -20,6 +20,9 @@ namespace Luna.DataClasses
             return this;
         }
 
+        /// <summary>
+        /// The full name associated with this Customer object
+        /// </summary>
         public string FullName
         {
             get
@@ -28,6 +31,9 @@ namespace Luna.DataClasses
             }
         }
 
+        /// <summary>
+        /// The first name associated with this customer object
+        /// </summary>
         public string FirstName
         {
             get
@@ -36,6 +42,9 @@ namespace Luna.DataClasses
             }
         }
 
+        /// <summary>
+        /// The last name associated with this Customer object
+        /// </summary>
         public string LastName
         {
             get

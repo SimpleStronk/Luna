@@ -11,6 +11,9 @@ namespace Luna.DataClasses
     {
         private DateTime dateTime;
 
+        /// <summary>
+        /// This object's value as a conventional DateTime object
+        /// </summary>
         public DateTime DateTime
         {
             get
@@ -19,6 +22,9 @@ namespace Luna.DataClasses
             }
         }
 
+        /// <summary>
+        /// The current time as a LunaDateTime object
+        /// </summary>
         public static LunaDateTime Now
         {
             get
@@ -29,6 +35,9 @@ namespace Luna.DataClasses
             }
         }
 
+        /// <summary>
+        /// Creates a LunaDateTime from the given DateTime object
+        /// </summary>
         public static LunaDateTime FromDateTime(DateTime dateTime)
         {
             LunaDateTime lunaDateTime = new LunaDateTime();
@@ -36,19 +45,28 @@ namespace Luna.DataClasses
             return lunaDateTime;
         }
 
+        /// <summary>
+        /// This object's value in the form "dd/mm/yyyy hh:mm:ss"
+        /// </summary>
         public string ShortDisplay
         {
             get { return $"{dateTime.ToShortDateString()} {dateTime.ToShortTimeString()}:{dateTime.Second}"; }
         }
 
+        /// <summary>
+        /// This objects value in the form "dd-mm-yyyy hh-mm-ss"
+        /// </summary>
         public string ShortDisplayAlt
         {
             get { return ShortDisplay.Replace('/', '-').Replace(':', '-'); }
         }
 
+        /// <summary>
+        /// This object's value in the form "dd <Month> yyyy, hh:mm:ss"
+        /// </summary>
         public string LongDisplay
         {
-            get { return dateTime.ToLongDateString(); }
+            get { return $"{dateTime.ToLongDateString()}, {dateTime.ToShortTimeString()}:{dateTime.Second}"; }
         }
     }
 }

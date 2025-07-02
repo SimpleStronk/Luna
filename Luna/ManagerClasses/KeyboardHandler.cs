@@ -4,7 +4,8 @@ using SharpDX.MediaFoundation;
 
 namespace Luna.ManagerClasses
 {
-    //This class was stolen from a previous project I did, originally I believe from a StackOverflow response
+    // This class was stolen from a previous project I did, originally I believe from a StackOverflow response.
+    // Since then, the class has been heavily modified and improved.
     internal class KeyboardHandler
     {
         static KeyboardState keyboard, oldKeyboard;
@@ -16,11 +17,16 @@ namespace Luna.ManagerClasses
         {
             Keys[] keys = keyboard.GetPressedKeys();
 
+            // Is the current key still being pressed? (I.e. holding a specific key down)
             if (Array.IndexOf(keys, currentKey) > -1)
             {
+                // Only allow an output if keyTimer has elapsed
                 if (keyTimer < 0)
                 {
+                    // Reset keyTimer
                     keyTimer = keypressPersistentDelay;
+
+                    // Outputs the character of the current key (or 0 if not pressed) and whether or not it is currently pressed
                     (char output, bool result) = TestKey(currentKey.GetValueOrDefault(), false);
 
                     if (result) { key = output; return true; }
@@ -28,12 +34,14 @@ namespace Luna.ManagerClasses
             }
             else
             {
+                // Elapse keyTimer
                 keyTimer = -1;
                 currentKey = null;
             }
 
             foreach (Keys k in keys)
             {
+                // Outputs the character of the current key and whether or not it is currently pressed (and wasn't during the previous frame
                 (char output, bool result) = TestKey(k, true);
 
                 if (result) { key = output; currentKey = k; keyTimer = keypressInitialDelay; return true; }
@@ -44,6 +52,12 @@ namespace Luna.ManagerClasses
             return false;
         }
 
+        /// <summary>
+        /// Tests the given key to see whether it is pressed
+        /// </summary>
+        /// <param name="k">Key to test</param>
+        /// <param name="firstFrameTest">If true, tests specifically for a new keypress</param>
+        /// <returns>A tuple representing the character of the current key (or 0 if not pressed) and whether the key is pressed</returns>
         private static (char key, bool result) TestKey(Keys k, bool firstFrameTest)
         {
             
@@ -131,41 +145,62 @@ namespace Luna.ManagerClasses
             return ((char)0, false);
         }
 
+        /// <summary>
+        /// Checks the ASCII value of the given character to see if it is numeric
+        /// </summary>
         public static bool IsNumber(char x)
         {
             if (x >= 48 && x <= 57) return true;
             return false;
         }
 
+        /// <summary>
+        /// Checks the ASCII value of the given character to see if it is numeric or a point
+        /// </summary>
         public static bool IsNumberOrPoint(char x)
         {
             if ((x >= 48 && x <= 57) || x == '.') return true;
             return false;
         }
 
+        /// <summary>
+        /// Checks the ASCII value of the given character to see if it is alphabetic
+        /// </summary>
+        /// <param name="x"></param>
+        /// <returns></returns>
         public static bool IsAlphabet(char x)
         {
             if (((int)x >= 65 && (int)x <= 122) || (x == ' ')) return true;
             return false;
         }
 
+        /// <summary>
+        /// Returns <c>true</c> if and only if the specified key is pressed, but wasn't during the previous frame
+        /// </summary>
         public static bool IsKeyJustPressed(Keys key)
         {
             return keyboard.IsKeyDown(key) && oldKeyboard.IsKeyUp(key);
         }
 
-        //To be called from the program's main PreUpdate
+        /// <summary>Captures the current KeyboardState</summary>
+        /// <remarks>To be called from the program's main PreUpdate</remarks>
         public static void SetKeyboard()
         {
             keyboard = Keyboard.GetState();
         }
 
-        //To be called from the program's main PostUpdate
+        /// <summary>
+        /// Sets KeyboardHandler's <c>oldKeyboard</c> to be the current Keyboard state, for inter-frame comparison
+        /// </summary>
+        /// <remarks>To be called from the program's main PostUpdate</remarks>
         public static void SetOldKeyboard()
         {
             oldKeyboard = Keyboard.GetState();
         }
 
+        /// <summary>
+        /// Steps forward the timer keeping track of the current keypress
+        /// </summary>
         public static void IncrementTime(float deltaTime)
         {
             keyTimer -= deltaTime;

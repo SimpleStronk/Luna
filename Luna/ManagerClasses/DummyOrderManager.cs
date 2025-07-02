@@ -20,33 +20,48 @@ namespace Luna.ManagerClasses
             return orders;
         }
 
+        /// <summary>
+        /// Adds the given object to this object's list of Orders
+        /// </summary>
         public override void AddOrder(Order order)
         {
             Console.WriteLine("Adding order to list...");
             updateOrders();
         }
 
+        /// <summary>
+        /// Removes the given order from this object's list of orders
+        /// </summary>
         public override void RemoveOrder(OrderID order)
         {
             Console.WriteLine("Removing order from list...");
             updateOrders();
         }
 
+        /// <summary>
+        /// Loads orders into this object
+        /// </summary>
+        /// <param name="orderLoader">IOrderLoader object to use to load the orders</param>
         public override void LoadOrders(IOrderLoader orderLoader)
         {
             Console.WriteLine("Loading recent orders...");
             orders = orderLoader.LoadOrders();
         }
 
+        /// <summary>
+        /// Calls the given Action when this object's list of orders is updated
+        /// </summary>
+        /// <param name="updateOrdersCallback">Action to be called</param>
         public override void SetUpdateCallback(Action<List<Order>> updateOrdersCallback)
         {
             this.updateOrdersCallback = updateOrdersCallback;
         }
 
+        /// <summary>
+        /// Calls <c>updateOrdersCallback</c> to notify listeners that orders have changed
+        /// </summary>
         private void updateOrders()
         {
-            if (updateOrdersCallback == null) return;
-
             Console.WriteLine("Updating Orders...");
             updateOrdersCallback?.Invoke(orders);
         }

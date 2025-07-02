@@ -15,6 +15,10 @@ namespace Luna.ManagerClasses
         DummyOrderSaver orderSaver;
         List<Order> orders;
 
+        /// <summary>
+        /// Sets up the entire system of Orders, Products and Customers. Currently showing some demo values
+        /// as the system is not yet in a completed state
+        /// </summary>
         public SystemManager()
         {
             productLoader = new DummyProductLoader();

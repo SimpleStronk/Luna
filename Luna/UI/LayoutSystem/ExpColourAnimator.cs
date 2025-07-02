@@ -16,6 +16,7 @@ namespace Luna.UI.LayoutSystem
         {
             currentColour += (targetColour - currentColour) / dampingFactor;
 
+            // Do onTransitionAction if there is anything to call
             if (GetColour() == Colour.ToColor(targetColour) && onTransitionAction != null)
             {
                 onTransitionAction.Invoke();
@@ -23,27 +24,44 @@ namespace Luna.UI.LayoutSystem
             }
         }
 
+        /// <summary>
+        /// Sets the tarhet colour of the ColourAnimator
+        /// </summary>
         public void SetColour(Color colour)
         {
+            // Convert given Color to custom Colour object
             targetColour = Colour.FromColor(colour);
         }
 
+        /// <summary>
+        /// Changes the colour of this ColourAnimator immediately to the given colour
+        /// </summary>
         public void ForceColour(Color colour)
         {
             currentColour = targetColour = Colour.FromColor(colour);
         }
 
+        /// <summary>
+        /// Gets the current colour of this ColourAnimator
+        /// </summary>
         public Color GetColour()
         {
             return Colour.ToColor(currentColour);
         }
 
-        // NOTE - THIS IS CURRENTLY PRONE TO EXPERIENCING ISSUES IF ANOTHER TRANSITION IS TRIGGERED BEFORE TARGET IS REACHED
+        /// <summary>
+        /// Have the given action be called when the current trantition is completed
+        /// </summary>
+        /// <remarks>Will experience issues if another transition is triggered before target is reached</remarks>
+        /// <param name="e">Action to be called</param>
         public void OnTransitionAction(Action e)
         {
             onTransitionAction += e;
         }
 
+        /// <summary>
+        /// Custom Colour Struct to allow easier manipulation of colours
+        /// </summary>
         struct Colour
         {
             float r, g, b, a;

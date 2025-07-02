@@ -25,6 +25,9 @@ namespace Luna.ManagerClasses
             }
         }
 
+        /// <summary>
+        /// The distance the mouse has travelled between the previous frame and this frame
+        /// </summary>
         public static Vector2 DeltaPosition
         {
             get
@@ -33,6 +36,9 @@ namespace Luna.ManagerClasses
             }
         }
 
+        /// <summary>
+        /// Tests whether the specified mouse button was not clicked during the previous frame and now is
+        /// </summary>
         public static bool IsJustClicked(MouseButton button)
         {
             ButtonState buttonState, buttonStateLast;
@@ -44,6 +50,9 @@ namespace Luna.ManagerClasses
             return justClicked;
         }
 
+        /// <summary>
+        /// Tests whether the specified mouse button was clicked during the previous frame and now isn't
+        /// </summary>
         public static bool IsJustUnclicked(MouseButton button)
         {
             ButtonState buttonState, buttonStateLast;

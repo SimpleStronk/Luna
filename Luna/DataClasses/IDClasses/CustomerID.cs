@@ -9,9 +9,13 @@ namespace Luna.DataClasses.IDClasses
 
         public int GetID()
         {
+            CreateSequential();
             return id;
         }
 
+        ///<summary>
+        /// Creates a new CustomerID object with the next available internal ID value
+        /// </summary>
         public static CustomerID CreateSequential()
         {
             CustomerID customerId = new CustomerID();

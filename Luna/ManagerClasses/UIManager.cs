@@ -19,7 +19,6 @@ namespace Luna.ManagerClasses
         private SystemManager systemManager;
 
         private UIComponent rootComponent;
-        //private List<UIComponent> overlayComponents;
         private UIComponent mainWindowContainer;
         private UIComponent windowControlsPanel, windowControlsParentTop;
         private (Action alertFocus, Action alertUnfocus, int priority) focusedComponent;
@@ -38,6 +37,9 @@ namespace Luna.ManagerClasses
         private TopBarBlock topBarBlock;
         UIComponent currentWindow;
 
+        /// <summary>
+        /// Generates and populates the permanent UI for Luna and sets up interactions for UI elements
+        /// </summary>
         public UIManager(GameWindow window, Action quitAction, GraphicsDevice graphicsDevice, SystemManager systemManager)
         {
             this.systemManager = systemManager;
@@ -45,13 +47,17 @@ namespace Luna.ManagerClasses
             this.quitAction = quitAction;
             pixelTexture = GraphicsHelper.GeneratePixelTexture();
 
+            // The UIComponent which all others will be child objects of
             rootComponent = SetupRootComponent();
 
+            // The UIComponent which will contain the minimise, maximise and quit buttons if the window is
+            // set to borderless
             windowControlsPanel = SetupWindowControlsPanel();
 
             if (window.IsBorderless) AddWindowControls();
             windowBorderless = window.IsBorderless;
 
+            // The header bar containing the Luna logo, Dashboard, Orders, Products and About buttons
             topBarBlock = uiFactory.CreateTopBar();
             UIComponent topBar = topBarBlock.Root;
             topBarBlock.Orders.Root.OnClick(() => { SetMainWindowState(MainWindowState.Orders); } );
@@ -59,6 +65,7 @@ namespace Luna.ManagerClasses
             topBarBlock.Products.Root.OnClick(() => SetMainWindowState(MainWindowState.Products));
             topBarBlock.About.Root.OnClick(() => { YesBlock about = uiFactory.CreateAboutPage(); about.Root.ForceTransparent(); AddOverlay(about.Root); about.Yes.OnClick(about.Root.Destroy); });
 
+            //The UIComponent which will be the parent to the Dashboard, Orders, or Products window
             mainWindowContainer = new BlankUI(UITheme.ColorType.Placeholder);
             mainWindowContainer.SetLayout(new Layout()
             {
@@ -66,21 +73,23 @@ namespace Luna.ManagerClasses
                 LayoutHeight = Sizing.Grow(1),
             });
 
+            // Create and setup the Dashboard window
             UIComponent dashboard = SetupDashboard(uiFactory.CreateDashboard());
 
+            // Acknowledge Dashboard as the current window, and populate the main window with it
             currentWindow = dashboard;
             HighlightTopBar(MainWindowState.Dashboard);
-
             mainWindowContainer.AddChild(dashboard);
 
-            rootComponent.AddChild(topBar);
-            rootComponent.AddChild(mainWindowContainer);
+            rootComponent.AddChild(topBar, mainWindowContainer);
 
             rootComponent.AddChild(windowControlsPanel);
 
             RecalculatePriority();
+            // Set the callback to work out which UIComponents to give priority to based on if they're hovered and their layout order
             rootComponent.SetCheckFocusCallback(CheckFocus);
 
+            // Setup LUIVA - the layout engine behind all the UIComponents
             luiva = new LUIVA();
             luiva.SetRootLayout(rootComponent);
             luiva.SetDisplayDimensions(graphicsDevice.Viewport.Width, graphicsDevice.Viewport.Height);
@@ -111,9 +120,13 @@ namespace Luna.ManagerClasses
 
         private void CheckFocus(Action alertFocus, Action alertUnfocus, int priority)
         {
+            // Higher priority means we need to consider a new UIComponent
             if (priority > focusedComponent.priority)
             {
+                // Alert the old component that it's not focused anymore
                 if (focusedComponent.alertUnfocus != null) focusedComponent.alertUnfocus();
+
+                // Update focusedComponent so that it can be informed that it's focused, or alerted when it's unfocused
                 focusedComponent = (alertFocus, alertUnfocus, priority);
             }
         }
@@ -134,9 +147,11 @@ namespace Luna.ManagerClasses
 
             RecalculatePriority();
             luiva.CalculateLayout();
+            // Unfocus the current thing so we can re-test for the correct component
             focusedComponent.alertUnfocus?.Invoke();
             focusedComponent = (null, null, -1);
             rootComponent.PreUpdate();
+            // Tell newly focused object that it's focused
             focusedComponent.alertFocus?.Invoke();
         }
 
@@ -147,6 +162,10 @@ namespace Luna.ManagerClasses
             MouseHandler.SetOldMouse();
         }
 
+        /// <summary>
+        /// Saves, and returns the system path of, a texture imported via a TextureImporter structure
+        /// </summary>
+        /// <param name="texture">The texture to load</param>
         private string ImportTextureAction(Texture2D texture)
         {
             Console.WriteLine("Importing Texture!");
@@ -158,11 +177,6 @@ namespace Luna.ManagerClasses
             texture.SaveAsPng(s, texture.Width, texture.Height);
             s.Close();
             return filePath;
-        }
-
-        private void CancelImportAction()
-        {
-            //overlayComponent.Visible = false;
         }
 
         private void AddWindowControls()
@@ -301,16 +315,25 @@ namespace Luna.ManagerClasses
 
         private UIComponent SetupProductCreator(ProductCreator productCreator)
         {
+            // Create an image importer block when SelectIcon is clicked
             productCreator.SelectIcon.OnClick(() => {
                 Texture2D tex = IOManager.LoadImageFromDialog();
                 if (tex == null) return;
 
-                YesNoBlock imageImporter = uiFactory.CreateImageImporter(new LTexture2D(tex), (Texture2D t) => { productCreator.Icon.Texture = new LTexture2D(IOManager.LoadImageFromFile(ImportTextureAction(t))); }, CancelImportAction);
+                // Creates an image importer UI block for processing tex, assigns the action to be
+                // performed when accepted, and the action to be performed when rejected (destruction
+                // of the block is handled within the function, so there is no need to assign any
+                // further function here)
+                YesNoBlock imageImporter = uiFactory.CreateImageImporter(new LTexture2D(tex), (Texture2D t) => { productCreator.Icon.Texture = new LTexture2D(IOManager.LoadImageFromFile(ImportTextureAction(t))); }, () => { });
+                
+                // Force imageImporter and all child components to become transparent, so they will animate
+                // to the theme colours
                 imageImporter.Root.ForceTransparent();
                 AddOverlay(imageImporter.Root);
             });
+
+            // Create a new product when OKButton is clicked
             productCreator.OKButton.OnClick(() => {
-                productCreator.Root.Destroy();
                 Product product = new Product().SetProductID(ProductID.CreateSequential()).SetName(productCreator.Name.Text).SetCost(float.Parse(productCreator.Cost.Text));
                 ProductManager.AddProduct(product);
                 Console.WriteLine("Attempted to create a product with name: " + productCreator.Name.Text + ", cost " + productCreator.Cost.Text);
@@ -318,8 +341,13 @@ namespace Luna.ManagerClasses
             return productCreator.Root;
         }
 
+        /// <summary>
+        /// Adds the given UIComponent to the root in front of everything else
+        /// </summary>
+        /// <param name="overlayUI">the UIComponent to add as an overlay</param>
         private void AddOverlay(UIComponent overlayUI)
         {
+            // Overlay a shadow to visually separate overlayUI from background elements
             BlankUI overlayShadow = new BlankUI(UITheme.ColorType.Shadow);
             overlayShadow.SetLayout(new Layout()
             {
@@ -327,22 +355,39 @@ namespace Luna.ManagerClasses
                 VerticalAlignment = Alignment.Middle,
                 LayoutWidth = Sizing.Grow(1),
                 LayoutHeight = Sizing.Grow(1),
+                // Separate from normal LUIVA layout
                 Inline = false
             });
 
             overlayShadow.AddChild(overlayUI);
+
+            // Force shadow to be transparent so it can animate to its normal colour
             overlayShadow.ForceTransparent();
-            overlayUI.OnDestroy(() => { overlayShadow.Visible = false; overlayShadow.ColourAnimator.SetColour(new Color(0, 0, 0, 0)); overlayShadow.ColourAnimator.OnTransitionAction(() => { rootComponent.RemoveChild(overlayShadow); }); });
+            overlayUI.OnDestroy(() => {
+                overlayShadow.Visible = false;
+                // Animate shadow to transparent
+                overlayShadow.ColourAnimator.SetColour(new Color(0, 0, 0, 0));
+                // Destroy shadow when the transition is complete
+                overlayShadow.ColourAnimator.OnTransitionAction(() => { rootComponent.RemoveChild(overlayShadow); }); });
 
             rootComponent.AddChild(overlayShadow);
         }
 
+        /// <summary>
+        /// Swaps out the current window with the specified window, by means of a fade transition
+        /// </summary>
+        /// <param name="newWindow">The new window to fade to</param>
         private void InitiateFadeTransition(UIComponent newWindow)
         {
             mainWindowContainer.AddChild(newWindow);
+            // Destroy old window when the transition has completed
             newWindow.ColourAnimator.OnTransitionAction(() => { mainWindowContainer.RemoveChild(currentWindow); currentWindow = newWindow; });
         }
 
+        /// <summary>
+        /// Makes sure the right top-bar button is highlighted for the current MainWindowState
+        /// </summary>
+        /// <param name="mainWindowState">Which window is currently occupying the main window container</param>
         private void HighlightTopBar(MainWindowState mainWindowState)
         {
             switch (mainWindowState)
@@ -371,12 +416,20 @@ namespace Luna.ManagerClasses
             }
         }
 
+        /// <summary>
+        /// Quickly sets the ColourType of the given TextButton to the given value
+        /// </summary>
+        /// <param name="button">The button to change</param>
+        /// <param name="colorType">The colour type to change to</param>
         private void SetButtonColourType(TextButton button, UITheme.ColorType colorType)
         {
             button.Root.SetTheme(new UITheme() { ColourType = colorType });
             button.Label.SetTheme(new UITheme() { ColourType = colorType });
         }
 
+        /// <summary>
+        /// Gives every UIComponent the means to change the GraphicsDevice's ScissorRectangle, for clipped UIComponents
+        /// </summary>
         public void SetUpdateScissorRectangleAction(GraphicsDevice graphicsDevice)
         {
             UIComponent.SetUpdateScissorRectangleAction((Rectangle r) => { graphicsDevice.ScissorRectangle = r; });
