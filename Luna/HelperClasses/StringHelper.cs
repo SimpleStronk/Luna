@@ -1,5 +1,6 @@
 using System;
 using FontStashSharp;
+using Luna.UI.InputFormat;
 using Microsoft.VisualBasic.ApplicationServices;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -7,6 +8,12 @@ namespace Luna.HelperClasses
 {
     internal class StringHelper
     {
+        private static AlphanumericFormat alphanumericFormat = new AlphanumericFormat();
+        private static CentiDecimalFormat centidecimalFormat = new CentiDecimalFormat();
+        private static DecimalFormat decimalFormat = new DecimalFormat();
+        private static NumericFormat numericFormat = new NumericFormat();
+        private static UnformattedFormat unformattedFormat = new UnformattedFormat();
+
         /// <summary>
         /// Cuts the given text into lines
         /// </summary>
@@ -99,6 +106,31 @@ namespace Luna.HelperClasses
             }
 
             return workingText;
+        }
+
+        public static AlphanumericFormat GetAlphanumericFormat()
+        {
+            return alphanumericFormat;
+        }
+
+        public static CentiDecimalFormat GetCentiDecimalFormat()
+        {
+            return centidecimalFormat;
+        }
+
+        public static DecimalFormat GetDecimalFormat()
+        {
+            return decimalFormat;
+        }
+
+        public static NumericFormat GetNumericFormat()
+        {
+            return numericFormat;
+        }
+
+        public static UnformattedFormat GetUnformattedFormat()
+        {
+            return unformattedFormat;
         }
     }
 }

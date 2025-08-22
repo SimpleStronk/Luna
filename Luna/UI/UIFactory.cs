@@ -713,7 +713,7 @@ namespace Luna.UI
 
             TextInput textInput = new TextInput();
             textInput.SetLayout(new Layout() { LayoutWidth = Sizing.Grow(1), LayoutHeight = Sizing.Wrap() });
-            textInput.InputType = TextInput.InputFormat.CentiDecimal;
+            textInput.SetInputFormat(StringHelper.GetCentiDecimalFormat());
             textInput.Prefix = "£";
             textInput.Placeholder = "Monetary Value";
 
@@ -906,7 +906,7 @@ namespace Luna.UI
             });
             Label costIndicator = new Label("Cost", GraphicsHelper.GetBoldFontSystem(), GraphicsHelper.GetDefaultFontSize(), UITheme.ColorType.Background);
             TextInput costInput = new TextInput();
-            costInput.InputType = TextInput.InputFormat.CentiDecimal;
+            costInput.SetInputFormat(StringHelper.GetCentiDecimalFormat());
             costInput.Prefix = "£";
             costInput.SetLayout(new Layout()
             {

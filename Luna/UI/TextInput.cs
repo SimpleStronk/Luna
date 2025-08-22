@@ -1,9 +1,8 @@
 using System;
 using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Windows.Forms.Design;
 using Luna.HelperClasses;
 using Luna.ManagerClasses;
+using Luna.UI.InputFormat;
 using Luna.UI.LayoutSystem;
 using Microsoft.Xna.Framework.Input;
 using static Luna.UI.LayoutSystem.LUIVA;
@@ -20,14 +19,14 @@ namespace Luna.UI
         private bool multiline = false;
         private int maxCharacters = 30;
         private (int character, int line) caretIndex;
-        public enum InputFormat { Numeric, Decimal, CentiDecimal, Alphanumeric, All };
-        private InputFormat inputType = InputFormat.All;
         private string prefix, suffix, placeholder;
+        private IInputFormat inputFormat;
 
         private Action<(int, int)> onCaretChanged;
 
         public TextInput() : base(UITheme.ColorType.Background)
         {
+            inputFormat = StringHelper.GetUnformattedFormat();
             overrideTheme.ColourType = UITheme.ColorType.Background;
             layout.Padding = new Tetra(2);
 
@@ -132,39 +131,7 @@ namespace Luna.UI
         {
             if (editingText.Length >= maxCharacters) return;
 
-            switch (inputType)
-            {
-                // Only allow Alphanumeric characters
-                case InputFormat.Alphanumeric:
-                {
-                    if (!KeyboardHandler.IsAlphabet(c) && !KeyboardHandler.IsNumber(c) && c != '\n') return;
-                    break;
-                }
-                // Only allow decimal input
-                case InputFormat.Decimal:
-                {
-                    if (!KeyboardHandler.IsNumberOrPoint(c)) return;
-                    break;
-                }
-                // Only allow decimal input with at most 2 characters after the point
-                case InputFormat.CentiDecimal:
-                {
-                    if (!KeyboardHandler.IsNumberOrPoint(c)) return;
-
-                    if (editingText.Split('.').Length > 1)
-                    {
-                        if (c == '.') return;
-                        if (editingText.Split('.')[1].Length > 1) return;
-                    }
-                    break;
-                }
-                // Only allow numeric input
-                case InputFormat.Numeric:
-                {
-                    if (!KeyboardHandler.IsNumber(c)) return;
-                    break;
-                }
-            }
+            if (!inputFormat.isInputValid(editingText, c)) return;
 
             editingText = UpToCaret + c + PostCaret;
             MoveCaretRight(true, c == '\n');
@@ -241,10 +208,9 @@ namespace Luna.UI
             set { maxCharacters = value; }
         }
 
-        public InputFormat InputType
+        public void SetInputFormat(IInputFormat inputFormat)
         {
-            get { return inputType; }
-            set { inputType = value; }
+            this.inputFormat = inputFormat;
         }
 
         /// <summary>
