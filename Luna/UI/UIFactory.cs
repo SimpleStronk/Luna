@@ -297,8 +297,13 @@ namespace Luna.UI
         }
         #endregion
 
+        /// <summary>
+        /// Creates a UIComponent containing window controls and returns an object indexing the most important
+        /// </summary>
+        /// <returns>A WindowControls object containing Minimise, Maximise and Quit buttons</returns>
         public WindowControls CreateWindowControls()
         {
+            // Create a top bar for the window controls to sit within
             BlankUI windowControlsParentTop = new BlankUI(UITheme.ColorType.Placeholder);
             windowControlsParentTop.SetLayout(new Layout()
             {
@@ -309,6 +314,7 @@ namespace Luna.UI
             });
             windowControlsParentTop.FocusIgnore = true;
 
+            // Minimise button
             Button minimise = new Button(UITheme.ColorType.Background);
             minimise.SetLayout(new Layout()
             {
@@ -322,6 +328,7 @@ namespace Luna.UI
             Label minimiseLabel = new Label("_", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Background);
             minimise.AddChild(minimiseLabel);
 
+            // Maximise button
             Button maximise = new Button(UITheme.ColorType.Background);
             maximise.SetLayout(new Layout()
             {
@@ -335,6 +342,7 @@ namespace Luna.UI
             Label maximiseLabel = new Label("O", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Background);
             maximise.AddChild(maximiseLabel);
 
+            // Quit button
             Button quit = new Button(UITheme.ColorType.Background);
             quit.SetLayout(new Layout()
             {
@@ -345,8 +353,8 @@ namespace Luna.UI
             });
             quit.SetTheme(new UITheme() { ColourType = UITheme.ColorType.Emergency, Rounded = false });
 
-            Label quitButton = new Label("X", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Emergency);
-            quit.AddChild(quitButton);
+            Label quitLabel = new Label("X", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Emergency);
+            quit.AddChild(quitLabel);
 
             windowControlsParentTop.AddChild(minimise);
             windowControlsParentTop.AddChild(maximise);
@@ -355,6 +363,11 @@ namespace Luna.UI
             return new WindowControls { Root = windowControlsParentTop, Minimise = minimise, Maximise = maximise, Quit = quit };
         }
 
+        /// <summary>
+        /// Creates a UIComponent showing information about a particular order
+        /// </summary>
+        /// <param name="order">The Order object to turn into visual data</param>
+        /// <returns>An OrderBlock object containing the main UIComponents which may need to be indexed</returns>
         public OrderBlock CreateOrder(Order order)
         {
             //
@@ -367,6 +380,7 @@ namespace Luna.UI
             //  ├─Product 2
             //
 
+            // Button which all subsequent UIComponents are child objects of
             Button root = new Button(UITheme.ColorType.Background);
             root.SetLayout(new Layout()
             {
@@ -377,6 +391,7 @@ namespace Luna.UI
                 LayoutAxis = LVector2.HORIZONTAL
             });
 
+            // Button containing the order title and product info UIComponents
             Button titleBox = new Button(UITheme.ColorType.Background);
             titleBox.SetLayout(new Layout()
             {
@@ -392,6 +407,7 @@ namespace Luna.UI
             Label title = new Label($"{CustomerManager.GetCustomerByID(order.GetCustomerID()).FullName}", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Background);
             Label productInfo = new Label(order.GetOrderStatus().ToString(), GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Background);
 
+            // Button containing the product title
             Button infoBox = new Button(UITheme.ColorType.Background);
             infoBox.SetLayout(new Layout()
             {
@@ -416,8 +432,16 @@ namespace Luna.UI
             return new OrderBlock() { Root = root };
         }
 
+        /// <summary>
+        /// Creates a UIComponent structure which facilitates converting a Texture2D into a usable image
+        /// </summary>
+        /// <param name="texture">Texture to process</param>
+        /// <param name="importAction">What to do when the OK button is pressed</param>
+        /// <param name="cancelAction">What to do when the Cancel button is pressed</param>
+        /// <returns></returns>
         public YesNoBlock CreateImageImporter(LTexture2D texture, Action<Texture2D> importAction, Action cancelAction)
         {
+            // Base UI component which contains all others as child elements
             Button panel = new Button(UITheme.ColorType.Background);
             panel.SetLayout(new Layout()
             {
@@ -430,6 +454,7 @@ namespace Luna.UI
             });
             panel.FocusIgnore = true;
 
+            // Texture preview component
             UIDraggableTexture preview = new UIDraggableTexture(texture);
             preview.SetLayout(new Layout()
             {
@@ -440,6 +465,7 @@ namespace Luna.UI
             preview.FocusIgnore = false;
             preview.RenderDefaultRect = false;
 
+            // Button containing the yes and no buttons, i.e. 'yes, import this' or 'no, go home'
             Button buttonContainer = new Button(UITheme.ColorType.Background);
             buttonContainer.SetLayout(new Layout()
             {
@@ -489,6 +515,10 @@ namespace Luna.UI
             return new YesNoBlock() { Root = panel, Yes = yesButton, No = noButton };
         }
 
+        /// <summary>
+        /// Creates a UIComponent for the top bar of the program, shows navigation and the program name
+        /// </summary>
+        /// <returns>A TopBarBlock object containing the Root, along with Dashboard, Orders, Products and About buttons</returns>
         public TopBarBlock CreateTopBar()
         {
             BlankUI root = new BlankUI(UITheme.ColorType.Main);
@@ -500,38 +530,46 @@ namespace Luna.UI
                 Spacing = 5
             });
 
+            // UIComponent containing the program logo
             BlankUI logoContainer = new BlankUI(UITheme.ColorType.Main);
             logoContainer.SetLayout(TopBarButtonLayout);
             logoContainer.SetLayout(new Layout() { LayoutWidth = Sizing.Fixed(150), HorizontalAlignment = Alignment.Begin });
 
             Label logo = new Label("LUNΛ", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Main);
 
+            // Separates the logo from other buttons
             BlankUI separator = new BlankUI(UITheme.ColorType.Separator);
             separator.SetLayout(SeparatorVerticalLayout);
 
+            // Dashboard navigation button
             Button dashboardButton = new Button(UITheme.ColorType.Main);
             dashboardButton.SetLayout(TopBarButtonLayout);
 
             Label dashboardLabel = new Label("Dashboard", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Main);
 
+            // Orders navigation button
             Button ordersButton = new Button(UITheme.ColorType.Main);
             ordersButton.SetLayout(TopBarButtonLayout);
 
             Label ordersLabel = new Label("Orders", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Main);
 
+            // Products navigation button
             Button productsButton = new Button(UITheme.ColorType.Main);
             productsButton.SetLayout(TopBarButtonLayout);
 
             Label productsLabel = new Label("Products", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Main);
 
+            // About navigation button
             Button aboutButton = new Button(UITheme.ColorType.Main);
             aboutButton.SetLayout(TopBarButtonLayout);
 
             Label aboutLabel = new Label("About", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Main);
 
+            // Visual separator element, sits below the TopBar component
             BlankUI topBarSeparator = new BlankUI(UITheme.ColorType.Background);
             topBarSeparator.SetLayout(SeparatorHorizontalLayout);
 
+            // Separator UIComponent, expands between navigation buttons and About button to align the latter to the right
             BlankUI topBarSpacer = new BlankUI(UITheme.ColorType.Placeholder);
             topBarSpacer.SetLayout(new Layout()
             {
@@ -561,6 +599,10 @@ namespace Luna.UI
             };
         }
 
+        /// <summary>
+        /// Creates the Dashboard page
+        /// </summary>
+        /// <returns>A DashboardBlock object indexing the LeftPanel and MainPanel</returns>
         public DashboardBlock CreateDashboard()
         {
             BlankUI mainPanel = new BlankUI(UITheme.ColorType.MainSoft);
@@ -600,6 +642,8 @@ namespace Luna.UI
                 Padding = new Tetra(10),
                 Spacing = 10
             });
+
+            // NGL, this is a bunch of temporary shit
 
             Button b1 = new Button(UITheme.ColorType.Background);
             b1.SetLayout(new Layout()
@@ -689,6 +733,10 @@ namespace Luna.UI
             return new DashboardBlock() { Root = mainPanel, LeftPanel = leftPanel, MainPanel = rightPanel };
         }
 
+        /// <summary>
+        /// Creates the Orders page
+        /// </summary>
+        /// <returns>An OrdersBlock object, indexing the root element</returns>
         public OrdersBlock CreateOrders()
         {
             BlankUI blank = new BlankUI(UITheme.ColorType.MainSoft);
@@ -711,6 +759,10 @@ namespace Luna.UI
             return new OrdersBlock() { Root = blank };
         }
 
+        /// <summary>
+        /// Creates the Products page
+        /// </summary>
+        /// <returns>A ProductsBlock object indexing the Root, along with the AddProducts button and the ProductsContainer</returns>
         public ProductsBlock CreateProducts()
         {
             BlankUI blank = new BlankUI(UITheme.ColorType.MainSoft);
@@ -772,6 +824,10 @@ namespace Luna.UI
             return new ProductsBlock() { Root = blank, AddProducts = addProduct, ProductsContainer = productsContainer };
         }
 
+        /// <summary>
+        /// Creates a ProductCreator dialogue
+        /// </summary>
+        /// <returns>A ProductCreator object indexing the Root, SelectIcon, OK and Close buttons, along with Name and Cost inputs and the Icon</returns>
         public ProductCreator CreateProductCreator()
         {
             BlankUI root = new BlankUI(UITheme.ColorType.Background);
@@ -896,6 +952,10 @@ namespace Luna.UI
             return new ProductCreator { Root = root, SelectIcon = selectIcon, OKButton = ok, CloseButton = cancel, Name = nameInput, Cost = costInput, Icon = icon };
         }
 
+        /// <summary>
+        /// Creates a Product UIComponent
+        /// </summary>
+        /// <returns>A ProductBlock object indexing the Root, Name and Cost labels along with the Remove button</returns>
         public ProductBlock CreateProduct()
         {
             BlankUI root = new BlankUI(UITheme.ColorType.Background);
@@ -956,6 +1016,10 @@ namespace Luna.UI
             return new ProductBlock { Root = root, Name = nameLabel, Cost = costLabel, RemoveButton = removeButton };
         }
 
+        /// <summary>
+        /// Creates the About page
+        /// </summary>
+        /// <returns>A YesBlock object containing the Root and the OK button</returns>
         public YesBlock CreateAboutPage()
         {
             BlankUI root = new BlankUI(UITheme.ColorType.Background);

@@ -105,7 +105,10 @@ namespace Luna.UI.LayoutSystem
                         // The currently considered child element, with its size
                         ILayoutable element = elements.ElementAt(i);
                         int elementSize = (int)element.GetTransform().Size.GetComponent(axis);
-                        
+
+                        // If we're ignoring alignment, we don't want to change it at all
+                        if (parentAlignment == Alignment.Ignore) continue;
+
                         // Non-inline elements should be placed based on the starting position, rather than the current position
                         if (!element.GetLayout().Inline)
                         {
@@ -113,13 +116,10 @@ namespace Luna.UI.LayoutSystem
                             continue;
                         }
 
-                        // If alignment is being considered, place at the current position (taking into account scroll offset)
+                        // Place at the current position (taking into account scroll offset)
                         // and increment currentPosition
-                        if (parentAlignment != Alignment.Ignore)
-                        {
-                            element.GetTransform().SetPositionComponentValue(currentPosition + element.GetTransform().Parent.ScrollOffset.GetComponent(axis), axis);
-                            currentPosition += elementSize + parentSpacing;
-                        }
+                        element.GetTransform().SetPositionComponentValue(currentPosition + element.GetTransform().Parent.ScrollOffset.GetComponent(axis), axis);
+                        currentPosition += elementSize + parentSpacing;
                     }
                 }
                 // Seconday Axis Logic
@@ -142,26 +142,27 @@ namespace Luna.UI.LayoutSystem
                         switch (parentAlignment)
                         {
                             case Alignment.Begin:
-                            {
-                                position = parentPadding.X;
-                                break;
-                            }
+                                {
+                                    position = parentPadding.X;
+                                    break;
+                                }
                             case Alignment.Middle:
-                            {
-                                position = (int)(((float)parentSize / 2) - ((float)elementSize / 2));
-                                break;
-                            }
+                                {
+                                    position = (int)(((float)parentSize / 2) - ((float)elementSize / 2));
+                                    break;
+                                }
                             case Alignment.End:
-                            {
-                                position = (parentSize - elementSize) - (int)parentPadding.Y;
-                                break;
-                            }
+                                {
+                                    position = (parentSize - elementSize) - (int)parentPadding.Y;
+                                    break;
+                                }
                         }
 
-                        if (parentAlignment != Alignment.Ignore)
-                        {
-                            element.GetTransform().SetPositionComponentValue(position + element.GetTransform().Parent.ScrollOffset.GetComponent(axis), axis);
-                        }
+                        // If we're ignoring alignment, we don't want to change it at all
+                        if (parentAlignment == Alignment.Ignore) continue;
+                        
+                        // Place at the right position, taking into account scroll offset
+                        element.GetTransform().SetPositionComponentValue(position + element.GetTransform().Parent.ScrollOffset.GetComponent(axis), axis);
                     }
                 }
 
@@ -561,6 +562,8 @@ namespace Luna.UI.LayoutSystem
             private bool clipChildren = true;
             private bool inline = true;
 
+            // Records true whenever a particular property is changed, so that the layout can be updated by
+            // passing a different, updated object, and only the changed values overriding the original values
             private bool paddingChanged, layoutAxisChanged,
                 horizontalAlignmentChanged, verticalAlignmentChanged, imageFitModeChanged,
                 imageAlignmentChanged, layoutWidthChanged, LayoutHeightChanged, spacingChanged,
@@ -570,6 +573,9 @@ namespace Luna.UI.LayoutSystem
             {
                 alignment = new Alignment[2];
                 layoutSizing = new Sizing[2];
+
+                // Initialise horizontal and vertical sizing as otherwise errors happen
+                layoutSizing[0] = layoutSizing[1] = Sizing.Fixed(100);
             }
 
             public Tetra Padding
@@ -626,21 +632,13 @@ namespace Luna.UI.LayoutSystem
                 set { layoutSizing[LVector2.VERTICAL] = value; LayoutHeightChanged = true; }
             }
 
-            /// <summary>
-            /// 
-            /// </summary>
             /// <param name="axis">Use LVector2.HORIZONTAL or LVector2.VERTICAL</param>
-            /// <returns></returns>
             public Sizing GetSizingFromAxis(int axis)
             {
                 return layoutSizing[axis];
             }
 
-            /// <summary>
-            /// 
-            /// </summary>
             /// <param name="axis">Use LVector2.HORIZONTAL or LVector2.VERTICAL</param>
-            /// <returns></returns>
             public Alignment GetAlignmentFromAxis(int axis)
             {
                 return alignment[axis];
@@ -669,6 +667,9 @@ namespace Luna.UI.LayoutSystem
                 return 1 - axis;
             }
 
+            /// <summary>
+            /// Changes only the values of this object which have been updated in the given Layout object
+            /// </summary>
             public void UpdateLayout(Layout layout)
             {
                 if (layout.paddingChanged) padding = layout.padding;

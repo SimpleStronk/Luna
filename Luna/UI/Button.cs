@@ -16,6 +16,9 @@ namespace Luna.UI
         protected ButtonState buttonState = ButtonState.None;
         public enum VisualResponse { None, ColourChange };
 
+        /// <summary>
+        /// Creates a new Button with the given colour type, and a visual response
+        /// </summary>
         public Button(UITheme.ColorType colourType)
         {
             AddVisualResponse();
@@ -24,6 +27,9 @@ namespace Luna.UI
             Initialise();
         }
 
+        /// <summary>
+        /// Creates a new Button with the given colour type and the given visual response
+        /// </summary>
         public Button(VisualResponse visualResponse, UITheme.ColorType colourType)
         {
             if (visualResponse == VisualResponse.ColourChange) AddVisualResponse();
@@ -34,9 +40,11 @@ namespace Luna.UI
 
         protected override void Update()
         {
+            // Click logic
             if (hovered) if (IsJustClicked(MouseButton.Left)) SetClicked(true);
             if (clicked) if (IsJustUnclicked(MouseButton.Left)) { SetClicked(false); }
 
+            // Make sure button has the right colour type
             switch (buttonState)
             {
                 case ButtonState.None:
@@ -62,6 +70,9 @@ namespace Luna.UI
             //s.Draw
         }
 
+        /// <summary>
+        /// Link visual activity to actions happening to the button
+        /// </summary>
         protected void AddVisualResponse()
         {
             onHover += () => { if (clicked) return; buttonState = ButtonState.Hovered; colourAnimator.SetColour(overrideTheme.GetColourPalatte(cascadeTheme).HoveredColour); };
@@ -73,8 +84,11 @@ namespace Luna.UI
         private void SetClicked(bool clicked)
         {
             this.clicked = clicked;
+
+            // Give unclick response if mouse is up
             if (!clicked) { onUnclick?.Invoke(); return; }
 
+            // Don't give click response if not focused
             if (!focused) return;
 
             onClick?.Invoke();

@@ -47,8 +47,13 @@ namespace Luna.UI
             transform.OnResize(OnResize);
         }
 
+        /// <summary>
+        /// Called on all UIComponents before the main update function
+        /// </summary>
         public void PreUpdate()
         {
+            // Reports to an outside class if this object is hovered, if a deeper
+            // object is hovered then focus is updated to that later.
             CheckFocused(TestMouseCollision());
             transform.Update();
 
@@ -58,11 +63,14 @@ namespace Luna.UI
             }
         }
 
-
+        /// <summary>
+        /// Performs base update functionality on self and all child components recursively
+        /// </summary>
         public void BaseUpdate()
         {
             SyncChildren();
             transform.Padding = layout.Padding;
+
             if (focused) CheckScroll();
 
             if (!visible) { colourAnimator.SetColour(new Color(0, 0, 0, 0)); return; }
@@ -72,10 +80,17 @@ namespace Luna.UI
                 c.BaseUpdate();
             }
 
+            // Only set hovered if the mouse is over component AND no
+            // deeper components are hovered (I.E. this object has focus).
             SetHovered(TestMouseCollision() && focused);
+
+            //Virtual update function, overridden by derived classes
             Update();
         }
 
+        /// <summary>
+        /// Called on all UIComponents after the main update function
+        /// </summary>
         public void PostUpdate()
         {
             colourAnimator.Update();
@@ -86,8 +101,14 @@ namespace Luna.UI
             }
         }
 
+        /// <summary>
+        /// Default drawing behaviour of the UIComponent
+        /// </summary>
+        /// <param name="s"></param>
+        /// <exception cref="Exception"></exception>
         public void BaseDraw(SpriteBatch s)
         {
+            // Are we abiding by the scissor rectangle? If not, use root component's scissor rect.
             updateScissorRectangle(ignoreScissorRect ? GetRootRectangle() : CalculateScissorRectangle());
 
             if (renderDefaultRect)
@@ -96,6 +117,7 @@ namespace Luna.UI
 
                 (int tl, int tr, int bl, int br) = UITheme.GetCornerRadius(GetCorrectTheme(overrideTheme.CornerRadiusChanged), transform);
 
+                // If we can ignore the rounded corners, just ignore them
                 if (UITheme.GetCornerRadius(GetCorrectTheme(overrideTheme.CornerRadiusChanged), transform) == (0, 0, 0, 0) || !GetCorrectTheme(overrideTheme.RoundedChanged).Rounded)
                 {
                     s.Draw(pixelTexture, transform.GetGlobalRect(), new Rectangle(0, 0, 1, 1),
@@ -104,6 +126,7 @@ namespace Luna.UI
                 else
                 {
                     UITheme correctTheme = GetCorrectTheme(overrideTheme.CornerRadiusChanged);
+                    // Draw each rounded corner, only if it is rounded
                     if (tl > 0) s.Draw(UITheme.TopLeftTexture(correctTheme, transform), UITheme.TopLeftRect(correctTheme, transform), new Rectangle(0, 0, tl, tl), colourAnimator.GetColour(), 0, new Vector2(0, 0), SpriteEffects.None, 1);
                     if (tr > 0) s.Draw(UITheme.TopRightTexture(correctTheme, transform), UITheme.TopRightRect(correctTheme, transform), new Rectangle(tr, 0, tr, tr), colourAnimator.GetColour(), 0, new Vector2(0, 0), SpriteEffects.None, 1);
                     if (bl > 0) s.Draw(UITheme.BottomLeftTexture(correctTheme, transform), UITheme.BottomLeftRect(correctTheme, transform), new Rectangle(0, bl, bl, bl), colourAnimator.GetColour(), 0, new Vector2(0, 0), SpriteEffects.None, 1);
@@ -116,6 +139,7 @@ namespace Luna.UI
                 }
             }
             
+            // Virtual draw function, overridden in derived classes
             Draw(s);
 
             foreach (UIComponent c in children)
@@ -135,9 +159,14 @@ namespace Luna.UI
             return Rectangle.Intersect(CalculateScissorRectangle(), transform.GetGlobalRect()).Contains(MouseHandler.Position);
         }
 
+        /// <summary>
+        /// Recursively designates hierarchy priority in a tree-like fashion, where succeeding siblings have
+        /// greater priority than preceding siblings and all their children.
+        /// </summary>
         public int SetPriority(int p)
         {
             priority = p;
+
             int _priority = ++p;
 
             foreach (UIComponent c in children)
@@ -148,6 +177,10 @@ namespace Luna.UI
             return _priority;
         }
 
+        /// <summary>
+        /// Recursively intersects this UIComponent's rectangle with parent rectangles to calculate
+        /// appropriate scissor bounds
+        /// </summary>
         Rectangle CalculateScissorRectangle()
         {
             if (!layout.ClipChildren) return parent.CalculateScissorRectangle();
@@ -156,10 +189,13 @@ namespace Luna.UI
                 Rectangle.Intersect(transform.GetGlobalRect(), parent.CalculateScissorRectangle());
         }
 
+        /// <summary>
+        /// Get the bounds rectangle of the root component
+        /// </summary>
         Rectangle GetRootRectangle()
         {
             if (parent == null) return transform.GetGlobalRect();
-            else return parent.transform.GetGlobalRect();
+            else return parent.GetRootRectangle();
         }
 
         public void Destroy()
@@ -173,6 +209,9 @@ namespace Luna.UI
             this.onDestroy += onDestroy;
         }
 
+        /// <summary>
+        /// Check whether the scroll wheel, or page up/down keys have been used
+        /// </summary>
         private void CheckScroll()
         {
             if (!scrollable) { parent?.CheckScroll(); return; }
@@ -195,6 +234,10 @@ namespace Luna.UI
                 debugMode = value;
             }
         }
+
+        /// <summary>
+        /// Attach debug info to behaviour callbacks
+        /// </summary>
         private void SetDebugActions()
         {
             onHover += () => ConditionalDebugAction("Hover");
@@ -229,6 +272,10 @@ namespace Luna.UI
             this.focused = focused;
         }
 
+        /// <summary>
+        /// Recursively sets the CheckFocus callback of this and all children
+        /// </summary>
+        /// <param name="e"></param>
         public void SetCheckFocusCallback(Action<Action, Action, int> e)
         {
             checkFocusCallback = e;
@@ -258,6 +305,9 @@ namespace Luna.UI
             }
         }
 
+        /// <summary>
+        /// Unhover this and all child components
+        /// </summary>
         private void CascadeUnhover()
         {
             SetHovered(false);
@@ -296,6 +346,10 @@ namespace Luna.UI
             return overrideTheme;
         }
 
+        /// <summary>
+        /// Set the theme for this component and all child components
+        /// </summary>
+        /// <param name="cascadeTheme"></param>
         public void CascadeTheme(UITheme cascadeTheme)
         {
             if (cascadeTheme == null) return;
@@ -350,6 +404,10 @@ namespace Luna.UI
             }
         }
 
+        /// <summary>
+        /// Make sure all new child components have the same CheckFocus callback and cascade theme,
+        /// and clean up after all child objects pending termination
+        /// </summary>
         private void SyncChildren()
         {
             foreach (UIComponent c in childQueue)

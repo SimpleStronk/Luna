@@ -13,7 +13,6 @@ namespace Luna.UI
     internal class Label : UIComponent
     {
         string text;
-        string displayText;
         SpriteFont font;
 
         public Label(string text, SpriteFont font, UITheme.ColorType colourType)
@@ -21,9 +20,6 @@ namespace Luna.UI
             textObject = true;
             this.font = font;
             SetText(text);
-            // UITheme tmp = theme;
-            // tmp.ColourType = colourType;
-            // SetTheme(tmp);
             overrideTheme.ColourType = colourType;
             RenderDefaultRect = false;
             FocusIgnore = true;
@@ -37,18 +33,19 @@ namespace Luna.UI
 
         protected override void Update()
         {
-            displayText = DisplayText;
-
+            // If height isn't determined by LUIVA, keep the width and measure the height
             if (layout.LayoutHeight.ScalingMode == Sizing.Mode.Ignore)
             {
-                transform.Size = new LVector2(transform.Size.X, MeasureText(displayText).Y);
+                transform.Size = new LVector2(transform.Size.X, MeasureText(DisplayText).Y);
             }
         }
 
         protected override void Draw(SpriteBatch s)
         {
             Rectangle globalRect = GetTransform().GetGlobalRect();
-            s.DrawString(font, displayText, new Vector2(globalRect.X, globalRect.Y), overrideTheme.GetColourPalatte(cascadeTheme).TextColour);
+
+            // Draw text to screen
+            s.DrawString(font, DisplayText, new Vector2(globalRect.X, globalRect.Y), overrideTheme.GetColourPalatte(cascadeTheme).TextColour);
         }
 
         public override string GetTag()
@@ -68,6 +65,8 @@ namespace Luna.UI
         {
             string tmp = text;
 
+            // Blank characters affect the measured size of the string, so add full-height elements
+            // to make MeasureString acknowledge the whitespace
             if (tmp == "") tmp = "|";
             else if (tmp.Split('\n')[0] == "") tmp = "|" + text;
             else if (tmp.Split('\n').Last() == "") tmp = text + "|";

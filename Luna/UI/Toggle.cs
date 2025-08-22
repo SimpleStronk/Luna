@@ -15,6 +15,7 @@ namespace Luna.UI
 
         public Toggle(UITheme.ColorType colourType) : base(VisualResponse.ColourChange, colourType)
         {
+            // Initialise self layout
             SetLayout(new Layout()
             {
                 HorizontalAlignment = Alignment.Begin,
@@ -27,6 +28,7 @@ namespace Luna.UI
             onClick += () => { IsOn = !IsOn; };
             Initialise();
 
+            // The thing that contains the toggle indicator
             indicatorContainer = new BlankUI(UITheme.ColorType.Separator);
             indicatorContainer.SetLayout(new Layout()
             {
@@ -36,8 +38,9 @@ namespace Luna.UI
                 Padding = new Tetra(5)
             });
             indicatorContainer.SetTheme(new UITheme() { Rounded = true });
-            indicatorContainer.FocusIgnore = true;
+            indicatorContainer.FocusIgnore = true;      // We want the Toggle to capture mouse events
 
+            // The toggle indicator
             indicator = new BlankUI(UITheme.ColorType.MainSoft);
             indicator.SetLayout(new Layout()
             {
@@ -45,10 +48,11 @@ namespace Luna.UI
                 LayoutHeight = Sizing.Grow(1),
             });
             indicator.SetTheme(new UITheme(){ Rounded = true });
-            indicator.FocusIgnore = true;
+            indicator.FocusIgnore = true;               // We want the Toggle to capture mouse events
 
             indicatorContainer.AddChild(indicator);
 
+            // Create label
             label = new Label("", GraphicsHelper.GetDefaultFont(), colourType);
             label.SetText("Testing, testing, 123");
 

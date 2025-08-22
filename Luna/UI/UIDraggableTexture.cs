@@ -26,6 +26,7 @@ namespace Luna.UI
 
         protected override void Update()
         {
+            // Only allow drag along overflow axis
             if (dragging)
             {
                 if (fitAxis == LVector2.VERTICAL) manualTextureOffset += MouseHandler.DeltaPosition.X;
@@ -39,6 +40,7 @@ namespace Luna.UI
 
         private void DoDraggableCheck()
         {
+            // Leftmost possible offset is to the right
             if (maxTextureOffset >= 0) return;
 
             if (MouseHandler.IsJustClicked(MouseHandler.MouseButton.Left) && focused)

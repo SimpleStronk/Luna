@@ -5,6 +5,7 @@ using System.Windows.Forms.Design;
 using Luna.HelperClasses;
 using Luna.ManagerClasses;
 using Luna.UI.LayoutSystem;
+using Microsoft.Xna.Framework.Input;
 using static Luna.UI.LayoutSystem.LUIVA;
 
 namespace Luna.UI
@@ -30,6 +31,7 @@ namespace Luna.UI
             overrideTheme.ColourType = UITheme.ColorType.Background;
             layout.Padding = new Tetra(2);
 
+            // The panel inside the TextInput, remaining white and being drawn over the darker surrounding panel
             internalPanel = new BlankUI(UITheme.ColorType.Background);
             internalPanel.SetLayout(new Layout() { LayoutWidth = Sizing.Grow(1), LayoutHeight = Sizing.Wrap(), HorizontalAlignment = Alignment.Middle, VerticalAlignment = Alignment.Middle, Padding = new Tetra(10) });
             internalPanel.SetTheme(new UITheme() { CornerRadius = (8, 8, 8, 8), Rounded = true });
@@ -54,7 +56,7 @@ namespace Luna.UI
         {
             base.Update();
 
-            if ((MouseHandler.IsJustClicked(MouseHandler.MouseButton.Left) && !clicked) || KeyboardHandler.IsKeyJustPressed(Microsoft.Xna.Framework.Input.Keys.Enter))
+            if ((MouseHandler.IsJustClicked(MouseHandler.MouseButton.Left) && !clicked) || KeyboardHandler.IsKeyJustPressed(Keys.Enter))
             {
                 editing = false;
             }
@@ -67,6 +69,8 @@ namespace Luna.UI
             else
             {
                 caret.Visible = false;
+
+                // Show placeholder text if value empty
                 if (editingText == "") label.SetTheme(new UITheme() { ColourType = UITheme.ColorType.PlaceholderText });
                 label.SetText(DisplayText);
             }
@@ -75,51 +79,53 @@ namespace Luna.UI
         private void EditText()
         {
             char c;
-            if (KeyboardHandler.TryConvertKeyboardInput(out c))
+            if (!KeyboardHandler.TryConvertKeyboardInput(out c)) return;
+
+            switch (c)
             {
-                switch (c)
-                {
-                    case '\b':
+                case '\b':
                     {
                         RemoveCharacter();
                         break;
                     }
-                    case '\n':
+                case '\n':
                     {
                         if (multiline) AddCharacter('\n');
                         else editing = false;
                         break;
                     }
-                    // LEFT KEY
-                    case (char)0:
+                // LEFT KEY RETURNS 0 CHAR
+                case (char)0:
                     {
                         MoveCaretLeft();
                         break;
                     }
-                    // RIGHT KEY
-                    case (char)1:
+                // RIGHT KEY RETURNS 1 CHAR
+                case (char)1:
                     {
                         MoveCaretRight(false, false);
                         break;
                     }
-                    case (char)2:
+                // UP KEY RETURNS 2 CHAR
+                case (char)2:
                     {
                         // TODO - IMPLEMENT UP KEY
                         break;
                     }
-                    case (char)3:
+                // DOWN KEY RETURNS 3 CHAR
+                case (char)3:
                     {
                         // TODO - IMPLEMENT DOWN KEY
                         break;
                     }
-                    default:
+                default:
                     {
                         AddCharacter(c);
                         break;
                     }
-                }
-                label.SetText(editingText);
             }
+
+            label.SetText(editingText);
         }
 
         private void AddCharacter(char c)
@@ -128,16 +134,19 @@ namespace Luna.UI
 
             switch (inputType)
             {
+                // Only allow Alphanumeric characters
                 case InputFormat.Alphanumeric:
                 {
                     if (!KeyboardHandler.IsAlphabet(c) && !KeyboardHandler.IsNumber(c) && c != '\n') return;
                     break;
                 }
+                // Only allow decimal input
                 case InputFormat.Decimal:
                 {
                     if (!KeyboardHandler.IsNumberOrPoint(c)) return;
                     break;
                 }
+                // Only allow decimal input with at most 2 characters after the point
                 case InputFormat.CentiDecimal:
                 {
                     if (!KeyboardHandler.IsNumberOrPoint(c)) return;
@@ -149,6 +158,7 @@ namespace Luna.UI
                     }
                     break;
                 }
+                // Only allow numeric input
                 case InputFormat.Numeric:
                 {
                     if (!KeyboardHandler.IsNumber(c)) return;
@@ -160,6 +170,7 @@ namespace Luna.UI
             MoveCaretRight(true, c == '\n');
         }
 
+        // Backspace procedure
         private void RemoveCharacter()
         {
             string placeholderText = editingText.Substring(0, Math.Max(UpToCaret.Length - 1, 0)) + PostCaret;
@@ -183,17 +194,21 @@ namespace Luna.UI
 
         private void MoveCaretRight(bool adding, bool newline)
         {
+            // Enter pressed
             if (newline)
             {
                 CaretIndex = (0, caretIndex.line + 1);
                 return;
             }
 
+            // Other character added
             if (adding)
             {
                 CaretIndex = (caretIndex.character + 1, caretIndex.line);
                 return;
             }
+
+            // Pure caret move
 
             if (CaretIndex.Character == GetLine(CaretIndex.Line).Length)
             {
@@ -232,6 +247,9 @@ namespace Luna.UI
             set { inputType = value; }
         }
 
+        /// <summary>
+        /// The text value preceding the caret
+        /// </summary>
         private string PreCaret
         {
             get
@@ -250,11 +268,17 @@ namespace Luna.UI
             }
         }
 
+        /// <summary>
+        /// The text value succeeding the caret
+        /// </summary>
         private string PostCaret
         {
             get { return editingText.Substring(UpToCaret.Length); }
         }
 
+        /// <summary>
+        /// The text value on the line of the caret, which precedes the caret
+        /// </summary>
         private string CaretLine
         {
             get
@@ -263,6 +287,9 @@ namespace Luna.UI
             }
         }
 
+        /// <summary>
+        /// The entire text preceding the caret
+        /// </summary>
         private string UpToCaret
         {
             get { return caretIndex.line == 0 ? CaretLine : PreCaret + "\n" + CaretLine; }
@@ -274,12 +301,18 @@ namespace Luna.UI
             private set { caretIndex = value; onCaretChanged?.Invoke(caretIndex); SetCaretPosition(); }
         }
 
+        /// <summary>
+        /// The value contained within this TextInput
+        /// </summary>
         public string Text
         {
             get { return editingText; }
             set { editingText = value; }
         }
 
+        /// <summary>
+        /// The text displayed when rendering this TextInput
+        /// </summary>
         public string DisplayText
         {
             get { return prefix + (editingText != "" ? editingText : placeholder) + suffix; }
@@ -308,9 +341,13 @@ namespace Luna.UI
             onCaretChanged += e;
         }
 
+        /// <summary>
+        /// Sets the position of the caret UIComponent based on the current caret index
+        /// </summary>
         private void SetCaretPosition()
         {
-            float height = GraphicsHelper.GetDefaultFont().MeasureString(UpToCaret == "" ? "|" : UpToCaret).Y - GraphicsHelper.GetDefaultFont().MeasureString(CaretLine == "" ? "|" : CaretLine).Y;
+            float height = GraphicsHelper.GetDefaultFont().MeasureString(UpToCaret == "" ? "|" : UpToCaret).Y
+                - GraphicsHelper.GetDefaultFont().MeasureString(CaretLine == "" ? "|" : CaretLine).Y;
             float width = GraphicsHelper.GetDefaultFont().MeasureString(CaretLine).X;
 
             caret.GetTransform().SetPositionComponentValue(width, LVector2.HORIZONTAL);

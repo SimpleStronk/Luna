@@ -30,12 +30,14 @@ namespace Luna.UI.LayoutSystem
 
         public void Update()
         {
+            // Do scrolling logic, if scrolling is possible
             if (scrollable)
             {
                 CalculateOverflow();
                 MoveDisplay();
             }
 
+            // Keep animator up to date
             positionAnimator.Update();
         }
 
@@ -67,6 +69,11 @@ namespace Luna.UI.LayoutSystem
             return parent.GlobalPosition;
         }
 
+        /// <summary>
+        /// Sets the value of local position on the axis specified
+        /// </summary>
+        /// <param name="component">The value to assign</param>
+        /// <param name="axis">The axis to change the value of</param>
         public void SetPositionComponentValue(float component, int axis)
         {
             LVector2 targetPos = positionAnimator.GetTargetPosition();
@@ -74,6 +81,11 @@ namespace Luna.UI.LayoutSystem
             positionAnimator.SetPosition(targetPos);
         }
 
+        /// <summary>
+        /// Sets the value of global position on the axis specified
+        /// </summary>
+        /// <param name="component">The value to assign</param>
+        /// <param name="axis">The axis to change the value of</param>
         public void SetGlobalPositionComponentValue(float component, int axis)
         {
             LVector2 targetPos = positionAnimator.GetTargetPosition();
@@ -149,35 +161,58 @@ namespace Luna.UI.LayoutSystem
         }
         #endregion
 
+        /// <summary>
+        /// Call the given action when the size changes
+        /// </summary>
+        /// <param name="e">The action to call</param>
         public void OnResize(Action e)
         {
             onResize += e;
         }
 
+        /// <summary>
+        /// Increment the scroll value by the given amount
+        /// </summary>
+        /// <param name="scroll">The scroll increment amount</param>
         public void Scroll(int scroll)
         {
             if (scroll == 0) return;
 
+            // Change scroll and make sure it's not scrolled too far
             scrollAmount += scroll;
             ClampScroll();
+
+            // Notify listeners that scroll has changed to -scrollAmount / scrollMax
             onScrollChanged?.Invoke(-scrollAmount / scrollMax);
         }
 
+        /// <summary>
+        /// Sets how scrolled this object should be, with a value of 1 being all the way
+        /// </summary>
         public void SetScrollRatio(float normalisedValue)
         {
             scrollAmount = -normalisedValue * scrollMax;
         }
 
+        /// <summary>
+        /// Update the scrollOffset value with the current scroll amount
+        /// </summary>
         private void MoveDisplay()
         {
             scrollOffset.SetComponentValue(scrollAmount * scrollSensitivity, overflowAxis);
         }
 
+        /// <summary>
+        /// Clamp the scroll value to prevent over-scrolling
+        /// </summary>
         private void ClampScroll()
         {
             scrollAmount = Math.Clamp(scrollAmount, -scrollMax, 0);
         }
 
+        /// <summary>
+        /// Work out how much this component overflows, in terms of pixels and scroll value
+        /// </summary>
         private void CalculateOverflow()
         {
             if (parent == null)
@@ -186,6 +221,7 @@ namespace Luna.UI.LayoutSystem
                 return;
             }
 
+            // Works out how much larger this component is than the bounds it should exist within
             overflowAmount = new LVector2(size.X - (parent.size.X - (parent.padding.Left + parent.padding.Right)), size.Y - (parent.size.Y - (parent.padding.Top + parent.padding.Bottom)));
 
             //  If Y overflow amount is positive, regard axis as vertical regardless of horizontal state
@@ -204,6 +240,10 @@ namespace Luna.UI.LayoutSystem
             }
         }
 
+        /// <summary>
+        /// Calculates the ratio of the size of this component relative to its container
+        /// </summary>
+        /// <returns></returns>
         public float GetOverflowRatio()
         {
             return Size.GetComponent(overflowAxis) / (parent.Size.GetComponent(overflowAxis) - parent.padding.GetAxis(overflowAxis));

@@ -1,6 +1,10 @@
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 using Microsoft.Xna.Framework.Graphics;
+using SharpDX.Direct3D9;
 
 namespace Luna.ManagerClasses
 {

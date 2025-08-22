@@ -27,6 +27,7 @@ namespace Luna.UI
         {
             base.OnResize();
 
+            // Make sure circle texture fits transform
             int size = (int)Math.Min(transform.Size.X, transform.Size.Y);
             Texture = new LTexture2D(GraphicsHelper.GenerateCircleTexture(size));
         }

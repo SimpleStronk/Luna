@@ -59,7 +59,7 @@ namespace Luna.DataClasses
             return this;
         }
 
-        public Customer SetlastName(string lastName)
+        public Customer SetLastName(string lastName)
         {
             this.lastName = lastName;
             return this;

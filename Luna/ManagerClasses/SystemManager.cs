@@ -23,16 +23,20 @@ namespace Luna.ManagerClasses
         {
             productLoader = new DummyProductLoader();
             productSaver = new DummyProductSaver();
+
             ProductManager.LoadProducts(productLoader);
             ProductManager.SetProductSaver(productSaver);
+            
             CustomerManager.AddCustomer(new Customer().SetCustomerID(CustomerID.CreateSequential())
-                .SetFirstName("Mike").SetlastName("Customer"));
+                .SetFirstName("Mike").SetLastName("Customer"));
 
             orderManager = new DummyOrderManager();
             orderLoader = new DummyOrderLoader();
             orderSaver = new DummyOrderSaver();
+
             orderManager.LoadOrders(orderLoader);
             orderManager.SetUpdateCallback(orderSaver.OutputOrders);
+
             orders = orderManager.GetRecentOrders();
 
             foreach (Order order in orders)

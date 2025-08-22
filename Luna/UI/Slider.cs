@@ -25,35 +25,53 @@ namespace Luna.UI
             this.minimumValue = minimumValue;
             this.maximumValue = maximumValue;
             this.increment = increment;
+
             overrideTheme.ColourType = colorType;
             layout.HorizontalAlignment = layout.VerticalAlignment = Alignment.Middle;
             layout.Padding = new Tetra(15);
 
+            // Create slider groove element but don't let it capture focus
+            // (so that the slider itself captures input)
             sliderGroove = new BlankUI(UITheme.ColorType.Separator);
             sliderGroove.FocusIgnore = true;
 
             switch (axis)
             {
-                case LVector2.HORIZONTAL: { layout.LayoutHeight = Sizing.Fixed(40);
-                    sliderGroove.SetLayout(new Layout()
+                case LVector2.HORIZONTAL:
                     {
-                        LayoutWidth = Sizing.Grow(1),
-                        LayoutHeight = Sizing.Fixed(2),
-                        HorizontalAlignment = Alignment.Ignore,
-                        VerticalAlignment = Alignment.Middle,
-                        ClipChildren = false
-                        }); break; }
-                case LVector2.VERTICAL: { layout.LayoutWidth = Sizing.Fixed(40);
-                    sliderGroove.SetLayout(new Layout()
+                        layout.LayoutHeight = Sizing.Fixed(40);
+
+                        // Slider groove should fill the space horizontally but only be 2px thick
+                        sliderGroove.SetLayout(new Layout()
+                        {
+                            LayoutWidth = Sizing.Grow(1),
+                            LayoutHeight = Sizing.Fixed(2),
+
+                            // Slider groove should not place child elements horizontally
+                            HorizontalAlignment = Alignment.Ignore,
+                            VerticalAlignment = Alignment.Middle,
+                            ClipChildren = false
+                        }); break;
+                    }
+                case LVector2.VERTICAL:
                     {
-                        LayoutWidth = Sizing.Fixed(2),
-                        LayoutHeight = Sizing.Grow(1),
-                        HorizontalAlignment = Alignment.Middle,
-                        VerticalAlignment = Alignment.Ignore,
-                        ClipChildren = false
-                    }); break; }
+                        layout.LayoutWidth = Sizing.Fixed(40);
+
+                        // Slider groove should fill the space vertically but only be 2px wide
+                        sliderGroove.SetLayout(new Layout()
+                        {
+                            LayoutWidth = Sizing.Fixed(2),
+                            LayoutHeight = Sizing.Grow(1),
+                            HorizontalAlignment = Alignment.Middle,
+
+                            // Slider groove should not place child elements vertically
+                            VerticalAlignment = Alignment.Ignore,
+                            ClipChildren = false
+                        }); break;
+                    }
             }
 
+            // Create slider knob element with fixed size, and allowed to deviate from standard LUIVA placement
             sliderKnob = new BlankUI(UITheme.ColorType.Main);
             sliderKnob.SetLayout(new Layout() { LayoutWidth = Sizing.Fixed(knobSize), LayoutHeight = Sizing.Fixed(knobSize), Inline = false });
             sliderKnob.SetTheme(new UITheme() { Rounded = true });
@@ -84,6 +102,7 @@ namespace Luna.UI
             float grooveSize = sliderGroove.GetTransform().Size.GetComponent(axis);
             float position = (value * grooveSize) + groovePosition - (knobSize / 2f);
 
+            Console.WriteLine($"Setting knob position to {position}");
             sliderKnob.GetTransform().SetGlobalPositionComponentValue(position, axis);
         }
 
@@ -95,11 +114,19 @@ namespace Luna.UI
             return (mousePosition.GetComponent(axis) - groovePosition) / grooveSize;
         }
 
+        /// <summary>
+        /// Converts a normalised value to the interval represented by this slider
+        /// </summary>
         private float NormalisedToScaledValue(float normalisedValue)
         {
             return minimumValue + (normalisedValue * (maximumValue - minimumValue));
         }
 
+        /// <summary>
+        /// Calculates the increment in [0, 1] space corresponding to this slider's
+        /// increment
+        /// </summary>
+        /// <returns></returns>
         private float CalculateNormalisedIncrement()
         {
             return increment / (maximumValue - minimumValue);
@@ -144,6 +171,10 @@ namespace Luna.UI
             else { normalisedValue = Math.Clamp(((int)(normalisedValue / CalculateNormalisedIncrement() + 0.5f)) * CalculateNormalisedIncrement(), 0, 1); }
         }
 
+        /// <summary>
+        /// Sets the value of this slider and reports its update via the onValueChanged callback
+        /// </summary>
+        /// <param name="value"></param>
         public void HardSetValue(float value)
         {
             SoftSetValue(value);
