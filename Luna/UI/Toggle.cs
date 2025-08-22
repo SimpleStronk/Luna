@@ -49,6 +49,7 @@ namespace Luna.UI
             });
             indicator.SetTheme(new UITheme(){ Rounded = true });
             indicator.FocusIgnore = true;               // We want the Toggle to capture mouse events
+            indicator.IgnoreScissorRect = true;
 
             indicatorContainer.AddChild(indicator);
 

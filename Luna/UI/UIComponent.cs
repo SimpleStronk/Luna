@@ -10,6 +10,7 @@ namespace Luna.UI
 {
     internal abstract class UIComponent : ILayoutable
     {
+        protected static UIComponent rootComponent;
         protected static Texture2D pixelTexture;
         protected UITheme cascadeTheme, overrideTheme = new UITheme();
         protected LUIVA.Layout layout = new LUIVA.Layout();
@@ -24,6 +25,7 @@ namespace Luna.UI
         protected Action onHover, onUnhover;
         protected Action<Action, Action, int> checkFocusCallback;
         private static Action<Rectangle> updateScissorRectangle;
+        private Rectangle scissorRectangle;
         private Action onDestroy;
         protected IColourAnimator colourAnimator = new ExpColourAnimator();
         protected bool debugMode = false;
@@ -39,6 +41,14 @@ namespace Luna.UI
 
         private static int currentElement = 0;
 
+        public UIComponent(bool isRootComponent)
+        {
+            if (isRootComponent)
+            {
+                rootComponent = this;
+            }
+        }
+
         public void Initialise()
         {
             elementId = NewElementId();
@@ -52,6 +62,7 @@ namespace Luna.UI
         /// </summary>
         public void PreUpdate()
         {
+            scissorRectangle = CalculateScissorRectangle();
             // Reports to an outside class if this object is hovered, if a deeper
             // object is hovered then focus is updated to that later.
             CheckFocused(TestMouseCollision());
@@ -109,7 +120,7 @@ namespace Luna.UI
         public void BaseDraw(SpriteBatch s)
         {
             // Are we abiding by the scissor rectangle? If not, use root component's scissor rect.
-            updateScissorRectangle(ignoreScissorRect ? GetRootRectangle() : CalculateScissorRectangle());
+            updateScissorRectangle(ignoreScissorRect ? GetRootRectangle() : scissorRectangle);
 
             if (renderDefaultRect)
             {
@@ -147,7 +158,7 @@ namespace Luna.UI
                 c.BaseDraw(s);
             }
 
-            if (parent != null) updateScissorRectangle(parent.CalculateScissorRectangle());
+            if (parent != null) updateScissorRectangle(parent.scissorRectangle);
         }
 
         protected abstract void Update();
@@ -156,7 +167,7 @@ namespace Luna.UI
 
         private bool TestMouseCollision()
         {
-            return Rectangle.Intersect(CalculateScissorRectangle(), transform.GetGlobalRect()).Contains(MouseHandler.Position);
+            return Rectangle.Intersect(scissorRectangle, transform.GetGlobalRect()).Contains(MouseHandler.Position);
         }
 
         /// <summary>
@@ -178,15 +189,17 @@ namespace Luna.UI
         }
 
         /// <summary>
-        /// Recursively intersects this UIComponent's rectangle with parent rectangles to calculate
+        /// Intersects this UIComponent's rectangle with parent rectangles to calculate
         /// appropriate scissor bounds
         /// </summary>
         Rectangle CalculateScissorRectangle()
         {
-            if (!layout.ClipChildren) return parent.CalculateScissorRectangle();
+            // Parent != null && ensures that the root component will always ignore this line, even if it isn't
+            // clipping children
+            if (parent != null && !layout.ClipChildren) return parent.scissorRectangle;
 
             return parent == null ? transform.GetGlobalRect() :
-                Rectangle.Intersect(transform.GetGlobalRect(), parent.CalculateScissorRectangle());
+                Rectangle.Intersect(transform.GetGlobalRect(), parent.scissorRectangle);
         }
 
         /// <summary>
@@ -195,7 +208,7 @@ namespace Luna.UI
         Rectangle GetRootRectangle()
         {
             if (parent == null) return transform.GetGlobalRect();
-            else return parent.GetRootRectangle();
+            else return rootComponent.transform.GetGlobalRect();
         }
 
         public void Destroy()

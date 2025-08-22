@@ -9,7 +9,12 @@ namespace Luna.UI
 {
     internal class BlankUI : UIComponent
     {
-        public BlankUI(UITheme.ColorType colourType)
+        public BlankUI(bool root, UITheme.ColorType colourType) : base(root)
+        {
+            overrideTheme.ColourType = colourType;
+        }
+
+        public BlankUI(UITheme.ColorType colourType) : base(false)
         {
             overrideTheme.ColourType = colourType;
         }

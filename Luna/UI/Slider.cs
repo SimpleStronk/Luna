@@ -76,6 +76,7 @@ namespace Luna.UI
             sliderKnob.SetLayout(new Layout() { LayoutWidth = Sizing.Fixed(knobSize), LayoutHeight = Sizing.Fixed(knobSize), Inline = false });
             sliderKnob.SetTheme(new UITheme() { Rounded = true });
             sliderKnob.FocusIgnore = true;
+            sliderKnob.IgnoreScissorRect = true;
 
             sliderGroove.AddChild(sliderKnob);
             AddChild(sliderGroove);
@@ -102,7 +103,7 @@ namespace Luna.UI
             float grooveSize = sliderGroove.GetTransform().Size.GetComponent(axis);
             float position = (value * grooveSize) + groovePosition - (knobSize / 2f);
 
-            Console.WriteLine($"Setting knob position to {position}");
+            //Console.WriteLine($"Setting knob position to {position}");
             sliderKnob.GetTransform().SetGlobalPositionComponentValue(position, axis);
         }
 

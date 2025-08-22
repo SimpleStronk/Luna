@@ -227,7 +227,7 @@ namespace Luna.ManagerClasses
 
         private BlankUI SetupRootComponent()
         {
-            BlankUI rootComponent = new BlankUI(UITheme.ColorType.MainSoft);
+            BlankUI rootComponent = new BlankUI(true, UITheme.ColorType.MainSoft);
             rootComponent.CascadeTheme(PlumTheme);
             rootComponent.SetLayout(new Layout()
             {

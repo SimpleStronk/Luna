@@ -19,7 +19,7 @@ namespace Luna.UI
         /// <summary>
         /// Creates a new Button with the given colour type, and a visual response
         /// </summary>
-        public Button(UITheme.ColorType colourType)
+        public Button(UITheme.ColorType colourType) : base(false)
         {
             AddVisualResponse();
             overrideTheme.ColourType = colourType;
@@ -30,7 +30,7 @@ namespace Luna.UI
         /// <summary>
         /// Creates a new Button with the given colour type and the given visual response
         /// </summary>
-        public Button(VisualResponse visualResponse, UITheme.ColorType colourType)
+        public Button(VisualResponse visualResponse, UITheme.ColorType colourType) : base(false)
         {
             if (visualResponse == VisualResponse.ColourChange) AddVisualResponse();
             overrideTheme.ColourType = colourType;

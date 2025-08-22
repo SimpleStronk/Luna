@@ -18,14 +18,14 @@ namespace Luna.UI
         protected int maxTextureOffset;
         protected float manualTextureOffset;
 
-        public UITexture()
+        public UITexture() : base(false)
         {
             pixel = GraphicsHelper.GeneratePixelTexture();
             Initialise();
             RenderDefaultRect = false;
         }
 
-        public UITexture(LTexture2D texture)
+        public UITexture(LTexture2D texture) : base(false)
         {
             Texture = texture;
             Initialise();

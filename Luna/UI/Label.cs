@@ -19,7 +19,7 @@ namespace Luna.UI
         SpriteFont font;
         SpriteFontBase stashfont;
 
-        public Label(string text, SpriteFont font, UITheme.ColorType colourType)
+        public Label(string text, SpriteFont font, UITheme.ColorType colourType) : base(false)
         {
             textObject = true;
             this.font = font;
@@ -35,7 +35,7 @@ namespace Luna.UI
             };
         }
 
-        public Label(string text, FontSystem fontSystem, float size, UITheme.ColorType colourType)
+        public Label(string text, FontSystem fontSystem, float size, UITheme.ColorType colourType) : base(false)
         {
             textObject = true;
             this.stashfont = fontSystem.GetFont(size);
