@@ -53,7 +53,7 @@ namespace Luna.UI
             indicatorContainer.AddChild(indicator);
 
             // Create label
-            label = new Label("", GraphicsHelper.GetDefaultFont(), colourType);
+            label = new Label("", GraphicsHelper.GetDefaultFontSystem(), GraphicsHelper.GetDefaultFontSize(), colourType);
             label.SetText("Testing, testing, 123");
 
             AddChild(indicatorContainer);

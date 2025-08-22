@@ -38,7 +38,7 @@ namespace Luna.UI
             internalPanel.FocusIgnore = true;
             AddChild(internalPanel);
 
-            label = new Label("", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.PlaceholderText);
+            label = new Label("", GraphicsHelper.GetDefaultFontSystem(), GraphicsHelper.GetDefaultFontSize(), UITheme.ColorType.PlaceholderText);
             label.SetLayout(new Layout() { HorizontalAlignment = Alignment.Ignore, VerticalAlignment = Alignment.Ignore, ClipChildren = false });
 
             caret = new BlankUI(UITheme.ColorType.Main);
@@ -346,9 +346,9 @@ namespace Luna.UI
         /// </summary>
         private void SetCaretPosition()
         {
-            float height = GraphicsHelper.GetDefaultFont().MeasureString(UpToCaret == "" ? "|" : UpToCaret).Y
-                - GraphicsHelper.GetDefaultFont().MeasureString(CaretLine == "" ? "|" : CaretLine).Y;
-            float width = GraphicsHelper.GetDefaultFont().MeasureString(CaretLine).X;
+            float height = GraphicsHelper.GetDefaultFontSystem().GetFont(GraphicsHelper.GetDefaultFontSize()).MeasureString(UpToCaret == "" ? "|" : UpToCaret).Y
+                - GraphicsHelper.GetDefaultFontSystem().GetFont(GraphicsHelper.GetDefaultFontSize()).MeasureString(CaretLine == "" ? "|" : CaretLine).Y;
+            float width = GraphicsHelper.GetDefaultFontSystem().GetFont(GraphicsHelper.GetDefaultFontSize()).MeasureString(CaretLine).X;
 
             caret.GetTransform().SetPositionComponentValue(width, LVector2.HORIZONTAL);
             caret.GetTransform().SetPositionComponentValue(height, LVector2.VERTICAL);

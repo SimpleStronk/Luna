@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using FontStashSharp;
 using Luna.HelperClasses;
 using Luna.ManagerClasses;
 using Luna.UI.LayoutSystem;
@@ -12,6 +14,8 @@ public class Game1 : Game
 {
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
+    private FontSystem defaultFontSystem = new FontSystem(),
+        boldFontSystem = new FontSystem();
 
     UIManager uiManager;
     SystemManager systemManager = new SystemManager();
@@ -43,6 +47,10 @@ public class Game1 : Game
         GraphicsHelper.SetGraphicsDevice(GraphicsDevice);
         GraphicsHelper.SetDefaultFont(Content.Load<SpriteFont>(@"MontserratLight"));
         GraphicsHelper.SetBoldFont(Content.Load<SpriteFont>(@"MontserratRegular"));
+        defaultFontSystem.AddFont(File.ReadAllBytes(@"Content/Montserrat-Light.ttf"));
+        boldFontSystem.AddFont(File.ReadAllBytes(@"Content/Montserrat-Regular.ttf"));
+        GraphicsHelper.SetDefaultFontSystem(defaultFontSystem);
+        GraphicsHelper.SetBoldFontSystem(boldFontSystem);
         GraphicsHelper.LuivaLogo = Content.Load<Texture2D>(@"LUIVA");
         uiManager = new UIManager(Window, Exit, GraphicsDevice, systemManager);
         uiManager.SetPixelTexture(GraphicsHelper.GeneratePixelTexture());

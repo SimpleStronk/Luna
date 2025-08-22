@@ -8,11 +8,54 @@
     ".NETCoreApp,Version=v8.0": {
       "Luna/1.0.0": {
         "dependencies": {
+          "FontStashSharp.MonoGame": "1.4.0",
           "MonoGame.Content.Builder.Task": "3.8.2.1105",
           "MonoGame.Framework.WindowsDX": "3.8.2.1105"
         },
         "runtime": {
           "Luna.dll": {}
+        }
+      },
+      "Cyotek.Drawing.BitmapFont/2.0.4": {
+        "runtime": {
+          "lib/net5.0/Cyotek.Drawing.BitmapFont.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "2.0.4.0"
+          }
+        }
+      },
+      "FontStashSharp.Base/1.1.10": {
+        "runtime": {
+          "lib/netstandard2.0/FontStashSharp.Base.dll": {
+            "assemblyVersion": "1.1.10.0",
+            "fileVersion": "1.1.10.0"
+          }
+        }
+      },
+      "FontStashSharp.MonoGame/1.4.0": {
+        "dependencies": {
+          "Cyotek.Drawing.BitmapFont": "2.0.4",
+          "FontStashSharp.Base": "1.1.10",
+          "FontStashSharp.Rasterizers.StbTrueTypeSharp": "1.1.10",
+          "StbImageSharp": "2.30.15"
+        },
+        "runtime": {
+          "lib/netstandard2.0/FontStashSharp.MonoGame.dll": {
+            "assemblyVersion": "1.4.0.0",
+            "fileVersion": "1.4.0.0"
+          }
+        }
+      },
+      "FontStashSharp.Rasterizers.StbTrueTypeSharp/1.1.10": {
+        "dependencies": {
+          "FontStashSharp.Base": "1.1.10",
+          "StbTrueTypeSharp": "1.26.12"
+        },
+        "runtime": {
+          "lib/netstandard2.0/FontStashSharp.Rasterizers.StbTrueTypeSharp.dll": {
+            "assemblyVersion": "1.1.10.0",
+            "fileVersion": "1.1.10.0"
+          }
         }
       },
       "Microsoft.NETCore.App/2.1.30": {
@@ -215,6 +258,22 @@
           "lib/netcoreapp1.0/SharpDX.XInput.dll": {
             "assemblyVersion": "4.0.1.0",
             "fileVersion": "4.0.1.0"
+          }
+        }
+      },
+      "StbImageSharp/2.30.15": {
+        "runtime": {
+          "lib/netstandard2.0/StbImageSharp.dll": {
+            "assemblyVersion": "2.30.15.0",
+            "fileVersion": "2.30.15.0"
+          }
+        }
+      },
+      "StbTrueTypeSharp/1.26.12": {
+        "runtime": {
+          "lib/netstandard2.0/StbTrueTypeSharp.dll": {
+            "assemblyVersion": "1.26.12.0",
+            "fileVersion": "1.26.12.0"
           }
         }
       },
@@ -574,6 +633,34 @@
       "serviceable": false,
       "sha512": ""
     },
+    "Cyotek.Drawing.BitmapFont/2.0.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-iA6WehGVdMUuNbfsQQDq/Bt+mMd/OqHjiMUtKFLIQd/0pyYh4ehT7FEjTxN9/4OXNKQZsp9bAJgltP2nnswUJg==",
+      "path": "cyotek.drawing.bitmapfont/2.0.4",
+      "hashPath": "cyotek.drawing.bitmapfont.2.0.4.nupkg.sha512"
+    },
+    "FontStashSharp.Base/1.1.10": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-EkguKbW6LUHxH3oFLnoetsDNY7gMFYkAB4peZMtyELwjmmuVKo0+dBvIyTM+pyuvqr7kFVtppghb4OAjhULB2w==",
+      "path": "fontstashsharp.base/1.1.10",
+      "hashPath": "fontstashsharp.base.1.1.10.nupkg.sha512"
+    },
+    "FontStashSharp.MonoGame/1.4.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Ibh5l+ikU7K46/sZk/GUkd39DoofRFZbGzNnKPxEGqRM90WGRkxz8FMBA1L/aepLkruPoRYKWjfgzIB65ajyMg==",
+      "path": "fontstashsharp.monogame/1.4.0",
+      "hashPath": "fontstashsharp.monogame.1.4.0.nupkg.sha512"
+    },
+    "FontStashSharp.Rasterizers.StbTrueTypeSharp/1.1.10": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-8zXzKbUfqkTq7VllZ+T79EsJ9/NPqyoSB/mnitKO6biW1DUIov/tAvN/gMVIvGsi5sjskTrQEwBau07TErJ5iw==",
+      "path": "fontstashsharp.rasterizers.stbtruetypesharp/1.1.10",
+      "hashPath": "fontstashsharp.rasterizers.stbtruetypesharp.1.1.10.nupkg.sha512"
+    },
     "Microsoft.NETCore.App/2.1.30": {
       "type": "package",
       "serviceable": true,
@@ -811,6 +898,20 @@
       "sha512": "sha512-vDnp6CTVC9dKQHwLVF4GLNdCJqGMUuxyZLLlorDjgnVOOO7koPR20/tqt1A53gnNy/Id93Nzq7K2ILLvBQWvGQ==",
       "path": "sharpdx.xinput/4.0.1",
       "hashPath": "sharpdx.xinput.4.0.1.nupkg.sha512"
+    },
+    "StbImageSharp/2.30.15": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-7QqbupVhz2kcFUPTgMw4iHR9rYDHGundzzee19Mwmd1typ2Lnv8EVJcLJxlkeBM2+4ex0NwsMtdbGSJctp1XCQ==",
+      "path": "stbimagesharp/2.30.15",
+      "hashPath": "stbimagesharp.2.30.15.nupkg.sha512"
+    },
+    "StbTrueTypeSharp/1.26.12": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-hCc6/OsfcPa5VsLECcEU2m78WOshBrKwK42nAodSm9Z5wH68f7n66SoiRLCdGCkDaqbWz2TlX4zYHIjogj1HJA==",
+      "path": "stbtruetypesharp/1.26.12",
+      "hashPath": "stbtruetypesharp.1.26.12.nupkg.sha512"
     },
     "System.Collections/4.3.0": {
       "type": "package",

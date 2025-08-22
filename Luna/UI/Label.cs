@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Runtime.InteropServices.Marshalling;
+using FontStashSharp;
 using Luna.HelperClasses;
 using Luna.UI.LayoutSystem;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using SharpDX.DirectWrite;
 using static Luna.UI.LayoutSystem.LUIVA;
 
 namespace Luna.UI
@@ -14,11 +17,28 @@ namespace Luna.UI
     {
         string text;
         SpriteFont font;
+        SpriteFontBase stashfont;
 
         public Label(string text, SpriteFont font, UITheme.ColorType colourType)
         {
             textObject = true;
             this.font = font;
+            SetText(text);
+            overrideTheme.ColourType = colourType;
+            RenderDefaultRect = false;
+            FocusIgnore = true;
+
+            layout = new Layout()
+            {
+                LayoutWidth = Sizing.Ignore(),
+                LayoutHeight = Sizing.Ignore()
+            };
+        }
+
+        public Label(string text, FontSystem fontSystem, float size, UITheme.ColorType colourType)
+        {
+            textObject = true;
+            this.stashfont = fontSystem.GetFont(size);
             SetText(text);
             overrideTheme.ColourType = colourType;
             RenderDefaultRect = false;
@@ -44,8 +64,9 @@ namespace Luna.UI
         {
             Rectangle globalRect = GetTransform().GetGlobalRect();
 
-            // Draw text to screen
-            s.DrawString(font, DisplayText, new Vector2(globalRect.X, globalRect.Y), overrideTheme.GetColourPalatte(cascadeTheme).TextColour);
+            // Draw text to screen, prioritise FontStashSharp font
+            if (stashfont != null) s.DrawString(stashfont, DisplayText, new Vector2(globalRect.X, globalRect.Y), overrideTheme.GetColourPalatte(cascadeTheme).TextColour);
+            if (font != null) s.DrawString(font, DisplayText, new Vector2(globalRect.X, globalRect.Y), overrideTheme.GetColourPalatte(cascadeTheme).TextColour);
         }
 
         public override string GetTag()
@@ -72,7 +93,9 @@ namespace Luna.UI
             else if (tmp.Split('\n').Last() == "") tmp = text + "|";
             else tmp = text;
 
-            return font.MeasureString(tmp);
+            if (stashfont != null) return stashfont.MeasureString(tmp);
+            if (font != null) return font.MeasureString(tmp);
+            return new LVector2(0, 0);
         }
 
         private string DisplayText
@@ -80,7 +103,9 @@ namespace Luna.UI
             get
             {
                 if (text == null) return "";
-                return StringHelper.CutStringToBounds(text, (int)transform.Size.X, true, font);
+                if (stashfont != null) return StringHelper.CutStringToBounds(text, (int)transform.Size.X, true, stashfont);
+                if (font != null) return StringHelper.CutStringToBounds(text, (int)transform.Size.X, true, font);
+                return "";
             }
         }
     }

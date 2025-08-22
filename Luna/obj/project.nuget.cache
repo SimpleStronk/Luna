@@ -1,9 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "soe6ikvyTek=",
+  "dgSpecHash": "GSBjYUi3JAg=",
   "success": true,
   "projectFilePath": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\Luna.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\bill\\.nuget\\packages\\cyotek.drawing.bitmapfont\\2.0.4\\cyotek.drawing.bitmapfont.2.0.4.nupkg.sha512",
+    "C:\\Users\\bill\\.nuget\\packages\\fontstashsharp.base\\1.1.10\\fontstashsharp.base.1.1.10.nupkg.sha512",
+    "C:\\Users\\bill\\.nuget\\packages\\fontstashsharp.monogame\\1.4.0\\fontstashsharp.monogame.1.4.0.nupkg.sha512",
+    "C:\\Users\\bill\\.nuget\\packages\\fontstashsharp.rasterizers.stbtruetypesharp\\1.1.10\\fontstashsharp.rasterizers.stbtruetypesharp.1.1.10.nupkg.sha512",
     "C:\\Users\\bill\\.nuget\\packages\\microsoft.netcore.app\\2.1.30\\microsoft.netcore.app.2.1.30.nupkg.sha512",
     "C:\\Users\\bill\\.nuget\\packages\\microsoft.netcore.dotnetapphost\\2.1.30\\microsoft.netcore.dotnetapphost.2.1.30.nupkg.sha512",
     "C:\\Users\\bill\\.nuget\\packages\\microsoft.netcore.dotnethostpolicy\\2.1.30\\microsoft.netcore.dotnethostpolicy.2.1.30.nupkg.sha512",
@@ -38,6 +42,8 @@
     "C:\\Users\\bill\\.nuget\\packages\\sharpdx.mediafoundation\\4.0.1\\sharpdx.mediafoundation.4.0.1.nupkg.sha512",
     "C:\\Users\\bill\\.nuget\\packages\\sharpdx.xaudio2\\4.0.1\\sharpdx.xaudio2.4.0.1.nupkg.sha512",
     "C:\\Users\\bill\\.nuget\\packages\\sharpdx.xinput\\4.0.1\\sharpdx.xinput.4.0.1.nupkg.sha512",
+    "C:\\Users\\bill\\.nuget\\packages\\stbimagesharp\\2.30.15\\stbimagesharp.2.30.15.nupkg.sha512",
+    "C:\\Users\\bill\\.nuget\\packages\\stbtruetypesharp\\1.26.12\\stbtruetypesharp.1.26.12.nupkg.sha512",
     "C:\\Users\\bill\\.nuget\\packages\\system.collections\\4.3.0\\system.collections.4.3.0.nupkg.sha512",
     "C:\\Users\\bill\\.nuget\\packages\\system.collections.concurrent\\4.3.0\\system.collections.concurrent.4.3.0.nupkg.sha512",
     "C:\\Users\\bill\\.nuget\\packages\\system.diagnostics.debug\\4.3.0\\system.diagnostics.debug.4.3.0.nupkg.sha512",

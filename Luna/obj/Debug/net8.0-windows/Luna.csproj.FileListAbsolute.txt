@@ -55,3 +55,11 @@ c:\Users\bill\Documents\GitHub\Luna\Luna\obj\Debug\net8.0-windows\ref\Luna.dll
 c:\Users\bill\Documents\GitHub\Luna\Luna\obj\Debug\net8.0-windows\Luna.sourcelink.json
 c:\Users\bill\Documents\GitHub\Luna\Luna\bin\Debug\net8.0-windows\Content\MontserratRegular.xnb
 C:\Users\bill\Documents\GitHub\Luna\Luna\bin\Debug\net8.0-windows\Content\LUIVA.xnb
+C:\Users\bill\Documents\GitHub\Luna\Luna\bin\Debug\net8.0-windows\Cyotek.Drawing.BitmapFont.dll
+C:\Users\bill\Documents\GitHub\Luna\Luna\bin\Debug\net8.0-windows\FontStashSharp.Base.dll
+C:\Users\bill\Documents\GitHub\Luna\Luna\bin\Debug\net8.0-windows\FontStashSharp.MonoGame.dll
+C:\Users\bill\Documents\GitHub\Luna\Luna\bin\Debug\net8.0-windows\FontStashSharp.Rasterizers.StbTrueTypeSharp.dll
+C:\Users\bill\Documents\GitHub\Luna\Luna\bin\Debug\net8.0-windows\StbImageSharp.dll
+C:\Users\bill\Documents\GitHub\Luna\Luna\bin\Debug\net8.0-windows\StbTrueTypeSharp.dll
+C:\Users\bill\Documents\GitHub\Luna\Luna\bin\Debug\net8.0-windows\Content\Montserrat-Light.ttf
+C:\Users\bill\Documents\GitHub\Luna\Luna\bin\Debug\net8.0-windows\Content\Montserrat-Regular.ttf

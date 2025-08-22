@@ -1,9 +1,11 @@
-﻿using Microsoft.Xna.Framework;
+﻿using FontStashSharp;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,9 +15,11 @@ namespace Luna.HelperClasses
     {
         private static GraphicsDevice graphicsDevice;
         private static SpriteFont defaultFont, boldFont;
+        private static FontSystem defaultFontSystem, boldFontSystem;
         private static int msaaRes = 3;
         private static Dictionary<int, Texture2D> circleCache = new Dictionary<int, Texture2D>();
         private static Texture2D luivaLogo;
+        private static float defaultFontSize = 24f;
 
         /// <summary>
         /// Generates a Texture2D object representing a single white pixel
@@ -100,6 +104,26 @@ namespace Luna.HelperClasses
             return boldFont;
         }
 
+        public static void SetDefaultFontSystem(FontSystem fontSystem)
+        {
+            defaultFontSystem = fontSystem;
+        }
+
+        public static void SetBoldFontSystem(FontSystem fontSystem)
+        {
+            boldFontSystem = fontSystem;
+        }
+
+        public static FontSystem GetDefaultFontSystem()
+        {
+            return defaultFontSystem;
+        }
+
+        public static FontSystem GetBoldFontSystem()
+        {
+            return boldFontSystem;
+        }
+
         /// <summary>
         /// Gets the colour data of a smaller region within a larger image
         /// </summary>
@@ -126,6 +150,11 @@ namespace Luna.HelperClasses
         {
             get { return luivaLogo; }
             set { luivaLogo = value; }
+        }
+
+        public static float GetDefaultFontSize()
+        {
+            return defaultFontSize;
         }
     }
 }

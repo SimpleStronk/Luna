@@ -325,7 +325,7 @@ namespace Luna.UI
             });
             minimise.SetTheme(new UITheme() { CornerRadius = (0, 0, 10, 0) });
 
-            Label minimiseLabel = new Label("_", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Background);
+            Label minimiseLabel = new Label("_", GraphicsHelper.GetDefaultFontSystem(), GraphicsHelper.GetDefaultFontSize(), UITheme.ColorType.Background);
             minimise.AddChild(minimiseLabel);
 
             // Maximise button
@@ -339,7 +339,7 @@ namespace Luna.UI
             });
             maximise.SetTheme(new UITheme() { Rounded = false });
 
-            Label maximiseLabel = new Label("O", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Background);
+            Label maximiseLabel = new Label("O", GraphicsHelper.GetDefaultFontSystem(), GraphicsHelper.GetDefaultFontSize(), UITheme.ColorType.Background);
             maximise.AddChild(maximiseLabel);
 
             // Quit button
@@ -353,7 +353,7 @@ namespace Luna.UI
             });
             quit.SetTheme(new UITheme() { ColourType = UITheme.ColorType.Emergency, Rounded = false });
 
-            Label quitLabel = new Label("X", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Emergency);
+            Label quitLabel = new Label("X", GraphicsHelper.GetDefaultFontSystem(), GraphicsHelper.GetDefaultFontSize(), UITheme.ColorType.Emergency);
             quit.AddChild(quitLabel);
 
             windowControlsParentTop.AddChild(minimise);
@@ -404,8 +404,8 @@ namespace Luna.UI
             titleBox.RenderDefaultRect = false;
             titleBox.FocusIgnore = true;
 
-            Label title = new Label($"{CustomerManager.GetCustomerByID(order.GetCustomerID()).FullName}", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Background);
-            Label productInfo = new Label(order.GetOrderStatus().ToString(), GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Background);
+            Label title = new Label($"{CustomerManager.GetCustomerByID(order.GetCustomerID()).FullName}", GraphicsHelper.GetDefaultFontSystem(), GraphicsHelper.GetDefaultFontSize(), UITheme.ColorType.Background);
+            Label productInfo = new Label(order.GetOrderStatus().ToString(), GraphicsHelper.GetDefaultFontSystem(), GraphicsHelper.GetDefaultFontSize(), UITheme.ColorType.Background);
 
             // Button containing the product title
             Button infoBox = new Button(UITheme.ColorType.Background);
@@ -419,7 +419,7 @@ namespace Luna.UI
             infoBox.RenderDefaultRect = false;
             infoBox.FocusIgnore = true;
 
-            Label productTitle = new Label(ProductManager.GetProductByID(order.GetProductIDs()[0]).GetName(), GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Background);
+            Label productTitle = new Label(ProductManager.GetProductByID(order.GetProductIDs()[0]).GetName(), GraphicsHelper.GetDefaultFontSystem(), GraphicsHelper.GetDefaultFontSize(), UITheme.ColorType.Background);
 
             infoBox.AddChild(productTitle);
 
@@ -488,7 +488,7 @@ namespace Luna.UI
             yesButton.OnClick(() => { importAction(preview.GetVisibleSubtexture()); panel.Destroy(); panel = null; });
             yesButton.SetTheme(new UITheme(){ ColourType = UITheme.ColorType.Main });
 
-            Label yesLabel = new Label("Import", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Main);
+            Label yesLabel = new Label("Import", GraphicsHelper.GetDefaultFontSystem(), GraphicsHelper.GetDefaultFontSize(), UITheme.ColorType.Main);
             yesLabel.SetTheme(new UITheme(){ ColourType = UITheme.ColorType.Main });
 
             yesButton.AddChild(yesLabel);
@@ -504,7 +504,7 @@ namespace Luna.UI
             noButton.OnClick(() => { cancelAction(); panel.Destroy(); panel = null; });
             noButton.SetTheme(new UITheme(){ ColourType = UITheme.ColorType.Emergency });
 
-            Label noLabel = new Label("Cancel", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Emergency);
+            Label noLabel = new Label("Cancel", GraphicsHelper.GetDefaultFontSystem(), GraphicsHelper.GetDefaultFontSize(), UITheme.ColorType.Emergency);
             noLabel.SetTheme(new UITheme(){ ColourType = UITheme.ColorType.Emergency });
 
             noButton.AddChild(noLabel);
@@ -535,7 +535,7 @@ namespace Luna.UI
             logoContainer.SetLayout(TopBarButtonLayout);
             logoContainer.SetLayout(new Layout() { LayoutWidth = Sizing.Fixed(150), HorizontalAlignment = Alignment.Begin });
 
-            Label logo = new Label("LUNΛ", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Main);
+            Label logo = new Label("LUNΛ", GraphicsHelper.GetDefaultFontSystem(), GraphicsHelper.GetDefaultFontSize(), UITheme.ColorType.Main);
 
             // Separates the logo from other buttons
             BlankUI separator = new BlankUI(UITheme.ColorType.Separator);
@@ -545,25 +545,25 @@ namespace Luna.UI
             Button dashboardButton = new Button(UITheme.ColorType.Main);
             dashboardButton.SetLayout(TopBarButtonLayout);
 
-            Label dashboardLabel = new Label("Dashboard", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Main);
+            Label dashboardLabel = new Label("Dashboard", GraphicsHelper.GetDefaultFontSystem(), GraphicsHelper.GetDefaultFontSize(), UITheme.ColorType.Main);
 
             // Orders navigation button
             Button ordersButton = new Button(UITheme.ColorType.Main);
             ordersButton.SetLayout(TopBarButtonLayout);
 
-            Label ordersLabel = new Label("Orders", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Main);
+            Label ordersLabel = new Label("Orders", GraphicsHelper.GetDefaultFontSystem(), GraphicsHelper.GetDefaultFontSize(), UITheme.ColorType.Main);
 
             // Products navigation button
             Button productsButton = new Button(UITheme.ColorType.Main);
             productsButton.SetLayout(TopBarButtonLayout);
 
-            Label productsLabel = new Label("Products", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Main);
+            Label productsLabel = new Label("Products", GraphicsHelper.GetDefaultFontSystem(), GraphicsHelper.GetDefaultFontSize(), UITheme.ColorType.Main);
 
             // About navigation button
             Button aboutButton = new Button(UITheme.ColorType.Main);
             aboutButton.SetLayout(TopBarButtonLayout);
 
-            Label aboutLabel = new Label("About", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Main);
+            Label aboutLabel = new Label("About", GraphicsHelper.GetDefaultFontSystem(), GraphicsHelper.GetDefaultFontSize(), UITheme.ColorType.Main);
 
             // Visual separator element, sits below the TopBar component
             BlankUI topBarSeparator = new BlankUI(UITheme.ColorType.Background);
@@ -680,13 +680,13 @@ namespace Luna.UI
                 LayoutHeight = Sizing.Grow(1)
             });
 
-            Label l1 = new Label("Testing", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Background);
-            Label l2 = new Label("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Background);//new Label("Enjoy the money, I hope it makes you happy. Dear lord, what a sad little life, Jane. You ruined my night completely so you could have the money and I hope now you can spend it on lessons in grace and decorum. Because you have all the grace of a reversing dump truck without any tyres on.", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Background);
+            Label l1 = new Label("Testing", GraphicsHelper.GetDefaultFontSystem(), GraphicsHelper.GetDefaultFontSize(), UITheme.ColorType.Background);
+            Label l2 = new Label("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", GraphicsHelper.GetDefaultFontSystem(), GraphicsHelper.GetDefaultFontSize(), UITheme.ColorType.Background);//new Label("Enjoy the money, I hope it makes you happy. Dear lord, what a sad little life, Jane. You ruined my night completely so you could have the money and I hope now you can spend it on lessons in grace and decorum. Because you have all the grace of a reversing dump truck without any tyres on.", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Background);
             l2.SetLayout(new Layout()
             {
                 LayoutWidth = Sizing.Grow(1)
             });
-            Label l3 = new Label("Holy hell!", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Background);
+            Label l3 = new Label("Holy hell!", GraphicsHelper.GetDefaultFontSystem(), GraphicsHelper.GetDefaultFontSize(), UITheme.ColorType.Background);
 
             b1.AddChild(l1);
             b2.AddChild(l2);
@@ -709,7 +709,7 @@ namespace Luna.UI
             s2.SetLayout(new Layout() { LayoutWidth = Sizing.Grow(1) });
             s2.SetTheme(new UITheme() { Rounded = true });
 
-            Label label = new Label("1 Slider", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Background);
+            Label label = new Label("1 Slider", GraphicsHelper.GetDefaultFontSystem(), GraphicsHelper.GetDefaultFontSize(), UITheme.ColorType.Background);
 
             TextInput textInput = new TextInput();
             textInput.SetLayout(new Layout() { LayoutWidth = Sizing.Grow(1), LayoutHeight = Sizing.Wrap() });
@@ -815,7 +815,7 @@ namespace Luna.UI
             addProduct.Name = "Add Product Button";
             addProduct.SetLayout(new Layout() { LayoutWidth = Sizing.Grow(1), LayoutHeight = Sizing.Fixed(40), VerticalAlignment = Alignment.Middle, HorizontalAlignment = Alignment.Middle });
 
-            Label addProductLabel = new Label("Add product", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Main);
+            Label addProductLabel = new Label("Add product", GraphicsHelper.GetDefaultFontSystem(), GraphicsHelper.GetDefaultFontSize(), UITheme.ColorType.Main);
             addProductLabel.Name = "Add Product Label";
             addProduct.AddChild(addProductLabel);
 
@@ -874,7 +874,7 @@ namespace Luna.UI
                 HorizontalAlignment = Alignment.Middle,
                 VerticalAlignment = Alignment.Middle
             });
-            Label selectIconText = new Label("Select Icon", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Main);
+            Label selectIconText = new Label("Select Icon", GraphicsHelper.GetDefaultFontSystem(), GraphicsHelper.GetDefaultFontSize(), UITheme.ColorType.Main);
             selectIcon.AddChild(selectIconText);
             iconContainer.AddChild(selectIcon);
 
@@ -886,7 +886,7 @@ namespace Luna.UI
                 Spacing = 20,
                 VerticalAlignment = Alignment.Middle
             });
-            Label nameIndicator = new Label("Name", GraphicsHelper.GetBoldFont(), UITheme.ColorType.Background);
+            Label nameIndicator = new Label("Name", GraphicsHelper.GetBoldFontSystem(), GraphicsHelper.GetDefaultFontSize(), UITheme.ColorType.Background);
             TextInput nameInput = new TextInput();
             nameInput.SetLayout(new Layout()
             {
@@ -904,7 +904,7 @@ namespace Luna.UI
                 VerticalAlignment = Alignment.Middle,
                 ClipChildren = false
             });
-            Label costIndicator = new Label("Cost", GraphicsHelper.GetBoldFont(), UITheme.ColorType.Background);
+            Label costIndicator = new Label("Cost", GraphicsHelper.GetBoldFontSystem(), GraphicsHelper.GetDefaultFontSize(), UITheme.ColorType.Background);
             TextInput costInput = new TextInput();
             costInput.InputType = TextInput.InputFormat.CentiDecimal;
             costInput.Prefix = "£";
@@ -932,7 +932,7 @@ namespace Luna.UI
                 VerticalAlignment = Alignment.Middle
             });
             ok.OnClick(() => root.Destroy());
-            Label okLabel = new Label("OK", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Main);
+            Label okLabel = new Label("OK", GraphicsHelper.GetDefaultFontSystem(), GraphicsHelper.GetDefaultFontSize(), UITheme.ColorType.Main);
             ok.AddChild(okLabel);
             Button cancel = new Button(Button.VisualResponse.ColourChange, UITheme.ColorType.Emergency);
             cancel.SetLayout(new Layout()
@@ -943,7 +943,7 @@ namespace Luna.UI
                 VerticalAlignment = Alignment.Middle
             });
             cancel.OnClick(() => root.Destroy());
-            Label cancelLabel = new Label("Cancel", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Emergency);
+            Label cancelLabel = new Label("Cancel", GraphicsHelper.GetDefaultFontSystem(), GraphicsHelper.GetDefaultFontSize(), UITheme.ColorType.Emergency);
             cancel.AddChild(cancelLabel);
             confirmationContainer.AddChild(ok, cancel);
 
@@ -989,9 +989,9 @@ namespace Luna.UI
                 Spacing = 20
             });
 
-            Label nameLabel = new Label("name", GraphicsHelper.GetBoldFont(), UITheme.ColorType.Background);
+            Label nameLabel = new Label("name", GraphicsHelper.GetBoldFontSystem(), GraphicsHelper.GetDefaultFontSize(), UITheme.ColorType.Background);
             nameLabel.Name = "Product Name Label";
-            Label costLabel = new Label("cost", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Background);
+            Label costLabel = new Label("cost", GraphicsHelper.GetDefaultFontSystem(), GraphicsHelper.GetDefaultFontSize(), UITheme.ColorType.Background);
             costLabel.Name = "Product Cost Label";
 
             contentContainer.AddChild(nameLabel, costLabel);
@@ -1006,7 +1006,7 @@ namespace Luna.UI
                 Padding = new Tetra(10)
             });
 
-            Label removeButtonLabel = new Label("Remove", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Emergency);
+            Label removeButtonLabel = new Label("Remove", GraphicsHelper.GetDefaultFontSystem(), GraphicsHelper.GetDefaultFontSize(), UITheme.ColorType.Emergency);
             removeButton.AddChild(removeButtonLabel);
 
             rightControlsContainer.AddChild(removeButton);
@@ -1079,9 +1079,9 @@ namespace Luna.UI
                 LayoutAxis = LVector2.VERTICAL,
                 Padding = new Tetra(20)
             });
-            Label header = new Label("About", GraphicsHelper.GetBoldFont(), UITheme.ColorType.Background);
+            Label header = new Label("About", GraphicsHelper.GetBoldFontSystem(), GraphicsHelper.GetDefaultFontSize(), UITheme.ColorType.Background);
             Label content = new Label("Luna is a product/order management system deigned from the ground up by Bill Shepherd. " +
-                "It runs on LUIVA, a custom UI layout system created in C# with the Monogame framework. ", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Background);
+                "It runs on LUIVA, a custom UI layout system created in C# with the Monogame framework. ", GraphicsHelper.GetDefaultFontSystem(), GraphicsHelper.GetDefaultFontSize(), UITheme.ColorType.Background);
             content.SetLayout(new Layout()
             {
                 LayoutWidth = Sizing.Grow(1)
@@ -1105,7 +1105,7 @@ namespace Luna.UI
                 Padding = new Tetra(10)
             });
 
-            Label okLabel = new Label("OK", GraphicsHelper.GetDefaultFont(), UITheme.ColorType.Main);
+            Label okLabel = new Label("OK", GraphicsHelper.GetDefaultFontSystem(), GraphicsHelper.GetDefaultFontSize(), UITheme.ColorType.Main);
             okButton.AddChild(okLabel);
 
             okButtonContainer.AddChild(okButton);
