@@ -3,8 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{B1D89FCA-884C-4EC1-9530-99CBA6D87E68}|Luna\\Luna.csproj|c:\\users\\bill\\documents\\github\\luna\\luna\\ui\\uicomponent.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B1D89FCA-884C-4EC1-9530-99CBA6D87E68}|Luna\\Luna.csproj|solutionrelative:luna\\ui\\uicomponent.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{B1D89FCA-884C-4EC1-9530-99CBA6D87E68}|Luna\\Luna.csproj|c:\\users\\bill\\documents\\github\\luna\\luna\\ui\\uifactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B1D89FCA-884C-4EC1-9530-99CBA6D87E68}|Luna\\Luna.csproj|solutionrelative:luna\\ui\\uifactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B1D89FCA-884C-4EC1-9530-99CBA6D87E68}|Luna\\Luna.csproj|c:\\users\\bill\\documents\\github\\luna\\luna\\ui\\textinput.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B1D89FCA-884C-4EC1-9530-99CBA6D87E68}|Luna\\Luna.csproj|solutionrelative:luna\\ui\\textinput.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{B1D89FCA-884C-4EC1-9530-99CBA6D87E68}|Luna\\Luna.csproj|c:\\users\\bill\\documents\\github\\luna\\luna\\ui\\inputformat\\unformattedformat.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -15,16 +23,8 @@
       "RelativeMoniker": "D:0:0:{B1D89FCA-884C-4EC1-9530-99CBA6D87E68}|Luna\\Luna.csproj|solutionrelative:luna\\managerclasses\\uimanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B1D89FCA-884C-4EC1-9530-99CBA6D87E68}|Luna\\Luna.csproj|c:\\users\\bill\\documents\\github\\luna\\luna\\ui\\textinput.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B1D89FCA-884C-4EC1-9530-99CBA6D87E68}|Luna\\Luna.csproj|solutionrelative:luna\\ui\\textinput.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{B1D89FCA-884C-4EC1-9530-99CBA6D87E68}|Luna\\Luna.csproj|c:\\users\\bill\\documents\\github\\luna\\luna\\helperclasses\\stringhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B1D89FCA-884C-4EC1-9530-99CBA6D87E68}|Luna\\Luna.csproj|solutionrelative:luna\\helperclasses\\stringhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B1D89FCA-884C-4EC1-9530-99CBA6D87E68}|Luna\\Luna.csproj|c:\\users\\bill\\documents\\github\\luna\\luna\\ui\\inputformat\\iinputformat.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B1D89FCA-884C-4EC1-9530-99CBA6D87E68}|Luna\\Luna.csproj|solutionrelative:luna\\ui\\inputformat\\iinputformat.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -33,44 +33,38 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedWidth": 150,
-          "SelectedChildIndex": 0,
-          "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "IInputFormat.cs",
-              "DocumentMoniker": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\UI\\InputFormat\\IInputFormat.cs",
-              "RelativeDocumentMoniker": "Luna\\UI\\InputFormat\\IInputFormat.cs",
-              "ToolTip": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\UI\\InputFormat\\IInputFormat.cs",
-              "RelativeToolTip": "Luna\\UI\\InputFormat\\IInputFormat.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-22T01:10:55.821Z",
-              "EditorCaption": ""
-            }
-          ]
-        },
-        {
           "DockedWidth": 250,
           "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "UIComponent.cs",
+              "DocumentMoniker": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\UI\\UIComponent.cs",
+              "RelativeDocumentMoniker": "Luna\\UI\\UIComponent.cs",
+              "ToolTip": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\UI\\UIComponent.cs",
+              "RelativeToolTip": "Luna\\UI\\UIComponent.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAABAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-22T01:50:44.168Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "UIFactory.cs",
               "DocumentMoniker": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\UI\\UIFactory.cs",
               "RelativeDocumentMoniker": "Luna\\UI\\UIFactory.cs",
               "ToolTip": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\UI\\UIFactory.cs",
               "RelativeToolTip": "Luna\\UI\\UIFactory.cs",
-              "ViewState": "AgIAAJUBAAAAAAAAAAAuwKUBAAA6AAAAAAAAAA==",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAKUBAAA6AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-08-22T01:34:28.382Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "UnformattedFormat.cs",
               "DocumentMoniker": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\UI\\InputFormat\\UnformattedFormat.cs",
               "RelativeDocumentMoniker": "Luna\\UI\\InputFormat\\UnformattedFormat.cs",
@@ -78,12 +72,11 @@
               "RelativeToolTip": "Luna\\UI\\InputFormat\\UnformattedFormat.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-22T01:34:05.136Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-22T01:34:05.136Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "UIManager.cs",
               "DocumentMoniker": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\ManagerClasses\\UIManager.cs",
               "RelativeDocumentMoniker": "Luna\\ManagerClasses\\UIManager.cs",
@@ -91,12 +84,11 @@
               "RelativeToolTip": "Luna\\ManagerClasses\\UIManager.cs",
               "ViewState": "AgIAABoAAAAAAAAAAAAQwCkAAAAWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-22T01:33:52.797Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-22T01:33:52.797Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "StringHelper.cs",
               "DocumentMoniker": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\HelperClasses\\StringHelper.cs",
               "RelativeDocumentMoniker": "Luna\\HelperClasses\\StringHelper.cs",
@@ -104,18 +96,17 @@
               "RelativeToolTip": "Luna\\HelperClasses\\StringHelper.cs",
               "ViewState": "AgIAAFcAAAAAAAAAAAAowIQAAAAlAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-22T01:31:51.136Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-22T01:31:51.136Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
               "Title": "TextInput.cs",
               "DocumentMoniker": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\UI\\TextInput.cs",
               "RelativeDocumentMoniker": "Luna\\UI\\TextInput.cs",
               "ToolTip": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\UI\\TextInput.cs",
               "RelativeToolTip": "Luna\\UI\\TextInput.cs",
-              "ViewState": "AgIAADwAAAAAAAAAAAAAAEoAAAANAAAAAAAAAA==",
+              "ViewState": "AgIAAC4AAAAAAAAAAAAAAEYAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-08-20T15:56:54.681Z",
               "EditorCaption": ""

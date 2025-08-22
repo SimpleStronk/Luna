@@ -22,6 +22,8 @@ namespace Luna.UI
         private string prefix, suffix, placeholder;
         private IInputFormat inputFormat;
 
+        enum CaretMoveType { Creating, Passive, NewLine }
+
         private Action<(int, int)> onCaretChanged;
 
         public TextInput() : base(UITheme.ColorType.Background)
@@ -102,7 +104,7 @@ namespace Luna.UI
                 // RIGHT KEY RETURNS 1 CHAR
                 case (char)1:
                     {
-                        MoveCaretRight(false, false);
+                        MoveCaretRight(CaretMoveType.Passive);
                         break;
                     }
                 // UP KEY RETURNS 2 CHAR
@@ -134,7 +136,7 @@ namespace Luna.UI
             if (!inputFormat.isInputValid(editingText, c)) return;
 
             editingText = UpToCaret + c + PostCaret;
-            MoveCaretRight(true, c == '\n');
+            MoveCaretRight(c == '\n' ? CaretMoveType.NewLine : CaretMoveType.Creating);
         }
 
         // Backspace procedure
@@ -159,17 +161,17 @@ namespace Luna.UI
             }
         }
 
-        private void MoveCaretRight(bool adding, bool newline)
+        private void MoveCaretRight(CaretMoveType moveType)
         {
             // Enter pressed
-            if (newline)
+            if (moveType == CaretMoveType.NewLine)
             {
                 CaretIndex = (0, caretIndex.line + 1);
                 return;
             }
 
             // Other character added
-            if (adding)
+            if (moveType == CaretMoveType.Creating)
             {
                 CaretIndex = (caretIndex.character + 1, caretIndex.line);
                 return;
