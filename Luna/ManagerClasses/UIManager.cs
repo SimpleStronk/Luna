@@ -10,6 +10,8 @@ using Luna.UI;
 using System.IO;
 using System.Collections.Generic;
 using Luna.DataClasses.IDClasses;
+using System.Diagnostics;
+using System.Threading;
 
 namespace Luna.ManagerClasses
 {
@@ -58,7 +60,7 @@ namespace Luna.ManagerClasses
             windowBorderless = window.IsBorderless;
 
             // The header bar containing the Luna logo, Dashboard, Orders, Products and About buttons
-            topBarBlock = uiFactory.CreateTopBar();
+            topBarBlock = uiFactory.CreateTopBar(new LTexture2D(GraphicsHelper.LunaLogo));
             UIComponent topBar = topBarBlock.Root;
             topBarBlock.Orders.Root.OnClick(() => { SetMainWindowState(MainWindowState.Orders); } );
             topBarBlock.Dashboard.Root.OnClick(() => { SetMainWindowState(MainWindowState.Dashboard); });
@@ -91,7 +93,6 @@ namespace Luna.ManagerClasses
 
             // Setup LUIVA - the layout engine behind all the UIComponents
             luiva = new LUIVA();
-            luiva.SetRootLayout(rootComponent);
             luiva.SetDisplayDimensions(graphicsDevice.Viewport.Width, graphicsDevice.Viewport.Height);
         }
 
@@ -146,7 +147,7 @@ namespace Luna.ManagerClasses
             rootComponent.CascadeTheme(themeToggle ? UIFactory.PlumTheme : UIFactory.PlumTheme2);
 
             RecalculatePriority();
-            luiva.CalculateLayout();
+            luiva.CalculateLayout(rootComponent);
             // Unfocus the current thing so we can re-test for the correct component
             focusedComponent.alertUnfocus?.Invoke();
             focusedComponent = (null, null, -1);
@@ -227,7 +228,7 @@ namespace Luna.ManagerClasses
 
         private BlankUI SetupRootComponent()
         {
-            BlankUI rootComponent = new BlankUI(true, UITheme.ColorType.MainSoft);
+            BlankUI rootComponent = new BlankUI(true, UITheme.ColorType.Background);
             rootComponent.CascadeTheme(PlumTheme);
             rootComponent.SetLayout(new Layout()
             {

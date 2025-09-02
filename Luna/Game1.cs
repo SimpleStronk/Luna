@@ -31,6 +31,7 @@ public class Game1 : Game
         Window.AllowUserResizing = true;
         _graphics.PreferredBackBufferWidth = 1280;
         _graphics.PreferredBackBufferHeight = 720;
+        Window.Title = "LUIVA Demo";
     }
 
     protected override void Initialize()
@@ -48,10 +49,11 @@ public class Game1 : Game
         GraphicsHelper.SetDefaultFont(Content.Load<SpriteFont>(@"MontserratLight"));
         GraphicsHelper.SetBoldFont(Content.Load<SpriteFont>(@"MontserratRegular"));
         defaultFontSystem.AddFont(File.ReadAllBytes(@"Content/Montserrat-Light.ttf"));
-        boldFontSystem.AddFont(File.ReadAllBytes(@"Content/Montserrat-Regular.ttf"));
+        boldFontSystem.AddFont(File.ReadAllBytes(@"Content/Montserrat-SemiBold.ttf"));
         GraphicsHelper.SetDefaultFontSystem(defaultFontSystem);
         GraphicsHelper.SetBoldFontSystem(boldFontSystem);
         GraphicsHelper.LuivaLogo = Content.Load<Texture2D>(@"LUIVA");
+        GraphicsHelper.LunaLogo = Content.Load<Texture2D>(@"LunaLogo");
         uiManager = new UIManager(Window, Exit, GraphicsDevice, systemManager);
         uiManager.SetPixelTexture(GraphicsHelper.GeneratePixelTexture());
 
@@ -77,7 +79,7 @@ public class Game1 : Game
     {
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
-        _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, null, s, null, null);
+        _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, null, s, null, null);
 
         uiManager.Draw(_spriteBatch);
 

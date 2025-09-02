@@ -19,6 +19,7 @@ namespace Luna.HelperClasses
         private static int msaaRes = 3;
         private static Dictionary<int, Texture2D> circleCache = new Dictionary<int, Texture2D>();
         private static Texture2D luivaLogo;
+        private static Texture2D lunaLogo;
         private static float defaultFontSize = 24f;
 
         /// <summary>
@@ -150,6 +151,12 @@ namespace Luna.HelperClasses
         {
             get { return luivaLogo; }
             set { luivaLogo = value; }
+        }
+
+        public static Texture2D LunaLogo
+        {
+            get { return lunaLogo; }
+            set {  lunaLogo = value; }
         }
 
         public static float GetDefaultFontSize()

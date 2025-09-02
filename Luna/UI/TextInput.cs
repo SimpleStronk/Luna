@@ -1,10 +1,11 @@
-using System;
-using System.Linq;
 using Luna.HelperClasses;
 using Luna.ManagerClasses;
 using Luna.UI.InputFormat;
 using Luna.UI.LayoutSystem;
 using Microsoft.Xna.Framework.Input;
+using SharpDX.DirectWrite;
+using System;
+using System.Linq;
 using static Luna.UI.LayoutSystem.LUIVA;
 
 namespace Luna.UI
@@ -26,7 +27,7 @@ namespace Luna.UI
 
         private Action<(int, int)> onCaretChanged;
 
-        public TextInput() : base(UITheme.ColorType.Background)
+        public TextInput(Alignment textAlignment = Alignment.Middle) : base(UITheme.ColorType.Background)
         {
             inputFormat = StringHelper.GetUnformattedFormat();
             overrideTheme.ColourType = UITheme.ColorType.Background;
@@ -34,7 +35,7 @@ namespace Luna.UI
 
             // The panel inside the TextInput, remaining white and being drawn over the darker surrounding panel
             internalPanel = new BlankUI(UITheme.ColorType.Background);
-            internalPanel.SetLayout(new Layout() { LayoutWidth = Sizing.Grow(1), LayoutHeight = Sizing.Wrap(), HorizontalAlignment = Alignment.Middle, VerticalAlignment = Alignment.Middle, Padding = new Tetra(10) });
+            internalPanel.SetLayout(new Layout() { LayoutWidth = Sizing.Grow(1), LayoutHeight = Sizing.Wrap(), HorizontalAlignment = textAlignment, VerticalAlignment = Alignment.Middle, Padding = new Tetra(10) });
             internalPanel.SetTheme(new UITheme() { CornerRadius = (8, 8, 8, 8), Rounded = true });
             internalPanel.FocusIgnore = true;
             AddChild(internalPanel);
@@ -43,7 +44,7 @@ namespace Luna.UI
             label.SetLayout(new Layout() { HorizontalAlignment = Alignment.Ignore, VerticalAlignment = Alignment.Ignore, ClipChildren = false });
 
             caret = new BlankUI(UITheme.ColorType.Main);
-            caret.SetLayout(new Layout() { LayoutWidth = Sizing.Fixed(2), LayoutHeight = Sizing.Fixed(30) });
+            caret.SetLayout(new Layout() { LayoutWidth = Sizing.Fixed(2), LayoutHeight = Sizing.Fixed(25) });
             label.AddChild(caret);
 
             internalPanel.AddChild(label);

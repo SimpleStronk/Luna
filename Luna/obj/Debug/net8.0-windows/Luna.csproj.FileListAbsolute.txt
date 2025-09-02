@@ -63,3 +63,5 @@ C:\Users\bill\Documents\GitHub\Luna\Luna\bin\Debug\net8.0-windows\StbImageSharp.
 C:\Users\bill\Documents\GitHub\Luna\Luna\bin\Debug\net8.0-windows\StbTrueTypeSharp.dll
 C:\Users\bill\Documents\GitHub\Luna\Luna\bin\Debug\net8.0-windows\Content\Montserrat-Light.ttf
 C:\Users\bill\Documents\GitHub\Luna\Luna\bin\Debug\net8.0-windows\Content\Montserrat-Regular.ttf
+C:\Users\bill\Documents\GitHub\Luna\Luna\bin\Debug\net8.0-windows\Content\LunaLogo.xnb
+C:\Users\bill\Documents\GitHub\Luna\Luna\bin\Debug\net8.0-windows\Content\Montserrat-SemiBold.ttf

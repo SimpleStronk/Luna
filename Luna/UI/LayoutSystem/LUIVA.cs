@@ -10,20 +10,9 @@ namespace Luna.UI.LayoutSystem
         public enum Alignment { Begin, Middle, End, Ignore }
         public enum Direction { Forward, Backward };
 
-        private ILayoutable rootLayout;
         private int displayWidth;
         private int displayHeight;
         private bool debugMode = false;
-
-        /// <summary>
-        /// Sets the root layout for the layout algorithm
-        /// </summary>
-        /// <param name="root"></param>
-        public void SetRootLayout(ILayoutable root)
-        {
-            rootLayout = root;
-            rootLayout.SetLayout(new Layout() { ClipChildren = true });
-        }
 
         /// <param name="debugMode">If <c>true</c>, LUIVA will output all of its procedures</param>
         public void DebugLayout(bool debugMode)
@@ -34,14 +23,18 @@ namespace Luna.UI.LayoutSystem
         /// <summary>
         /// Calculates the sizing and positioning of all elements
         /// </summary>
-        public void CalculateLayout()
+        public void CalculateLayout(ILayoutable rootLayout)     // Taking rootLayout here enforces dependency injection, but also makes sure
+                                                                // rootLayout passing cannot be forgotten (which it could be if it were a class member)
         {
             DebugInfo("Performing horizontal layout");
             CalculateLayoutScale(null, new List<ILayoutable>() { rootLayout }, displayWidth, LVector2.HORIZONTAL, false);
+
             DebugInfo("Performing vertical layout");
             CalculateLayoutScale(null, new List<ILayoutable>() { rootLayout }, displayHeight, LVector2.VERTICAL, true);
+
             DebugInfo("Performing horizontal positioning");
             CalculateLayoutPosition(null, new List<ILayoutable>() {rootLayout}, LVector2.HORIZONTAL, false);
+
             DebugInfo("Performing vertical positioning");
             CalculateLayoutPosition(null, new List<ILayoutable>() {rootLayout}, LVector2.VERTICAL, true);
         }

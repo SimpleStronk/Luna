@@ -38,7 +38,7 @@ namespace Luna.UI
                 Padding = new Tetra(5)
             });
             indicatorContainer.SetTheme(new UITheme() { Rounded = true });
-            indicatorContainer.FocusIgnore = true;      // We want the Toggle to capture mouse events
+            indicatorContainer.FocusIgnore = true;      // We want the Root to capture mouse events
 
             // The toggle indicator
             indicator = new BlankUI(UITheme.ColorType.MainSoft);
@@ -48,7 +48,7 @@ namespace Luna.UI
                 LayoutHeight = Sizing.Grow(1),
             });
             indicator.SetTheme(new UITheme(){ Rounded = true });
-            indicator.FocusIgnore = true;               // We want the Toggle to capture mouse events
+            indicator.FocusIgnore = true;               // We want the Root to capture mouse events
             indicator.IgnoreScissorRect = true;
 
             indicatorContainer.AddChild(indicator);

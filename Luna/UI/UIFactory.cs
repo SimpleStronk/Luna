@@ -519,7 +519,7 @@ namespace Luna.UI
         /// Creates a UIComponent for the top bar of the program, shows navigation and the program name
         /// </summary>
         /// <returns>A TopBarBlock object containing the Root, along with Dashboard, Orders, Products and About buttons</returns>
-        public TopBarBlock CreateTopBar()
+        public TopBarBlock CreateTopBar(LTexture2D lunaLogo)
         {
             BlankUI root = new BlankUI(UITheme.ColorType.Main);
             root.SetLayout(new Layout()
@@ -535,7 +535,15 @@ namespace Luna.UI
             logoContainer.SetLayout(TopBarButtonLayout);
             logoContainer.SetLayout(new Layout() { LayoutWidth = Sizing.Fixed(150), HorizontalAlignment = Alignment.Begin });
 
-            Label logo = new Label("LUNΛ", GraphicsHelper.GetDefaultFontSystem(), GraphicsHelper.GetDefaultFontSize(), UITheme.ColorType.Main);
+            //Label logo = new Label("LUNΛ", GraphicsHelper.GetDefaultFontSystem(), GraphicsHelper.GetDefaultFontSize(), UITheme.ColorType.Main);
+
+            UITexture logo = new UITexture(lunaLogo);
+            logo.SetLayout(new Layout()
+            {
+                LayoutWidth = Sizing.Grow(1),
+                LayoutHeight = Sizing.Grow(1),
+                ImageAlignment = Alignment.Middle
+            });
 
             // Separates the logo from other buttons
             BlankUI separator = new BlankUI(UITheme.ColorType.Separator);
