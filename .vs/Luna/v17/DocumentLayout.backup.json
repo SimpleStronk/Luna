@@ -54,9 +54,9 @@
               "Title": "UIFactory.cs",
               "DocumentMoniker": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\UI\\UIFactory.cs",
               "RelativeDocumentMoniker": "Luna\\UI\\UIFactory.cs",
-              "ToolTip": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\UI\\UIFactory.cs*",
-              "RelativeToolTip": "Luna\\UI\\UIFactory.cs*",
-              "ViewState": "AgIAACsEAAAAAAAAAAAAAEQEAAA9AAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\UI\\UIFactory.cs",
+              "RelativeToolTip": "Luna\\UI\\UIFactory.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEQEAAA9AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-18T19:43:28.28Z",
               "EditorCaption": ""
@@ -67,12 +67,11 @@
               "Title": "SystemManager.cs",
               "DocumentMoniker": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\ManagerClasses\\SystemManager.cs",
               "RelativeDocumentMoniker": "Luna\\ManagerClasses\\SystemManager.cs",
-              "ToolTip": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\ManagerClasses\\SystemManager.cs*",
-              "RelativeToolTip": "Luna\\ManagerClasses\\SystemManager.cs*",
+              "ToolTip": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\ManagerClasses\\SystemManager.cs",
+              "RelativeToolTip": "Luna\\ManagerClasses\\SystemManager.cs",
               "ViewState": "AgIAAAwAAAAAAAAAAAAowC0AAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-18T19:33:27.873Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-18T19:33:27.873Z"
             },
             {
               "$type": "Document",
@@ -144,8 +143,7 @@
               "RelativeToolTip": "Luna\\ManagerClasses\\UIManager.cs",
               "ViewState": "AgIAAF0BAAAAAAAAAAAIwKcBAABIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-02T12:35:53.701Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-02T12:35:53.701Z"
             },
             {
               "$type": "Document",

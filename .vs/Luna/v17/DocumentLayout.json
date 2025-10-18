@@ -56,7 +56,7 @@
               "RelativeDocumentMoniker": "Luna\\UI\\UIFactory.cs",
               "ToolTip": "C:\\Users\\bill\\Documents\\GitHub\\Luna\\Luna\\UI\\UIFactory.cs",
               "RelativeToolTip": "Luna\\UI\\UIFactory.cs",
-              "ViewState": "AgIAACsEAAAAAAAAAAAAAEQEAAA9AAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEQEAAA9AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-18T19:43:28.28Z",
               "EditorCaption": ""
@@ -71,8 +71,7 @@
               "RelativeToolTip": "Luna\\ManagerClasses\\SystemManager.cs",
               "ViewState": "AgIAAAwAAAAAAAAAAAAowC0AAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-18T19:33:27.873Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-18T19:33:27.873Z"
             },
             {
               "$type": "Document",
@@ -84,8 +83,7 @@
               "RelativeToolTip": "Luna\\UI\\Button.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-09T17:19:38.115Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-09T17:19:38.115Z"
             },
             {
               "$type": "Document",
@@ -97,8 +95,7 @@
               "RelativeToolTip": "Luna\\ProductSystem\\DummyOrderSaver.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-09T17:18:50.746Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-09T17:18:50.746Z"
             },
             {
               "$type": "Document",
@@ -110,8 +107,7 @@
               "RelativeToolTip": "Luna\\UI\\LayoutSystem\\IPositionAnimator.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-02T12:49:39.062Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-02T12:49:39.062Z"
             },
             {
               "$type": "Document",
@@ -123,8 +119,7 @@
               "RelativeToolTip": "Luna\\UI\\LayoutSystem\\ILayoutable.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-02T12:49:36.968Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-02T12:49:36.968Z"
             },
             {
               "$type": "Document",
@@ -136,8 +131,7 @@
               "RelativeToolTip": "Luna\\UI\\LayoutSystem\\ExpColourAnimator.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-02T12:48:26.412Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-02T12:48:26.412Z"
             },
             {
               "$type": "Document",
@@ -149,8 +143,7 @@
               "RelativeToolTip": "Luna\\ManagerClasses\\UIManager.cs",
               "ViewState": "AgIAAF0BAAAAAAAAAAAIwKcBAABIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-02T12:35:53.701Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-02T12:35:53.701Z"
             },
             {
               "$type": "Document",
@@ -162,8 +155,7 @@
               "RelativeToolTip": "Luna\\UI\\LayoutSystem\\LUIVA.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAACwAAAAWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-02T12:32:23.551Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-02T12:32:23.551Z"
             }
           ]
         }
