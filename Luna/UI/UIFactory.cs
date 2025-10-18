@@ -1089,7 +1089,8 @@ namespace Luna.UI
             });
             Label header = new Label("About", GraphicsHelper.GetBoldFontSystem(), GraphicsHelper.GetDefaultFontSize(), UITheme.ColorType.Background);
             Label content = new Label("Luna is a product/order management system deigned from the ground up by Bill Shepherd. " +
-                "It runs on LUIVA, a custom UI layout system created in C# with the Monogame framework. ", GraphicsHelper.GetDefaultFontSystem(), GraphicsHelper.GetDefaultFontSize(), UITheme.ColorType.Background);
+                "It runs on LUIVA, a custom UI layout system created in C# with the Monogame framework. " + 
+                "Font rendering is handled by FontStashSharp.", GraphicsHelper.GetDefaultFontSystem(), GraphicsHelper.GetDefaultFontSize(), UITheme.ColorType.Background);
             content.SetLayout(new Layout()
             {
                 LayoutWidth = Sizing.Grow(1)
