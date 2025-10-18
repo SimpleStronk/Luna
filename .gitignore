@@ -1,0 +1,71 @@
+# === Visual Studio general ===
+.vs/
+*.user
+*.suo
+*.userosscache
+*.userprefs
+
+# Build output
+bin/
+obj/
+[Bb]uild/
+[Ll]ogs/
+
+# Auto-generated files
+*.aps
+*.ncb
+*.opendb
+*.VC.db
+*.VC.VC.opendb
+
+# MonoGame content cache (binary outputs)
+**/Content/bin/
+**/Content/obj/
+
+# MGCB intermediate / output files
+*.mgcb.tmp
+*.xnb
+
+# Rider / JetBrains
+.idea/
+*.sln.iml
+
+# System / OS junk
+Thumbs.db
+ehthumbs.db
+[Dd]esktop.ini
+$RECYCLE.BIN/
+
+# macOS junk
+.DS_Store
+
+# Backup files
+*.bak
+*.orig
+
+# === Optional: if you use MGCB Editor ===
+# If you want other devs to build content from .mgcb instead of .xnb files
+# Then DO include .mgcb and source assets, but ignore compiled .xnb
+# (That’s what we did above.)
+
+# === NuGet packages ===
+*.nupkg
+*.snupkg
+packages/
+*.nuspec
+project.lock.json
+project.fragment.lock.json
+
+# === Resharper ===
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# === VS Code ===
+.vscode/
+
+# === MonoGame Pipeline Editor cache ===
+.mgcb_editor_cache/
+
+# === Optional: User-specific settings ===
+*.userconfig
