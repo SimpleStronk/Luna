@@ -4,6 +4,7 @@
 *.suo
 *.userosscache
 *.userprefs
+.vs/*
 
 # Build output
 bin/
